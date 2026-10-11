@@ -10,7 +10,7 @@ import PatientRecords from './pages/PatientRecords';
 import SignIn from './pages/SignIn';
 import Settings from './pages/Settings';
 import YearlyReport from './pages/YearlyReport';
-import { supabase } from './services/supabase';
+import { supabase, supabaseConfigError } from './services/supabase';
 import './AdultOpd.css';
 
 const ALLOWED_ROLES = new Set(['owner', 'admin', 'data_entry', 'viewer']);
@@ -24,6 +24,29 @@ function LoadingScreen({ message }) {
         <p>{message}</p>
         <div className="aopd-auth-loading" role="status">Loading…</div>
       </div>
+    </main>
+  );
+}
+
+function ConfigurationIssue() {
+  return (
+    <main className="aopd-auth-screen">
+      <section className="aopd-auth-card" aria-labelledby="aopd-config-heading">
+        <span className="aopd-auth-mark" aria-hidden="true">OPD</span>
+        <h1 id="aopd-config-heading">App configuration required</h1>
+        <p className="aopd-auth-description">
+          {supabaseConfigError || 'The Supabase connection is not configured.'}
+        </p>
+        <p className="aopd-auth-description">
+          In your Vercel project, add <code>VITE_SUPABASE_URL</code> and{' '}
+          <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> under Environment Variables,
+          then redeploy the latest deployment.
+        </p>
+        <p className="aopd-auth-description">
+          For local development, set both values in your <code>.env</code> file
+          and restart the development server.
+        </p>
+      </section>
     </main>
   );
 }
@@ -77,6 +100,11 @@ function AuthGate() {
   const authEventReceived = useRef(false);
 
   useEffect(() => {
+    if (!supabase) {
+      setAuthLoading(false);
+      return undefined;
+    }
+
     let mounted = true;
     const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       authEventReceived.current = true;
@@ -110,7 +138,7 @@ function AuthGate() {
 
   useEffect(() => {
     let cancelled = false;
-    if (!session?.user?.id) {
+    if (!supabase || !session?.user?.id) {
       setAccess({ status: 'signed_out' });
       return () => {
         cancelled = true;
@@ -243,6 +271,10 @@ function AuthGate() {
       cancelled = true;
     };
   }, [session, retryCount]);
+
+  if (!supabase) {
+    return <ConfigurationIssue />;
+  }
 
   async function handleSignOut() {
     const { error } = await supabase.auth.signOut();
