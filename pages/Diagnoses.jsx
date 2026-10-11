@@ -26,8 +26,8 @@ export default function Diagnoses() {
     <div className="aopd-page">
       <h2>Diagnoses</h2>
       <p className="aopd-lede">
-        Configure the searchable diagnosis list used during patient entry. This is a local catalog for this facility. It
-        is not presented as an official Ethiopian Ministry of Health diagnosis list.
+        Search the diagnosis catalog shared by this facility. Owners and admins can manage entries. The catalog is not
+        presented as an official Ethiopian Ministry of Health diagnosis list.
       </p>
 
       {canManageFacility && (

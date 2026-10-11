@@ -14,9 +14,9 @@
 -- 2. After applying this reviewed schema, replace the UUID placeholder below
 --    and run the block in the Supabase SQL Editor as the project owner. It
 --    atomically creates one facility, its settings, and its first owner.
--- 3. Before patient entry is enabled or data-entry accounts are provisioned,
+-- 3. Before patient entry is enabled or facility accounts are provisioned,
 --    configure the approved facility diagnosis catalog. If the facility
---    diagnosis table is empty, the first owner/admin app sign-in initializes
+--    diagnosis table is empty, the first facility-member app sign-in initializes
 --    the bundled ESV-1 and starter catalog. To use a separately approved
 --    catalog, import it through a trusted operator process before that first
 --    sign-in; a non-empty catalog is never overwritten. Do not invent or infer
@@ -93,18 +93,14 @@
 --    facility membership rows must not be readable or writable. If the user
 --    is a facility B member, A must remain isolated and B access must not
 --    authorize A.
--- 4. Viewer session: can read own facility's data; INSERT/UPDATE/DELETE on
---    encounters, diagnoses, settings, facilities, and memberships must fail.
--- 5. Data-entry session: can INSERT/UPDATE encounters; cannot DELETE them.
---    Cannot INSERT/UPDATE/DELETE diagnoses or INSERT/UPDATE/DELETE settings.
--- 6. Admin and owner sessions: can read facility data, manage settings and
---    diagnoses, and INSERT/UPDATE/DELETE encounters within their own facility.
---    Both must fail to read or write facility B data unless separately
---    provisioned there. They cannot write facilities or memberships through
---    the client, nor change any role. They cannot delete diagnoses through
---    the client; referenced diagnosis deletion is additionally restricted by
---    the encounter foreign key.
--- 7. Each authenticated role, including admin/owner, attempts facility INSERT,
+-- 4. Every facility role (viewer, data_entry, admin, owner) can SELECT,
+--    INSERT, UPDATE, and DELETE encounters, diagnoses, and settings only for
+--    its own facility. Cross-facility reads and writes must fail.
+-- 5. Facility rows and memberships remain read-only to clients. Each member
+--    can read only its own membership; clients cannot change roles or grant
+--    access. Referenced diagnoses cannot be deleted because of the encounter
+--    foreign key.
+-- 6. Each authenticated role attempts facility INSERT,
 --    membership INSERT/UPDATE/DELETE, and self-role escalation. Each must be
 --    denied by SQL grants and/or RLS; verify memberships remain unchanged.
 -- Record both successful permitted operations and rejected operations. Do
@@ -331,10 +327,7 @@ stable
 security definer
 set search_path = pg_catalog, public, auth
 as $$
-  select public.has_facility_role(
-    requested_facility_id,
-    array['owner', 'admin']::text[]
-  );
+  select public.is_facility_member(requested_facility_id);
 $$;
 
 create function public.can_write_encounters(requested_facility_id uuid)
@@ -344,10 +337,7 @@ stable
 security definer
 set search_path = pg_catalog, public, auth
 as $$
-  select public.has_facility_role(
-    requested_facility_id,
-    array['owner', 'admin', 'data_entry']::text[]
-  );
+  select public.is_facility_member(requested_facility_id);
 $$;
 
 create function public.set_updated_at()
@@ -383,22 +373,19 @@ create policy "Facility members can read their facility"
   on public.facilities for select to authenticated
   using (public.is_facility_member(id));
 
-create policy "Members can read own membership and admins can read facility memberships"
+create policy "Members can read own membership"
   on public.facility_memberships for select to authenticated
-  using (
-    user_id = (select auth.uid())
-    or public.can_manage_facility(facility_id)
-  );
+  using (user_id = (select auth.uid()));
 
 create policy "Facility members can read facility settings"
   on public.facility_settings for select to authenticated
   using (public.is_facility_member(facility_id));
 
-create policy "Facility admins can create settings"
+create policy "Facility members can create settings"
   on public.facility_settings for insert to authenticated
   with check (public.can_manage_facility(facility_id));
 
-create policy "Facility admins can update settings"
+create policy "Facility members can update settings"
   on public.facility_settings for update to authenticated
   using (public.can_manage_facility(facility_id))
   with check (public.can_manage_facility(facility_id));
@@ -407,11 +394,11 @@ create policy "Facility members can read diagnoses"
   on public.diagnoses for select to authenticated
   using (public.is_facility_member(facility_id));
 
-create policy "Facility admins can add diagnoses"
+create policy "Facility members can add diagnoses"
   on public.diagnoses for insert to authenticated
   with check (public.can_manage_facility(facility_id));
 
-create policy "Facility admins can update diagnoses"
+create policy "Facility members can update diagnoses"
   on public.diagnoses for update to authenticated
   using (public.can_manage_facility(facility_id))
   with check (public.can_manage_facility(facility_id));
@@ -420,16 +407,16 @@ create policy "Facility members can read encounters"
   on public.encounters for select to authenticated
   using (public.is_facility_member(facility_id));
 
-create policy "Authorized staff can add encounters"
+create policy "Facility members can add encounters"
   on public.encounters for insert to authenticated
   with check (public.can_write_encounters(facility_id));
 
-create policy "Authorized staff can update encounters"
+create policy "Facility members can update encounters"
   on public.encounters for update to authenticated
   using (public.can_write_encounters(facility_id))
   with check (public.can_write_encounters(facility_id));
 
-create policy "Facility admins can delete encounters"
+create policy "Facility members can delete encounters"
   on public.encounters for delete to authenticated
   using (public.can_manage_facility(facility_id));
 

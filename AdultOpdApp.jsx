@@ -340,7 +340,7 @@ function AuthGate() {
   }
 
   return (
-    <AdultOpdProvider initialSettings={access.settings} facilityId={access.facilityId} role={access.role}>
+    <AdultOpdProvider initialSettings={access.settings} facilityId={access.facilityId}>
       <AdultOpdRoutes
         facilityId={access.facilityId}
         role={access.role}

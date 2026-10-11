@@ -79,7 +79,7 @@ export async function loadFacilityData(facilityId) {
       .select('role')
       .eq('facility_id', facilityId);
     if (membershipError) throw new Error(membershipError.message);
-    const canSeedCatalog = memberships.some(({ role }) => role === 'owner' || role === 'admin');
+    const canSeedCatalog = memberships.length > 0;
 
     if (canSeedCatalog) {
       const bundledCatalog = [

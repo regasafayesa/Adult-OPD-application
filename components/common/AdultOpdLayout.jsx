@@ -2,12 +2,12 @@ import React from 'react';
 
 const NAV_ITEMS = [
   { to: '/adult-opd', label: 'Dashboard', end: true },
-  { to: '/adult-opd/entry', label: 'Patient Entry', roles: ['owner', 'admin', 'data_entry', 'local demo'] },
+  { to: '/adult-opd/entry', label: 'Patient Entry' },
   { to: '/adult-opd/records', label: 'Patient Records' },
   { to: '/adult-opd/monthly', label: 'Monthly Report' },
   { to: '/adult-opd/yearly', label: 'Yearly Report' },
-  { to: '/adult-opd/diagnoses', label: 'Diagnoses', roles: ['owner', 'admin', 'local demo'] },
-  { to: '/adult-opd/settings', label: 'Settings', roles: ['owner', 'admin', 'local demo'] },
+  { to: '/adult-opd/diagnoses', label: 'Diagnoses' },
+  { to: '/adult-opd/settings', label: 'Settings' },
 ];
 
 export default function AdultOpdLayout({

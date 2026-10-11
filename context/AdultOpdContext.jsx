@@ -26,9 +26,9 @@ import {
 
 const AdultOpdContext = createContext(null);
 
-export function AdultOpdProvider({ children, initialSettings, facilityId, role }) {
+export function AdultOpdProvider({ children, initialSettings, facilityId }) {
   const remote = Boolean(facilityId);
-  const canManageFacility = !remote || role === 'owner' || role === 'admin';
+  const canManageFacility = true;
   const [records, setRecords] = useState(() => (remote ? [] : loadRecords()));
   const [diagnoses, setDiagnoses] = useState(() => (remote ? [] : loadDiagnoses()));
   const [settings, setSettingsState] = useState(() => ({ ...loadSettings(), ...initialSettings }));
@@ -142,9 +142,6 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
 
   const deleteRecord = useCallback(async (id) => {
     if (remote) {
-      if (!canManageFacility) {
-        return reportSyncError(new Error('Only a facility admin or owner can delete encounters.'));
-      }
       try {
         await deleteEncounter(facilityId, id);
         setSyncError('');
@@ -161,9 +158,6 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
     if (!trimmed) return { ok: false, error: 'Diagnosis name is required.' };
     const exists = diagnoses.some((item) => item.name.toLowerCase() === trimmed.toLowerCase());
     if (exists) return { ok: false, error: 'That diagnosis already exists.' };
-    if (remote && !canManageFacility) {
-      return reportSyncError(new Error('Only a facility admin or owner can manage diagnoses.'));
-    }
     const diagnosis = { id: createId('dx'), name: trimmed, active: true, official: false };
     if (remote) {
       try {
@@ -181,9 +175,6 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
 
   const updateDiagnosis = useCallback(async (id, patch) => {
     if (remote) {
-      if (!canManageFacility) {
-        return reportSyncError(new Error('Only a facility admin or owner can manage diagnoses.'));
-      }
       try {
         const savedDiagnosis = await updateFacilityDiagnosis(facilityId, id, patch);
         setDiagnoses((prev) => prev.map((item) => (item.id === id ? savedDiagnosis : item)));
@@ -206,9 +197,6 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
     const month = new Date().getMonth() + 1;
     const demoRecords = buildDemoRecords(year, month);
     if (remote) {
-      if (hasDemoRecords && !canManageFacility) {
-        return reportSyncError(new Error('Only a facility admin or owner can replace demo encounters.'));
-      }
       try {
         await deleteFacilityEncounters(facilityId, true);
         const savedRecords = await Promise.all(demoRecords.map((record) => insertEncounter(facilityId, record)));
@@ -227,9 +215,6 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
 
   const clearDemoData = useCallback(async () => {
     if (remote) {
-      if (!canManageFacility) {
-        return reportSyncError(new Error('Only a facility admin or owner can delete demo encounters.'));
-      }
       try {
         await deleteFacilityEncounters(facilityId, true);
         setSyncError('');
@@ -245,9 +230,6 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
 
   const clearAllRecords = useCallback(async () => {
     if (remote) {
-      if (!canManageFacility) {
-        return reportSyncError(new Error('Only a facility admin or owner can delete facility encounters.'));
-      }
       try {
         await deleteFacilityEncounters(facilityId);
         setSyncError('');
