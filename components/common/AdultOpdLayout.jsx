@@ -18,6 +18,7 @@ export default function AdultOpdLayout({
   role,
   userEmail,
   onSignOut,
+  isLocalDemo = false,
 }) {
   const [open, setOpen] = React.useState(false);
   const [signingOut, setSigningOut] = React.useState(false);
@@ -78,14 +79,18 @@ export default function AdultOpdLayout({
           <div className="aopd-account">
             <span className="aopd-account-email" title={userEmail}>{userEmail}</span>
             <span className="aopd-account-role">{role}</span>
-            <button type="button" onClick={handleSignOut} disabled={signingOut} className="aopd-signout">
-              {signingOut ? 'Signing out…' : 'Sign out'}
-            </button>
+            {onSignOut && (
+              <button type="button" onClick={handleSignOut} disabled={signingOut} className="aopd-signout">
+                {signingOut ? 'Signing out…' : 'Sign out'}
+              </button>
+            )}
           </div>
         </header>
         {signOutError && <p className="aopd-auth-error aopd-signout-error" role="alert">{signOutError}</p>}
         <div className="aopd-local-data-notice" role="status">
-          Patient records and diagnoses are still stored in this browser only; they have not been uploaded to Supabase.
+          {isLocalDemo
+            ? 'LOCAL DEMO MODE — sign-in is bypassed. Changes are saved only in this browser and are not synced.'
+            : 'Patient records and diagnoses are still stored in this browser only; they have not been uploaded to Supabase.'}
         </div>
         {hasDemoRecords && (
           <div className="aopd-demo-banner" role="status">

@@ -52,13 +52,20 @@ are installed from the committed `package-lock.json`.
 
 ## Local development
 
-Copy `.env.example` to `.env` and fill in the Supabase project URL and
-publishable key. `.env` is excluded from Git.
+To try the app locally without Supabase, install dependencies and start Vite.
+When Supabase is not configured, development builds open in local demo mode;
+changes are saved only in the current browser and are not synced. Use synthetic
+data only.
 
 ```sh
 npm ci
 npm run dev
 ```
+
+To use Supabase authentication locally, copy `.env.example` to `.env` and fill
+in the Supabase project URL and publishable key. `.env` is excluded from Git;
+restart Vite after changing it. To use local demo mode even when Supabase
+variables are present, set `VITE_LOCAL_DEMO_MODE=true` in `.env.local`.
 
 To verify the production build locally:
 

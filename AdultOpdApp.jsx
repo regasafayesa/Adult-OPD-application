@@ -272,6 +272,14 @@ function AuthGate() {
     };
   }, [session, retryCount]);
 
+  if (import.meta.env.DEV && (!supabase || import.meta.env.VITE_LOCAL_DEMO_MODE === 'true')) {
+    return (
+      <AdultOpdProvider>
+        <AdultOpdRoutes role="local demo" userEmail="Local demo" isLocalDemo />
+      </AdultOpdProvider>
+    );
+  }
+
   if (!supabase) {
     return <ConfigurationIssue />;
   }
@@ -343,7 +351,7 @@ function AuthGate() {
   );
 }
 
-function AdultOpdRoutes({ facilityId, role, userEmail, onSignOut }) {
+function AdultOpdRoutes({ facilityId, role, userEmail, onSignOut, isLocalDemo = false }) {
   const { hasDemoRecords, settings } = useAdultOpd();
 
   return (
@@ -355,6 +363,7 @@ function AdultOpdRoutes({ facilityId, role, userEmail, onSignOut }) {
       role={role}
       userEmail={userEmail}
       onSignOut={onSignOut}
+      isLocalDemo={isLocalDemo}
     >
       <Routes>
         <Route path="/" element={<Navigate to="/adult-opd" replace />} />
