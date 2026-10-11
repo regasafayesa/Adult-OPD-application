@@ -16,10 +16,10 @@ import { generateDashboardStats, generateMonthlyReport, generateYearlyReport } f
 
 const AdultOpdContext = createContext(null);
 
-export function AdultOpdProvider({ children }) {
+export function AdultOpdProvider({ children, initialSettings }) {
   const [records, setRecords] = useState(() => loadRecords());
   const [diagnoses, setDiagnoses] = useState(() => loadDiagnoses());
-  const [settings, setSettingsState] = useState(() => loadSettings());
+  const [settings, setSettingsState] = useState(() => ({ ...loadSettings(), ...initialSettings }));
   const [demoLoaded, setDemoLoadedState] = useState(() => isDemoLoaded());
 
   useEffect(() => {

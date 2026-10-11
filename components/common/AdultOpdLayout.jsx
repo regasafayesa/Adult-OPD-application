@@ -10,8 +10,30 @@ const NAV_ITEMS = [
   { to: '/adult-opd/settings', label: 'Settings' },
 ];
 
-export default function AdultOpdLayout({ children, NavLink, hasDemoRecords, healthCenterName }) {
+export default function AdultOpdLayout({
+  children,
+  NavLink,
+  hasDemoRecords,
+  healthCenterName,
+  role,
+  userEmail,
+  onSignOut,
+}) {
   const [open, setOpen] = React.useState(false);
+  const [signingOut, setSigningOut] = React.useState(false);
+  const [signOutError, setSignOutError] = React.useState('');
+
+  async function handleSignOut() {
+    setSigningOut(true);
+    setSignOutError('');
+    try {
+      await onSignOut();
+    } catch (error) {
+      setSignOutError(error.message || 'Could not sign out. Please retry.');
+    } finally {
+      setSigningOut(false);
+    }
+  }
 
   return (
     <div className="aopd-shell">
@@ -40,20 +62,58 @@ export default function AdultOpdLayout({ children, NavLink, hasDemoRecords, heal
       </aside>
       <div className="aopd-main">
         <header className="aopd-topbar">
-          <button type="button" className="aopd-menu" onClick={() => setOpen((value) => !value)}>
+          <button
+            type="button"
+            className="aopd-menu"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+          >
             Menu
           </button>
-          <div>
+          <div className="aopd-topbar-heading">
+            <span className="aopd-topbar-mark" aria-hidden="true">OPD</span>
             <h1>Adult OPD Monthly Reporting System</h1>
-            <p>Diagnosis → Age Group → Sex → Total. Age groups: 5–14, 15–29, 30–64, and ≥65.</p>
+          </div>
+          <div className="aopd-account">
+            <span className="aopd-account-email" title={userEmail}>{userEmail}</span>
+            <span className="aopd-account-role">{role}</span>
+            <button type="button" onClick={handleSignOut} disabled={signingOut} className="aopd-signout">
+              {signingOut ? 'Signing out…' : 'Sign out'}
+            </button>
           </div>
         </header>
+        {signOutError && <p className="aopd-auth-error aopd-signout-error" role="alert">{signOutError}</p>}
+        <div className="aopd-local-data-notice" role="status">
+          Patient records and diagnoses are still stored in this browser only; they have not been uploaded to Supabase.
+        </div>
         {hasDemoRecords && (
           <div className="aopd-demo-banner" role="status">
             DEMO DATA — NOT REAL PATIENT DATA
           </div>
         )}
         <div className="aopd-content">{children}</div>
+        <footer className="aopd-developer-credit">
+          <div className="aopd-developer-intro">
+            <span className="aopd-developer-eyebrow">DEVELOPER & SUPPORT</span>
+            <strong>Regasa Feyisa</strong>
+            <span className="aopd-developer-caption">Get in touch for questions or support.</span>
+          </div>
+          <div className="aopd-developer-contacts">
+            <a className="aopd-developer-contact" href="mailto:fregasa7@gmail.com">
+              <span>Email</span>
+              <strong>fregasa7@gmail.com</strong>
+            </a>
+            <a className="aopd-developer-contact" href="tel:+251900657115">
+              <span>Phone</span>
+              <strong>+251 900 657 115</strong>
+            </a>
+            <a className="aopd-developer-contact" href="https://t.me/Rpac2" target="_blank" rel="noreferrer">
+              <span>Telegram</span>
+              <strong>@Rpac2</strong>
+            </a>
+          </div>
+        </footer>
       </div>
     </div>
   );
