@@ -11,15 +11,15 @@ export default function Diagnoses() {
 
   const visible = diagnoses.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
 
-  function handleAdd(event) {
+  async function handleAdd(event) {
     event.preventDefault();
-    const result = addDiagnosis(name);
+    const result = await addDiagnosis(name);
     if (!result.ok) {
       setMessage(result.error);
       return;
     }
     setName('');
-    setMessage('Diagnosis added. This catalog is local to this health center and is not an official Ministry of Health list.');
+    setMessage('Diagnosis added to this facility catalog and synced to authorized devices. This is not an official Ministry of Health list.');
   }
 
   return (

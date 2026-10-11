@@ -2,18 +2,17 @@
 
 ## Deployment status
 
-The app can be deployed to Vercel for review or testing with synthetic data. It
-uses Supabase Auth and checks facility membership, but patient encounters,
-diagnoses, and settings are still stored in the browser's local storage. They
-are not saved to the Supabase tables, shared between users or devices, or
-backed up. Users on the same browser profile may see the same locally stored
-records, even after signing out.
+The app uses Supabase Auth and checks facility membership. Signed-in encounter
+records and facility diagnoses are stored in Supabase and shared with members
+of the same facility. Facility settings remain in browser local storage. Local
+demo mode stores all changes only in that browser. Cloud data does not by itself
+provide backups or audit history.
 
-**Do not use this deployment for real or identifiable patient data.** A
-production clinical deployment requires implementing and validating
-server-backed data storage, access controls, backups, and the applicable
-privacy and security requirements first. The included Supabase schema does
-not, by itself, connect the app's reporting data to Supabase.
+**Do not use this deployment for real or identifiable patient data.** Before
+using real clinical data, the facility must review and validate the deployed
+database schema, row-level security, backups, audit requirements, and applicable
+privacy and security requirements. Encounter dates, age, sex, and diagnoses are
+sensitive health information even when names are not collected.
 
 ## Deploy to Vercel
 

@@ -340,7 +340,7 @@ function AuthGate() {
   }
 
   return (
-    <AdultOpdProvider initialSettings={access.settings}>
+    <AdultOpdProvider initialSettings={access.settings} facilityId={access.facilityId} role={access.role}>
       <AdultOpdRoutes
         facilityId={access.facilityId}
         role={access.role}
@@ -352,7 +352,11 @@ function AuthGate() {
 }
 
 function AdultOpdRoutes({ facilityId, role, userEmail, onSignOut, isLocalDemo = false }) {
-  const { hasDemoRecords, settings } = useAdultOpd();
+  const { hasDemoRecords, settings, syncStatus, syncError } = useAdultOpd();
+
+  if (syncStatus === 'loading') {
+    return <LoadingScreen message="Loading records shared by your facility." />;
+  }
 
   return (
     <AdultOpdLayout
@@ -364,6 +368,7 @@ function AdultOpdRoutes({ facilityId, role, userEmail, onSignOut, isLocalDemo = 
       userEmail={userEmail}
       onSignOut={onSignOut}
       isLocalDemo={isLocalDemo}
+      syncError={syncError}
     >
       <Routes>
         <Route path="/" element={<Navigate to="/adult-opd" replace />} />

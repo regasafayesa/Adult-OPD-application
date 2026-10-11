@@ -13,82 +13,237 @@ import {
 } from '../services/storage';
 import { buildDemoRecords } from '../services/demoData';
 import { generateDashboardStats, generateMonthlyReport, generateYearlyReport } from '../services/reporting';
+import {
+  addFacilityDiagnosis,
+  deleteEncounter,
+  deleteFacilityEncounters,
+  insertEncounter,
+  loadFacilityData,
+  updateEncounter as updateRemoteEncounter,
+  updateFacilityDiagnosis,
+} from '../services/supabaseData';
 
 const AdultOpdContext = createContext(null);
 
-export function AdultOpdProvider({ children, initialSettings }) {
-  const [records, setRecords] = useState(() => loadRecords());
-  const [diagnoses, setDiagnoses] = useState(() => loadDiagnoses());
+export function AdultOpdProvider({ children, initialSettings, facilityId, role }) {
+  const remote = Boolean(facilityId);
+  const canManageFacility = role === 'owner' || role === 'admin';
+  const [records, setRecords] = useState(() => (remote ? [] : loadRecords()));
+  const [diagnoses, setDiagnoses] = useState(() => (remote ? [] : loadDiagnoses()));
   const [settings, setSettingsState] = useState(() => ({ ...loadSettings(), ...initialSettings }));
-  const [demoLoaded, setDemoLoadedState] = useState(() => isDemoLoaded());
+  const [demoLoaded, setDemoLoadedState] = useState(() => (remote ? false : isDemoLoaded()));
+  const [syncStatus, setSyncStatus] = useState(remote ? 'loading' : 'ready');
+  const [syncError, setSyncError] = useState('');
 
   useEffect(() => {
+    if (remote) return;
     saveRecords(records);
-  }, [records]);
+  }, [records, remote]);
 
   useEffect(() => {
+    if (remote) return;
     saveDiagnoses(diagnoses);
-  }, [diagnoses]);
+  }, [diagnoses, remote]);
 
   useEffect(() => {
     saveSettings(settings);
   }, [settings]);
 
-  const addRecord = useCallback((input) => {
+  useEffect(() => {
+    if (!remote) return undefined;
+    let active = true;
+
+    async function refreshRemoteData() {
+      try {
+        const data = await loadFacilityData(facilityId);
+        if (!active) return;
+        setRecords(data.records);
+        setDiagnoses(data.diagnoses);
+        setDemoLoadedState(data.records.some((record) => record.isDemo));
+        setSyncError('');
+        setSyncStatus('ready');
+      } catch (error) {
+        if (!active) return;
+        setSyncError(error.message || 'Could not sync facility data.');
+        setSyncStatus('error');
+      }
+    }
+
+    function refreshWhenVisible() {
+      if (document.visibilityState === 'visible') refreshRemoteData();
+    }
+
+    refreshRemoteData();
+    window.addEventListener('focus', refreshWhenVisible);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+    return () => {
+      active = false;
+      window.removeEventListener('focus', refreshWhenVisible);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+    };
+  }, [facilityId, remote]);
+
+  const reportSyncError = useCallback((error) => {
+    setSyncError(error.message || 'Could not sync facility data.');
+    return { ok: false, error: error.message || 'Could not sync facility data.' };
+  }, []);
+
+  const hasDemoRecords = records.some((record) => record.isDemo);
+
+  const addRecord = useCallback(async (input) => {
     const record = enrichEncounter(input);
+    if (remote) {
+      try {
+        const savedRecord = await insertEncounter(facilityId, record);
+        setRecords((prev) => [savedRecord, ...prev]);
+        setSyncError('');
+        return { ok: true, record: savedRecord };
+      } catch (error) {
+        return reportSyncError(error);
+      }
+    }
     setRecords((prev) => [record, ...prev]);
-    return record;
-  }, []);
+    return { ok: true, record };
+  }, [facilityId, remote, reportSyncError]);
 
-  const updateRecord = useCallback((id, input) => {
-    setRecords((prev) =>
-      prev.map((existing) => (existing.id === id ? enrichEncounter(input, existing) : existing))
-    );
-  }, []);
+  const updateRecord = useCallback(async (id, input) => {
+    const existing = records.find((record) => record.id === id);
+    if (!existing) return { ok: false, error: 'Encounter was not found.' };
+    const updated = enrichEncounter(input, existing);
+    if (remote) {
+      try {
+        const savedRecord = await updateRemoteEncounter(facilityId, updated);
+        setRecords((prev) => prev.map((record) => (record.id === id ? savedRecord : record)));
+        setSyncError('');
+        return { ok: true, record: savedRecord };
+      } catch (error) {
+        return reportSyncError(error);
+      }
+    }
+    setRecords((prev) => prev.map((record) => (record.id === id ? updated : record)));
+    return { ok: true, record: updated };
+  }, [facilityId, records, remote, reportSyncError]);
 
-  const deleteRecord = useCallback((id) => {
+  const deleteRecord = useCallback(async (id) => {
+    if (remote) {
+      if (!canManageFacility) {
+        return reportSyncError(new Error('Only a facility admin or owner can delete encounters.'));
+      }
+      try {
+        await deleteEncounter(facilityId, id);
+        setSyncError('');
+      } catch (error) {
+        return reportSyncError(error);
+      }
+    }
     setRecords((prev) => prev.filter((record) => record.id !== id));
-  }, []);
+    return { ok: true };
+  }, [canManageFacility, facilityId, remote, reportSyncError]);
 
-  const addDiagnosis = useCallback((name) => {
+  const addDiagnosis = useCallback(async (name) => {
     const trimmed = name.trim();
     if (!trimmed) return { ok: false, error: 'Diagnosis name is required.' };
     const exists = diagnoses.some((item) => item.name.toLowerCase() === trimmed.toLowerCase());
     if (exists) return { ok: false, error: 'That diagnosis already exists.' };
-    setDiagnoses((prev) => [...prev, { id: createId('dx'), name: trimmed, active: true }]);
+    if (remote && !canManageFacility) {
+      return reportSyncError(new Error('Only a facility admin or owner can manage diagnoses.'));
+    }
+    const diagnosis = { id: createId('dx'), name: trimmed, active: true, official: false };
+    if (remote) {
+      try {
+        const savedDiagnosis = await addFacilityDiagnosis(facilityId, diagnosis);
+        setDiagnoses((prev) => [...prev, savedDiagnosis]);
+        setSyncError('');
+        return { ok: true };
+      } catch (error) {
+        return reportSyncError(error);
+      }
+    }
+    setDiagnoses((prev) => [...prev, diagnosis]);
     return { ok: true };
-  }, [diagnoses]);
+  }, [canManageFacility, diagnoses, facilityId, remote, reportSyncError]);
 
-  const updateDiagnosis = useCallback((id, patch) => {
+  const updateDiagnosis = useCallback(async (id, patch) => {
+    if (remote) {
+      if (!canManageFacility) {
+        return reportSyncError(new Error('Only a facility admin or owner can manage diagnoses.'));
+      }
+      try {
+        const savedDiagnosis = await updateFacilityDiagnosis(facilityId, id, patch);
+        setDiagnoses((prev) => prev.map((item) => (item.id === id ? savedDiagnosis : item)));
+        setSyncError('');
+        return { ok: true };
+      } catch (error) {
+        return reportSyncError(error);
+      }
+    }
     setDiagnoses((prev) => prev.map((item) => (item.id === id ? { ...item, ...patch } : item)));
-  }, []);
+    return { ok: true };
+  }, [canManageFacility, facilityId, remote, reportSyncError]);
 
   const updateSettings = useCallback((patch) => {
     setSettingsState((prev) => ({ ...prev, ...patch }));
   }, []);
 
-  const loadDemoData = useCallback(() => {
+  const loadDemoData = useCallback(async () => {
     const year = Number(settings.reportingYear) || new Date().getFullYear();
     const month = new Date().getMonth() + 1;
     const demoRecords = buildDemoRecords(year, month);
-    setRecords((prev) => [...demoRecords, ...prev.filter((record) => !record.isDemo)]);
+    if (remote) {
+      if (hasDemoRecords && !canManageFacility) {
+        return reportSyncError(new Error('Only a facility admin or owner can replace demo encounters.'));
+      }
+      try {
+        await deleteFacilityEncounters(facilityId, true);
+        const savedRecords = await Promise.all(demoRecords.map((record) => insertEncounter(facilityId, record)));
+        setRecords((prev) => [...savedRecords, ...prev.filter((record) => !record.isDemo)]);
+        setSyncError('');
+      } catch (error) {
+        return reportSyncError(error);
+      }
+    } else {
+      setRecords((prev) => [...demoRecords, ...prev.filter((record) => !record.isDemo)]);
+    }
     setDemoLoaded(true);
     setDemoLoadedState(true);
-  }, [settings.reportingYear]);
+    return { ok: true };
+  }, [canManageFacility, facilityId, hasDemoRecords, remote, reportSyncError, settings.reportingYear]);
 
-  const clearDemoData = useCallback(() => {
+  const clearDemoData = useCallback(async () => {
+    if (remote) {
+      if (!canManageFacility) {
+        return reportSyncError(new Error('Only a facility admin or owner can delete demo encounters.'));
+      }
+      try {
+        await deleteFacilityEncounters(facilityId, true);
+        setSyncError('');
+      } catch (error) {
+        return reportSyncError(error);
+      }
+    }
     setRecords((prev) => prev.filter((record) => !record.isDemo));
     setDemoLoaded(false);
     setDemoLoadedState(false);
-  }, []);
+    return { ok: true };
+  }, [canManageFacility, facilityId, remote, reportSyncError]);
 
-  const clearAllRecords = useCallback(() => {
+  const clearAllRecords = useCallback(async () => {
+    if (remote) {
+      if (!canManageFacility) {
+        return reportSyncError(new Error('Only a facility admin or owner can delete facility encounters.'));
+      }
+      try {
+        await deleteFacilityEncounters(facilityId);
+        setSyncError('');
+      } catch (error) {
+        return reportSyncError(error);
+      }
+    }
     setRecords([]);
     setDemoLoaded(false);
     setDemoLoadedState(false);
-  }, []);
-
-  const hasDemoRecords = records.some((record) => record.isDemo);
+    return { ok: true };
+  }, [canManageFacility, facilityId, remote, reportSyncError]);
 
   const value = useMemo(
     () => ({
@@ -97,6 +252,8 @@ export function AdultOpdProvider({ children, initialSettings }) {
       settings,
       demoLoaded,
       hasDemoRecords,
+      syncStatus,
+      syncError,
       addRecord,
       updateRecord,
       deleteRecord,
@@ -116,6 +273,8 @@ export function AdultOpdProvider({ children, initialSettings }) {
       settings,
       demoLoaded,
       hasDemoRecords,
+      syncStatus,
+      syncError,
       addRecord,
       updateRecord,
       deleteRecord,

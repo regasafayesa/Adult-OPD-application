@@ -67,7 +67,7 @@ export default function Settings() {
             type="button"
             className="aopd-btn danger"
             onClick={() => {
-              if (window.confirm('Delete all stored Adult OPD encounters on this device?')) {
+              if (window.confirm('Delete all Adult OPD encounters for this facility? This affects every authorized device.')) {
                 clearAllRecords();
               }
             }}
@@ -80,9 +80,10 @@ export default function Settings() {
       <section className="aopd-panel">
         <h3>Privacy and future upgrades</h3>
         <p>
-          This MVP stores aggregate reporting encounters in the browser. It does not collect patient names, phone
-          numbers, addresses, or national IDs. The data layer is structured so authentication, role-based access, a
-          secure backend, backup, and audit logs can be added later.
+          Signed-in encounters and diagnoses are stored in the facility Supabase project and shared with authorized
+          facility members. Facility settings remain in this browser. This app does not collect patient names, phone
+          numbers, addresses, or national IDs; use only after your organization reviews its privacy, security, and
+          backup requirements.
         </p>
       </section>
     </div>

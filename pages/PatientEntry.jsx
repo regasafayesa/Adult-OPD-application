@@ -22,6 +22,8 @@ export default function PatientEntry({ editingRecord, onDone }) {
   );
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
+  const [saveError, setSaveError] = useState('');
+  const [saving, setSaving] = useState(false);
   const ageRef = useRef(null);
   const diagnosisRef = useRef(null);
 
@@ -35,8 +37,9 @@ export default function PatientEntry({ editingRecord, onDone }) {
     setSuccess('');
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    setSaveError('');
     const result = validateEncounter(form, { diagnoses });
     if (!result.valid) {
       setErrors(result.errors);
@@ -49,14 +52,25 @@ export default function PatientEntry({ editingRecord, onDone }) {
       sex: form.sex,
       diagnosis: form.diagnosis.trim(),
     };
+    setSaving(true);
     if (editingRecord) {
-      updateRecord(editingRecord.id, payload);
-      setSuccess('Encounter updated. Reports will recalculate automatically.');
+      const saveResult = await updateRecord(editingRecord.id, payload);
+      setSaving(false);
+      if (!saveResult.ok) {
+        setSaveError(saveResult.error);
+        return;
+      }
+      setSuccess('Encounter updated and synced to this facility.');
       onDone?.();
       return;
     }
-    addRecord(payload);
-    setSuccess('Encounter saved. Enter the next patient.');
+    const saveResult = await addRecord(payload);
+    setSaving(false);
+    if (!saveResult.ok) {
+      setSaveError(saveResult.error);
+      return;
+    }
+    setSuccess('Encounter saved and synced to this facility. Enter the next patient.');
     setForm((prev) => ({ ...EMPTY, date: prev.date, sex: prev.sex }));
     ageRef.current?.focus();
   }
@@ -149,8 +163,8 @@ export default function PatientEntry({ editingRecord, onDone }) {
         </div>
 
         <div className="aopd-actions">
-          <button type="submit" className="aopd-btn">
-            {editingRecord ? 'Save changes' : 'Save encounter'}
+          <button type="submit" className="aopd-btn" disabled={saving}>
+            {saving ? 'Saving…' : editingRecord ? 'Save changes' : 'Save encounter'}
           </button>
           {editingRecord && (
             <button type="button" className="aopd-btn secondary" onClick={onDone}>
@@ -158,6 +172,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
             </button>
           )}
         </div>
+        {saveError && <p className="aopd-error" role="alert">{saveError}</p>}
         {success && <p className="aopd-success">{success}</p>}
       </form>
     </div>
