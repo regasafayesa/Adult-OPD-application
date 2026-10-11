@@ -6,7 +6,7 @@ import { formatDisplayDate } from '../utils/dates';
 import PatientEntry from './PatientEntry';
 
 export default function PatientRecords() {
-  const { records, diagnoses, deleteRecord } = useAdultOpd();
+  const { records, diagnoses, deleteRecord, canManageFacility } = useAdultOpd();
   const [filters, setFilters] = useState({
     query: '',
     date: '',
@@ -153,7 +153,7 @@ export default function PatientRecords() {
                   <button type="button" onClick={() => setEditing(record)}>
                     Edit
                   </button>
-                  <button
+                  {canManageFacility && <button
                     type="button"
                     className="danger-text"
                     onClick={() => {
@@ -163,7 +163,7 @@ export default function PatientRecords() {
                     }}
                   >
                     Delete
-                  </button>
+                  </button>}
                 </td>
               </tr>
             ))}

@@ -4,9 +4,9 @@
 
 The app uses Supabase Auth and checks facility membership. Signed-in encounter
 records and facility diagnoses are stored in Supabase and shared with members
-of the same facility. Facility settings remain in browser local storage. Local
-demo mode stores all changes only in that browser. Cloud data does not by itself
-provide backups or audit history.
+of the same facility. Facility settings are shared for owner/admin accounts.
+Local demo mode stores all changes only in that browser. Cloud data does not by
+itself provide backups or audit history.
 
 **Do not use this deployment for real or identifiable patient data.** Before
 using real clinical data, the facility must review and validate the deployed
@@ -22,8 +22,10 @@ sensitive health information even when names are not collected.
 3. Review `supabase/schema.sql` and apply it **once to a new, empty Supabase
    project only**. Do not run it against an existing database. Follow its
    trusted-operator onboarding instructions to create the first facility and
-   owner membership. Import the approved facility diagnosis catalog before
-   enabling patient entry.
+   owner membership. When the diagnosis table for a facility is empty, its
+   first owner/admin sign-in initializes the bundled ESV-1 and starter catalog.
+   If your organization uses a separately approved catalog, import it before
+   that first sign-in; a non-empty catalog is never overwritten.
 4. In the Supabase project API settings, copy the project URL and publishable
    key. Never use a `service_role` key in the browser app.
 5. Import this repository into Vercel. The included `vercel.json` configures

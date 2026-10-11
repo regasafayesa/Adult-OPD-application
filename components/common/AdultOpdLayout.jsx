@@ -2,12 +2,12 @@ import React from 'react';
 
 const NAV_ITEMS = [
   { to: '/adult-opd', label: 'Dashboard', end: true },
-  { to: '/adult-opd/entry', label: 'Patient Entry' },
+  { to: '/adult-opd/entry', label: 'Patient Entry', roles: ['owner', 'admin', 'data_entry', 'local demo'] },
   { to: '/adult-opd/records', label: 'Patient Records' },
   { to: '/adult-opd/monthly', label: 'Monthly Report' },
   { to: '/adult-opd/yearly', label: 'Yearly Report' },
-  { to: '/adult-opd/diagnoses', label: 'Diagnoses' },
-  { to: '/adult-opd/settings', label: 'Settings' },
+  { to: '/adult-opd/diagnoses', label: 'Diagnoses', roles: ['owner', 'admin', 'local demo'] },
+  { to: '/adult-opd/settings', label: 'Settings', roles: ['owner', 'admin', 'local demo'] },
 ];
 
 export default function AdultOpdLayout({
@@ -45,7 +45,7 @@ export default function AdultOpdLayout({
           <span>Monthly Reporting System</span>
         </div>
         <nav>
-          {NAV_ITEMS.map((item) => (
+          {NAV_ITEMS.filter((item) => !item.roles || item.roles.includes(role)).map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -91,7 +91,7 @@ export default function AdultOpdLayout({
         <div className="aopd-local-data-notice" role="status">
           {isLocalDemo
             ? 'LOCAL DEMO MODE — sign-in is bypassed. Changes are saved only in this browser and are not synced.'
-            : 'Encounters and diagnoses are shared with authorized members of this facility through Supabase. Facility settings remain on this device.'}
+            : 'Encounters, diagnoses, and facility settings are shared with authorized members through Supabase.'}
         </div>
         {syncError && <p className="aopd-auth-error" role="alert">Cloud sync failed: {syncError}</p>}
         {hasDemoRecords && (

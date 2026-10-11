@@ -21,13 +21,14 @@ import {
   loadFacilityData,
   updateEncounter as updateRemoteEncounter,
   updateFacilityDiagnosis,
+  updateFacilitySettings,
 } from '../services/supabaseData';
 
 const AdultOpdContext = createContext(null);
 
 export function AdultOpdProvider({ children, initialSettings, facilityId, role }) {
   const remote = Boolean(facilityId);
-  const canManageFacility = role === 'owner' || role === 'admin';
+  const canManageFacility = !remote || role === 'owner' || role === 'admin';
   const [records, setRecords] = useState(() => (remote ? [] : loadRecords()));
   const [diagnoses, setDiagnoses] = useState(() => (remote ? [] : loadDiagnoses()));
   const [settings, setSettingsState] = useState(() => ({ ...loadSettings(), ...initialSettings }));
@@ -46,8 +47,23 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
   }, [diagnoses, remote]);
 
   useEffect(() => {
-    saveSettings(settings);
-  }, [settings]);
+    if (!remote) {
+      saveSettings(settings);
+      return undefined;
+    }
+    if (!canManageFacility) return undefined;
+
+    const timeoutId = window.setTimeout(async () => {
+      try {
+        await updateFacilitySettings(facilityId, settings);
+        setSyncError('');
+      } catch (error) {
+        setSyncError(error.message || 'Could not sync facility settings.');
+      }
+    }, 600);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [canManageFacility, facilityId, remote, settings]);
 
   useEffect(() => {
     if (!remote) return undefined;
@@ -204,7 +220,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
     } else {
       setRecords((prev) => [...demoRecords, ...prev.filter((record) => !record.isDemo)]);
     }
-    setDemoLoaded(true);
+    if (!remote) setDemoLoaded(true);
     setDemoLoadedState(true);
     return { ok: true };
   }, [canManageFacility, facilityId, hasDemoRecords, remote, reportSyncError, settings.reportingYear]);
@@ -222,7 +238,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
       }
     }
     setRecords((prev) => prev.filter((record) => !record.isDemo));
-    setDemoLoaded(false);
+    if (!remote) setDemoLoaded(false);
     setDemoLoadedState(false);
     return { ok: true };
   }, [canManageFacility, facilityId, remote, reportSyncError]);
@@ -240,7 +256,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
       }
     }
     setRecords([]);
-    setDemoLoaded(false);
+    if (!remote) setDemoLoaded(false);
     setDemoLoadedState(false);
     return { ok: true };
   }, [canManageFacility, facilityId, remote, reportSyncError]);
@@ -254,6 +270,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
       hasDemoRecords,
       syncStatus,
       syncError,
+      canManageFacility,
       addRecord,
       updateRecord,
       deleteRecord,
@@ -275,6 +292,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role }
       hasDemoRecords,
       syncStatus,
       syncError,
+      canManageFacility,
       addRecord,
       updateRecord,
       deleteRecord,

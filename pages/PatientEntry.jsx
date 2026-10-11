@@ -129,6 +129,11 @@ export default function PatientEntry({ editingRecord, onDone }) {
 
         <label>
           Diagnosis
+          {diagnoses.filter((item) => item.active !== false).length === 0 && (
+            <span className="aopd-error" role="status">
+              This facility has no active diagnosis catalog yet. Ask an owner or admin to initialize it.
+            </span>
+          )}
           <DiagnosisAutocomplete
             diagnoses={diagnoses}
             value={form.diagnosis}

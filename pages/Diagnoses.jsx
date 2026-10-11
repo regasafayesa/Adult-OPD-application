@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAdultOpd } from '../context/AdultOpdContext';
 
 export default function Diagnoses() {
-  const { diagnoses, addDiagnosis, updateDiagnosis } = useAdultOpd();
+  const { diagnoses, addDiagnosis, updateDiagnosis, canManageFacility } = useAdultOpd();
   const [name, setName] = useState('');
   const [query, setQuery] = useState('');
   const [message, setMessage] = useState('');
@@ -30,16 +30,18 @@ export default function Diagnoses() {
         is not presented as an official Ethiopian Ministry of Health diagnosis list.
       </p>
 
-      <form className="aopd-inline-form" onSubmit={handleAdd}>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Add diagnosis"
-        />
-        <button type="submit" className="aopd-btn">
-          Add
-        </button>
-      </form>
+      {canManageFacility && (
+        <form className="aopd-inline-form" onSubmit={handleAdd}>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Add diagnosis"
+          />
+          <button type="submit" className="aopd-btn">
+            Add
+          </button>
+        </form>
+      )}
       {message && <p className="aopd-success">{message}</p>}
 
       <input
@@ -63,7 +65,7 @@ export default function Diagnoses() {
             {visible.map((item) => (
               <tr key={item.id}>
                 <td>
-                  {editingId === item.id ? (
+                  {!canManageFacility ? null : editingId === item.id ? (
                     <input value={editName} onChange={(e) => setEditName(e.target.value)} />
                   ) : (
                     item.name

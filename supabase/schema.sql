@@ -15,11 +15,13 @@
 --    and run the block in the Supabase SQL Editor as the project owner. It
 --    atomically creates one facility, its settings, and its first owner.
 -- 3. Before patient entry is enabled or data-entry accounts are provisioned,
---    import the approved facility diagnosis catalog (including only the
---    approved ESV-1 and starter/custom catalog entries) through a trusted
---    operator process. Do not invent, infer, or seed diagnosis entries from
---    this migration. Validate the imported IDs, codes, names, and active
---    flags against the approved source.
+--    configure the approved facility diagnosis catalog. If the facility
+--    diagnosis table is empty, the first owner/admin app sign-in initializes
+--    the bundled ESV-1 and starter catalog. To use a separately approved
+--    catalog, import it through a trusted operator process before that first
+--    sign-in; a non-empty catalog is never overwritten. Do not invent or infer
+--    diagnosis entries. Validate IDs, codes, names, and active flags against
+--    the approved source.
 -- 4. Provision or change memberships only through a trusted operator process
 --    after verifying user identity. Authenticated clients have no membership
 --    write grants and cannot grant access or elevate roles. Never expose a

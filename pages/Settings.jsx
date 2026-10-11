@@ -2,7 +2,15 @@ import React from 'react';
 import { useAdultOpd } from '../context/AdultOpdContext';
 
 export default function Settings() {
-  const { settings, updateSettings, loadDemoData, clearDemoData, clearAllRecords, hasDemoRecords } = useAdultOpd();
+  const {
+    settings,
+    updateSettings,
+    loadDemoData,
+    clearDemoData,
+    clearAllRecords,
+    hasDemoRecords,
+    canManageFacility,
+  } = useAdultOpd();
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -20,35 +28,35 @@ export default function Settings() {
       <form className="aopd-settings" onSubmit={(event) => event.preventDefault()}>
         <label>
           Health center name
-          <input name="healthCenterName" value={settings.healthCenterName} onChange={handleChange} />
+          <input name="healthCenterName" value={settings.healthCenterName} onChange={handleChange} disabled={!canManageFacility} />
         </label>
         <label>
           Region
-          <input name="region" value={settings.region} onChange={handleChange} />
+          <input name="region" value={settings.region} onChange={handleChange} disabled={!canManageFacility} />
         </label>
         <label>
           Zone
-          <input name="zone" value={settings.zone} onChange={handleChange} />
+          <input name="zone" value={settings.zone} onChange={handleChange} disabled={!canManageFacility} />
         </label>
         <label>
           Woreda
-          <input name="woreda" value={settings.woreda} onChange={handleChange} />
+          <input name="woreda" value={settings.woreda} onChange={handleChange} disabled={!canManageFacility} />
         </label>
         <label>
           Reporting year
-          <input type="number" name="reportingYear" value={settings.reportingYear} onChange={handleChange} />
+          <input type="number" name="reportingYear" value={settings.reportingYear} onChange={handleChange} disabled={!canManageFacility} />
         </label>
         <label>
           Responsible person name
-          <input name="responsiblePersonName" value={settings.responsiblePersonName} onChange={handleChange} />
+          <input name="responsiblePersonName" value={settings.responsiblePersonName} onChange={handleChange} disabled={!canManageFacility} />
         </label>
         <label>
           Position
-          <input name="position" value={settings.position} onChange={handleChange} />
+          <input name="position" value={settings.position} onChange={handleChange} disabled={!canManageFacility} />
         </label>
       </form>
 
-      <section className="aopd-panel">
+      {canManageFacility && <section className="aopd-panel">
         <h3>Demo data</h3>
         <p>
           Demo encounters are labelled <strong>DEMO DATA — NOT REAL PATIENT DATA</strong> and can be removed before
@@ -75,7 +83,7 @@ export default function Settings() {
             Clear all encounters
           </button>
         </div>
-      </section>
+      </section>}
 
       <section className="aopd-panel">
         <h3>Privacy and future upgrades</h3>
