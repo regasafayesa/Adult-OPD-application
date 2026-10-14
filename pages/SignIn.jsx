@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DeveloperCredit from '../components/common/DeveloperCredit';
 import { supabase } from '../services/supabase';
 
 export default function SignIn() {
@@ -141,6 +142,7 @@ export default function SignIn() {
           </p>
         </div>
       </section>
+      <DeveloperCredit />
     </main>
   );
 }

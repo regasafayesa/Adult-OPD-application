@@ -1244,8 +1244,11 @@ tr.is-youth {
 
 .aopd-auth-screen {
   display: grid;
+  grid-template-columns: minmax(0, min(100%, 1040px));
+  grid-template-rows: 1fr auto;
   min-height: 100vh;
-  place-items: center;
+  justify-content: center;
+  align-items: center;
   padding: clamp(1rem, 4vw, 3rem);
   --aopd-auth-blue: #16745a;
   --aopd-auth-blue-dark: #105b46;
@@ -1254,6 +1257,10 @@ tr.is-youth {
     radial-gradient(ellipse at 12% 8%, rgba(70, 160, 111, 0.13), transparent 32rem),
     radial-gradient(ellipse at 95% 95%, rgba(225, 123, 97, 0.09), transparent 26rem),
     linear-gradient(145deg, #f4faf6 0%, #eef7f0 52%, #fff 100%);
+}
+
+.aopd-auth-screen > .aopd-developer-credit {
+  width: 100%;
 }
 
 .aopd-auth-card {
