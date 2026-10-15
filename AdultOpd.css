@@ -1775,3 +1775,626 @@ button:disabled,
     break-inside: avoid;
   }
 }
+/* ==========================================
+   BUTA BEDASO ADULT OPD — PREMIUM LOGIN THEME
+   Palette: Emerald Teal, Navy, Mint & Gold
+   ========================================== */
+
+.aopd-auth-screen {
+  --aopd-navy: #102f46;
+  --aopd-teal: #087f8c;
+  --aopd-emerald: #079477;
+  --aopd-mint: #b9f0df;
+  --aopd-gold: #e9bd69;
+  --aopd-text: #173d52;
+  --aopd-muted: #647d8c;
+  --aopd-border: #dce9ed;
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr auto auto;
+  min-height: 100svh;
+  justify-items: center;
+  align-items: center;
+  gap: clamp(0.8rem, 1.8vh, 1.3rem);
+  overflow: hidden;
+  padding: clamp(1.25rem, 3vh, 2rem) clamp(1rem, 4vw, 3rem);
+  font-family: Inter, "Aptos", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  background:
+    radial-gradient(
+      ellipse at 4% 5%,
+      rgba(6, 148, 119, 0.18),
+      transparent 34rem
+    ),
+    radial-gradient(
+      ellipse at 96% 12%,
+      rgba(19, 107, 157, 0.15),
+      transparent 32rem
+    ),
+    radial-gradient(
+      ellipse at 85% 100%,
+      rgba(105, 212, 185, 0.22),
+      transparent 32rem
+    ),
+    linear-gradient(
+      135deg,
+      #f5fbfa 0%,
+      #edf6f8 45%,
+      #f2f8fc 100%
+    );
+}
+
+/* Decorative background glow */
+.aopd-auth-screen::after {
+  position: absolute;
+  z-index: -1;
+  top: -170px;
+  right: -130px;
+  width: 390px;
+  height: 390px;
+  border: 1px solid rgba(8, 127, 140, 0.13);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 35px rgba(8, 127, 140, 0.035),
+    0 0 0 75px rgba(8, 127, 140, 0.025);
+  content: "";
+  pointer-events: none;
+}
+
+/* Ministry of Health watermark */
+.aopd-auth-screen::before {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: min(76vw, 760px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -52%);
+  background: url("/images/ethiopia-ministry-of-health-logo.png")
+    center / contain no-repeat;
+  content: "";
+  opacity: 0.045;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
+.aopd-auth-screen > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Main login card */
+.aopd-auth-screen .aopd-login-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) 1px minmax(0, 0.96fr);
+  align-items: stretch;
+  width: min(100%, 1120px);
+  min-height: clamp(560px, 68svh, 720px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 35px 90px rgba(16, 47, 70, 0.13),
+    0 12px 30px rgba(8, 127, 140, 0.07),
+    0 2px 8px rgba(16, 47, 70, 0.04);
+  backdrop-filter: blur(16px);
+}
+
+/* Left branding panel */
+.aopd-login-header {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  padding: clamp(2.5rem, 6vw, 5.5rem);
+  border-radius: 27px 0 0 27px;
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(185, 240, 223, 0.22),
+      transparent 17rem
+    ),
+    radial-gradient(
+      circle at 10% 100%,
+      rgba(233, 189, 105, 0.13),
+      transparent 20rem
+    ),
+    linear-gradient(
+      145deg,
+      #102f46 0%,
+      #10566a 47%,
+      #087f8c 77%,
+      #079477 100%
+    );
+  color: #fff;
+  text-align: left;
+}
+
+/* Subtle decorative circles on branding panel */
+.aopd-login-header::before {
+  position: absolute;
+  right: -115px;
+  bottom: -150px;
+  width: 330px;
+  height: 330px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 28px rgba(255, 255, 255, 0.035),
+    0 0 0 60px rgba(255, 255, 255, 0.025);
+  content: "";
+  pointer-events: none;
+}
+
+.aopd-login-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Official logo */
+.aopd-login-official-logo {
+  display: block;
+  width: 68px;
+  height: 68px;
+  margin: 0 0 1.7rem;
+  object-fit: contain;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 17px;
+  background: #fff;
+  padding: 0.4rem;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.13);
+}
+
+.aopd-login-official-logo[hidden] {
+  display: none;
+}
+
+.aopd-login-overline {
+  margin: 0 0 0.75rem;
+  color: #b9f0df;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.aopd-login-header h1 {
+  max-width: 12ch;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.1rem, 4.3vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.aopd-login-subtitle {
+  margin: 1.25rem 0 0;
+  color: #f0fffb;
+  font-size: clamp(1.05rem, 1.7vw, 1.24rem);
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.aopd-login-subtitle span {
+  color: #c4eae5;
+  font-weight: 600;
+}
+
+.aopd-login-supporting {
+  max-width: 34ch;
+  margin: 0.8rem 0 0;
+  color: #d0e9ee;
+  font-size: 1.02rem;
+  line-height: 1.8;
+}
+
+/* Center divider */
+.aopd-login-divider {
+  display: block;
+  width: 1px;
+  height: 68%;
+  justify-self: center;
+  margin: auto 0;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    #dbe9ec 18%,
+    #dbe9ec 82%,
+    transparent
+  );
+}
+
+.aopd-login-divider::before,
+.aopd-login-divider::after {
+  content: none;
+}
+
+.aopd-login-divider span {
+  display: none;
+}
+
+/* Right form panel */
+.aopd-auth-screen .aopd-auth-form-panel {
+  align-self: center;
+  width: 100%;
+  max-width: 480px;
+  justify-self: center;
+  padding: clamp(2.25rem, 5.2vw, 4rem);
+}
+
+.aopd-auth-screen .aopd-auth-form-heading h2 {
+  margin: 0;
+  color: #102f46;
+  font-size: clamp(1.7rem, 2.5vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.aopd-auth-screen .aopd-auth-form-heading p {
+  max-width: 34ch;
+  margin: 0.65rem 0 0;
+  color: #647d8c;
+  font-size: 0.96rem;
+  line-height: 1.75;
+}
+
+.aopd-auth-screen .aopd-auth-form {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.65rem;
+}
+
+.aopd-auth-screen .aopd-auth-form > label {
+  margin-top: 0.35rem;
+  color: #294b5e;
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+/* Inputs */
+.aopd-auth-screen .aopd-auth-input-wrap {
+  min-height: 54px;
+  border: 1px solid #d9e6eb;
+  border-radius: 12px;
+  background: #f7fafc;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.aopd-auth-screen .aopd-auth-input-wrap:hover {
+  border-color: #a9cbd1;
+  background: #fff;
+}
+
+.aopd-auth-screen .aopd-auth-input-wrap:focus-within {
+  border-color: #079477;
+  background: #fff;
+  box-shadow:
+    0 0 0 4px rgba(7, 148, 119, 0.11),
+    0 4px 12px rgba(16, 47, 70, 0.04);
+}
+
+.aopd-auth-screen .aopd-auth-input-wrap input {
+  color: #173d52;
+  background: transparent;
+  font-size: 0.96rem;
+}
+
+.aopd-auth-screen .aopd-auth-input-wrap input::placeholder {
+  color: #91a3ad;
+  opacity: 1;
+}
+
+.aopd-auth-screen .aopd-auth-input-wrap svg {
+  stroke: #62828f;
+}
+
+/* Show / hide password */
+.aopd-auth-screen .aopd-auth-show-password {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 8px;
+  color: #087f8c;
+  font-size: 0.9rem;
+  transition:
+    color 180ms ease,
+    background 180ms ease;
+}
+
+.aopd-auth-screen .aopd-auth-show-password:hover:not(:disabled) {
+  background: #e7f6f1;
+  color: #066b62;
+}
+
+/* Main sign-in button */
+.aopd-auth-screen .aopd-auth-button {
+  min-height: 54px;
+  margin-top: 0.8rem;
+  border: 1px solid #087f8c;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #079477 0%, #087f8c 48%, #145b83 100%);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 750;
+  letter-spacing: 0.015em;
+  box-shadow:
+    0 10px 22px rgba(8, 127, 140, 0.19),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+}
+
+.aopd-auth-screen .aopd-auth-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: linear-gradient(120deg, #067f68, #076c80 52%, #104968);
+  box-shadow:
+    0 14px 28px rgba(8, 127, 140, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.aopd-auth-screen .aopd-auth-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.aopd-auth-screen .aopd-auth-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Authentication error */
+.aopd-auth-screen .aopd-auth-error {
+  margin: 0.2rem 0;
+  border: 1px solid #f0c7c2;
+  border-left: 4px solid #c54f47;
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  background: #fff5f3;
+  color: #842f28;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+/* Security message */
+.aopd-login-trust-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.35rem;
+  color: #426879;
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-align: center;
+}
+
+.aopd-login-lock {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #d5eee4;
+  border-radius: 50%;
+  background: #e9f8f1;
+}
+
+.aopd-login-lock svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: #087f68;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.aopd-auth-screen .aopd-auth-admin-note {
+  margin: 1rem 0 0;
+  color: #70848e;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Footer */
+.aopd-login-footer {
+  margin: 0;
+  color: #526d7a;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  text-align: center;
+}
+
+/* Developer information card */
+.aopd-auth-screen > .aopd-developer-credit {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.5fr);
+  gap: 1rem;
+  width: min(100%, 680px);
+  margin: 0;
+  border: 1px solid rgba(216, 233, 236, 0.9);
+  border-radius: 15px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.82);
+  color: #31536a;
+  box-shadow: 0 8px 24px rgba(16, 47, 70, 0.055);
+  backdrop-filter: blur(12px);
+}
+
+.aopd-auth-screen .aopd-developer-eyebrow,
+.aopd-auth-screen .aopd-developer-contact > span {
+  color: #62828b;
+}
+
+.aopd-auth-screen .aopd-developer-intro > strong {
+  color: #173f59;
+  font-size: 1.02rem;
+}
+
+.aopd-auth-screen .aopd-developer-caption {
+  color: #71858f;
+  font-size: 0.76rem;
+}
+
+.aopd-auth-screen .aopd-developer-contacts {
+  gap: 0.45rem;
+}
+
+.aopd-auth-screen .aopd-developer-contact {
+  min-height: 52px;
+  gap: 0.25rem;
+  border: 1px solid #dce9ec;
+  border-radius: 10px;
+  padding: 0.55rem;
+  background: rgba(255, 255, 255, 0.85);
+  color: #214e64;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.aopd-auth-screen .aopd-developer-contact:hover {
+  transform: translateY(-1px);
+  border-color: #86c7ba;
+  background: #effaf6;
+  color: #173f59;
+}
+
+.aopd-auth-screen .aopd-developer-contact > strong {
+  font-size: 0.76rem;
+}
+
+/* Accessible focus */
+.aopd-auth-screen :focus-visible {
+  outline: 3px solid #159b8a;
+  outline-offset: 3px;
+}
+
+/* Tablet and mobile */
+@media (max-width: 600px) {
+  .aopd-auth-screen {
+    gap: 0.9rem;
+    padding: 1rem;
+  }
+
+  .aopd-auth-screen::before {
+    width: min(95vw, 500px);
+    opacity: 0.035;
+  }
+
+  .aopd-auth-screen .aopd-login-card {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    border-radius: 20px;
+  }
+
+  .aopd-login-header {
+    align-items: center;
+    padding: 2rem 1.4rem;
+    border-radius: 19px 19px 0 0;
+    text-align: center;
+  }
+
+  .aopd-login-header h1 {
+    max-width: 17ch;
+    font-size: clamp(1.9rem, 8.2vw, 2.4rem);
+  }
+
+  .aopd-login-official-logo {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+  }
+
+  .aopd-login-supporting {
+    max-width: 30ch;
+  }
+
+  .aopd-login-divider {
+    width: 76%;
+    height: 1px;
+    margin: 0.15rem auto;
+    background: #e3ecef;
+  }
+
+  .aopd-login-divider span {
+    display: block;
+    width: 7px;
+    height: 7px;
+    margin: -3px auto 0;
+    border-radius: 50%;
+    background: #079477;
+  }
+
+  .aopd-auth-screen .aopd-auth-form-panel {
+    max-width: none;
+    padding: 1.5rem 1.4rem 1.8rem;
+  }
+
+  .aopd-auth-screen > .aopd-developer-credit {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.7rem;
+    padding: 0.8rem;
+  }
+
+  .aopd-auth-screen .aopd-developer-contacts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .aopd-auth-screen .aopd-developer-contact {
+    padding: 0.45rem;
+  }
+
+  .aopd-auth-screen .aopd-developer-contact > strong {
+    font-size: 0.68rem;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 850px) {
+  .aopd-auth-screen .aopd-login-card {
+    grid-template-columns: minmax(0, 0.9fr) 1px minmax(0, 1.1fr);
+    min-height: 590px;
+  }
+
+  .aopd-login-header {
+    padding: 2rem;
+  }
+
+  .aopd-auth-screen .aopd-auth-form-panel {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .aopd-auth-screen .aopd-developer-contacts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .aopd-auth-screen *,
+  .aopd-auth-screen *::before,
+  .aopd-auth-screen *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
