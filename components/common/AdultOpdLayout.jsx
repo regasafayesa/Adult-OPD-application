@@ -91,7 +91,7 @@ export default function AdultOpdLayout({
         {signOutError && <p className="aopd-auth-error aopd-signout-error" role="alert">{signOutError}</p>}
         <div className="aopd-local-data-notice" role="status">
           {isLocalDemo
-            ? 'LOCAL DEMO MODE — sign-in is bypassed. Changes are saved only in this browser and are not synced.'
+            ? 'LOCAL DEMO MODE — sign-in is bypassed. Changes are temporary, lost on refresh, and not synced to Supabase.'
             : 'Encounters, diagnoses, and facility settings are shared with authorized members through Supabase.'}
         </div>
         {syncError && <p className="aopd-auth-error" role="alert">Cloud sync failed: {syncError}</p>}

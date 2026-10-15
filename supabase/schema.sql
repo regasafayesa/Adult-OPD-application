@@ -15,13 +15,10 @@
 --    and run the block in the Supabase SQL Editor as the project owner. It
 --    atomically creates one facility, its settings, and its first owner.
 -- 3. Before patient entry is enabled or facility accounts are provisioned,
---    configure the approved facility diagnosis catalog. If the facility
---    diagnosis table is empty, the first facility-member app sign-in initializes
---    the bundled ESV-1 and starter catalog. To use a separately approved
---    catalog, import it through a trusted operator process before that first
---    sign-in; a non-empty catalog is never overwritten. Do not invent or infer
---    diagnosis entries. Validate IDs, codes, names, and active flags against
---    the approved source.
+--    configure the approved facility diagnosis catalog. Existing approved
+--    diagnosis rows are loaded from public.diagnoses by the
+--    app. An empty catalog remains empty until a trusted operator loads the
+--    approved facility catalog. Do not seed or infer diagnosis entries.
 -- 4. Provision or change memberships only through a trusted operator process
 --    after verifying user identity. Authenticated clients have no membership
 --    write grants and cannot grant access or elevate roles. Never expose a
@@ -396,12 +393,12 @@ create policy "Facility members can read diagnoses"
 
 create policy "Facility members can add diagnoses"
   on public.diagnoses for insert to authenticated
-  with check (public.can_manage_facility(facility_id));
+  with check (public.can_manage_facility(facility_id) and not official);
 
 create policy "Facility members can update diagnoses"
   on public.diagnoses for update to authenticated
-  using (public.can_manage_facility(facility_id))
-  with check (public.can_manage_facility(facility_id));
+  using (public.can_manage_facility(facility_id) and not official)
+  with check (public.can_manage_facility(facility_id) and not official);
 
 create policy "Facility members can read encounters"
   on public.encounters for select to authenticated
@@ -439,9 +436,9 @@ grant update (
   responsible_person_name, position, demo_loaded
 ) on public.facility_settings to authenticated;
 
-grant insert (facility_id, id, code, name, active, official)
+grant insert (facility_id, id, name, active)
   on public.diagnoses to authenticated;
-grant update (code, name, active, official)
+grant update (name, active)
   on public.diagnoses to authenticated;
 
 grant insert (

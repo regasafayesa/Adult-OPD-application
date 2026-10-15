@@ -7,6 +7,7 @@ export default function DiagnosisAutocomplete({
   onChange,
   inputRef,
   placeholder = 'Search diagnosis name or ESV-1 code',
+  disabled = false,
 }) {
   const [open, setOpen] = useState(false);
   const [highlight, setHighlight] = useState(0);
@@ -69,6 +70,7 @@ export default function DiagnosisAutocomplete({
         value={value}
         placeholder={placeholder}
         autoComplete="off"
+        disabled={disabled}
         onFocus={() => setOpen(true)}
         onChange={(event) => {
           onChange(event.target.value);
@@ -89,6 +91,7 @@ export default function DiagnosisAutocomplete({
               <button
                 id={`diagnosis-option-${item.id}`}
                 type="button"
+                disabled={disabled}
                 className={index === highlight ? 'is-active' : ''}
                 role="option"
                 aria-selected={index === highlight}

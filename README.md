@@ -5,8 +5,8 @@
 The app uses Supabase Auth and checks facility membership. Every signed-in
 facility member can view and manage that facility's encounters, diagnoses, and
 settings. Facility membership and role changes remain operator-only.
-Local demo mode stores all changes only in that browser. Cloud data does not by
-itself provide backups or audit history.
+Local demo mode is temporary and stores changes only in memory; refresh discards
+them. Cloud data does not by itself provide backups or audit history.
 
 **Do not use this deployment for real or identifiable patient data.** Before
 using real clinical data, the facility must review and validate the deployed
@@ -23,12 +23,20 @@ sensitive health information even when names are not collected.
    project only**. Do not run it against an existing database. Follow its
    trusted-operator onboarding instructions to create the first facility and
    owner membership. When the diagnosis table for a facility is empty, the
-   first facility-member sign-in initializes the bundled ESV-1 and starter catalog.
-   If your organization uses a separately approved catalog, import it before
-   that first sign-in; a non-empty catalog is never overwritten.
+   app reads the approved diagnosis rows already stored for the facility; an
+   empty catalog remains empty until a trusted operator loads the approved
+   catalog. Authenticated client users cannot create or modify approved
+   diagnosis entries or codes.
    For an existing project, apply
    `supabase/migrations/20261011_all_facility_members_full_access.sql` once in
-   the Supabase SQL Editor. Do not rerun the initial schema migration.
+   the Supabase SQL Editor, followed by
+   `supabase/migrations/20261015_facility_member_access.sql`. Apply the updated
+   20261015 migration even if an earlier version was already applied; it resets
+   diagnosis grants so approved codes cannot be edited by authenticated clients.
+   Do not rerun the initial schema migration. Every provisioned facility member can manage that
+   facility's records, settings, and unofficial diagnosis entries; approved
+   diagnosis catalog entries and membership administration remain restricted
+   to trusted operators.
 4. In the Supabase project API settings, copy the project URL and publishable
    key. Never use a `service_role` key in the browser app.
 5. Import this repository into Vercel. The included `vercel.json` configures
@@ -56,10 +64,10 @@ are installed from the committed `package-lock.json`.
 
 ## Local development
 
-To try the app locally without Supabase, install dependencies and start Vite.
-When Supabase is not configured, development builds open in local demo mode;
-changes are saved only in the current browser and are not synced. Use synthetic
-data only.
+To try the interface locally without Supabase, install dependencies and start
+Vite. When Supabase is not configured, development builds open in local demo
+mode; changes are temporary, are not saved to browser storage, and are not
+synced. Use synthetic data only.
 
 ```sh
 npm ci
@@ -86,7 +94,10 @@ catalog entries. Its opening comments contain the one-time onboarding steps
 and explicitly prohibit rerunning it against a non-empty project. Review and
 follow those instructions before enabling sign-in for staff.
 
-The Supabase schema's access controls do not change the browser-only storage
-used by the current app. Do not treat successful authentication or a
-successful deployment as evidence that reporting records are centrally
-stored, backed up, or suitable for clinical use.
+Signed-in facility data is read from and written to Supabase. The facility ID
+comes from the authenticated user's verified membership; database RLS remains
+the access boundary. The app can offer an explicit, duplicate-aware import of
+legacy browser records, diagnoses, and settings; it does not erase the source
+browser data. Only uncoded, unofficial legacy diagnoses can be imported by the
+client; code-bearing or approved catalog additions require a trusted operator.
+Verify the database operations and configure backups before using clinical data.

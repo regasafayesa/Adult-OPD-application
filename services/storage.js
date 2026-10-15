@@ -1,20 +1,20 @@
-import { DEFAULT_SETTINGS, STARTER_DIAGNOSES, STORAGE_KEYS } from '../constants';
-import { ESV1_DIAGNOSES } from './esv1Diagnoses';
+import { STORAGE_KEYS } from '../constants';
 import { classifyAge } from '../utils/ageClassification';
 import { reportingPeriodFromDate } from '../utils/dates';
 
-function readJSON(key, fallback) {
+function readLegacyJSON(key, fallback) {
+  let raw;
   try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
+    raw = window.localStorage.getItem(key);
+  } catch (error) {
+    throw new Error(`Could not read existing browser data for ${key}: ${error.message}`);
+  }
+  if (raw === null) return fallback;
+  try {
     return JSON.parse(raw);
   } catch {
-    return fallback;
+    throw new Error(`Existing browser data for ${key} is not valid JSON. It was left unchanged.`);
   }
-}
-
-function writeJSON(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
 }
 
 export function createId(prefix) {
@@ -44,70 +44,20 @@ export function enrichEncounter(input, existing = {}) {
   };
 }
 
-export function loadRecords() {
-  return readJSON(STORAGE_KEYS.RECORDS, []).map((record) => enrichEncounter(record, record));
-}
+export function readLegacyLocalData() {
+  const records = readLegacyJSON(STORAGE_KEYS.RECORDS, []);
+  const diagnoses = readLegacyJSON(STORAGE_KEYS.DIAGNOSES, []);
+  const settings = readLegacyJSON(STORAGE_KEYS.SETTINGS, {});
 
-export function saveRecords(records) {
-  writeJSON(STORAGE_KEYS.RECORDS, records);
-}
+  if (!Array.isArray(records)) {
+    throw new Error('Existing browser encounter data is not a list. It was left unchanged.');
+  }
+  if (!Array.isArray(diagnoses)) {
+    throw new Error('Existing browser diagnosis data is not a list. It was left unchanged.');
+  }
+  if (!settings || typeof settings !== 'object' || Array.isArray(settings)) {
+    throw new Error('Existing browser settings are invalid. They were left unchanged.');
+  }
 
-export function loadDiagnoses() {
-  const savedDiagnoses = readJSON(STORAGE_KEYS.DIAGNOSES, []);
-  const stored = Array.isArray(savedDiagnoses) ? savedDiagnoses : [];
-  const merged = [...ESV1_DIAGNOSES, ...STARTER_DIAGNOSES].map((item) => ({ ...item }));
-  const byId = new Map(merged.map((item) => [item.id, item]));
-  const byCode = new Map(merged.filter((item) => item.code).map((item) => [item.code, item]));
-  const customByName = new Map(
-    merged.filter((item) => !item.official).map((item) => [item.name.trim().toLowerCase(), item])
-  );
-
-  stored.forEach((item) => {
-    if (!item || typeof item.name !== 'string' || !item.name.trim()) return;
-
-    const existing = byId.get(item.id) || (item.code && byCode.get(item.code));
-    if (existing) {
-      Object.assign(existing, item, {
-        id: existing.id,
-        code: existing.code || item.code,
-        name: existing.name,
-        official: existing.official || item.official,
-      });
-      return;
-    }
-
-    const legacyCustom = !item.code && !item.official && customByName.get(item.name.trim().toLowerCase());
-    if (legacyCustom) {
-      Object.assign(legacyCustom, item, { id: legacyCustom.id, name: legacyCustom.name });
-      return;
-    }
-
-    const saved = { ...item };
-    merged.push(saved);
-    byId.set(saved.id, saved);
-    if (saved.code) byCode.set(saved.code, saved);
-    if (!saved.official) customByName.set(saved.name.trim().toLowerCase(), saved);
-  });
-
-  return merged;
-}
-
-export function saveDiagnoses(diagnoses) {
-  writeJSON(STORAGE_KEYS.DIAGNOSES, diagnoses);
-}
-
-export function loadSettings() {
-  return { ...DEFAULT_SETTINGS, ...readJSON(STORAGE_KEYS.SETTINGS, {}) };
-}
-
-export function saveSettings(settings) {
-  writeJSON(STORAGE_KEYS.SETTINGS, settings);
-}
-
-export function isDemoLoaded() {
-  return localStorage.getItem(STORAGE_KEYS.DEMO_LOADED) === 'true';
-}
-
-export function setDemoLoaded(value) {
-  localStorage.setItem(STORAGE_KEYS.DEMO_LOADED, value ? 'true' : 'false');
+  return { records, diagnoses, settings };
 }

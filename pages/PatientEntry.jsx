@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import DiagnosisAutocomplete from '../components/common/DiagnosisAutocomplete';
 import { SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
+import { createId } from '../services/storage';
 import { classifyAge } from '../utils/ageClassification';
 import { todayISO } from '../utils/dates';
 import { validateEncounter } from '../utils/validation';
@@ -26,6 +27,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
   const [saving, setSaving] = useState(false);
   const ageRef = useRef(null);
   const diagnosisRef = useRef(null);
+  const pendingRecordId = useRef(null);
 
   const preview = useMemo(() => {
     if (form.age === '' || !Number.isInteger(Number(form.age))) return null;
@@ -46,7 +48,11 @@ export default function PatientEntry({ editingRecord, onDone }) {
       return;
     }
     setErrors({});
+    if (!editingRecord && !pendingRecordId.current) {
+      pendingRecordId.current = createId('enc');
+    }
     const payload = {
+      id: editingRecord?.id || pendingRecordId.current,
       date: form.date,
       age: Number(form.age),
       sex: form.sex,
@@ -60,7 +66,9 @@ export default function PatientEntry({ editingRecord, onDone }) {
         setSaveError(saveResult.error);
         return;
       }
-      setSuccess('Encounter updated and synced to this facility.');
+      setSuccess(saveResult.refreshError
+        ? 'Encounter updated in Supabase, but the latest facility records could not be reloaded.'
+        : 'Encounter updated and synced to this facility.');
       onDone?.();
       return;
     }
@@ -70,7 +78,10 @@ export default function PatientEntry({ editingRecord, onDone }) {
       setSaveError(saveResult.error);
       return;
     }
-    setSuccess('Encounter saved and synced to this facility. Enter the next patient.');
+    pendingRecordId.current = null;
+    setSuccess(saveResult.refreshError
+      ? 'Encounter saved in Supabase, but the latest facility records could not be reloaded.'
+      : 'Encounter saved and synced to this facility. Enter the next patient.');
     setForm((prev) => ({ ...EMPTY, date: prev.date, sex: prev.sex }));
     ageRef.current?.focus();
   }
@@ -86,7 +97,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
       <form className="aopd-entry" onSubmit={handleSubmit}>
         <label>
           Date
-          <input type="date" value={form.date} onChange={(e) => handleChange('date', e.target.value)} required />
+          <input type="date" value={form.date} onChange={(e) => handleChange('date', e.target.value)} required disabled={saving} />
           {errors.date && <span className="aopd-error">{errors.date}</span>}
         </label>
 
@@ -100,6 +111,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
             value={form.age}
             onChange={(e) => handleChange('age', e.target.value)}
             required
+            disabled={saving}
           />
           {errors.age && <span className="aopd-error">{errors.age}</span>}
         </label>
@@ -112,6 +124,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
               name="sex"
               checked={form.sex === SEX.MALE}
               onChange={() => handleChange('sex', SEX.MALE)}
+              disabled={saving}
             />
             Male
           </label>
@@ -121,6 +134,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
               name="sex"
               checked={form.sex === SEX.FEMALE}
               onChange={() => handleChange('sex', SEX.FEMALE)}
+              disabled={saving}
             />
             Female
           </label>
@@ -139,6 +153,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
             value={form.diagnosis}
             onChange={(value) => handleChange('diagnosis', value)}
             inputRef={diagnosisRef}
+            disabled={saving}
           />
           {errors.diagnosis && <span className="aopd-error">{errors.diagnosis}</span>}
         </label>

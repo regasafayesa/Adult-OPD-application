@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StatusBadge } from '../components/common/ReportTables';
 import { ADULT_AGE_GROUPS, MONTH_NAMES, OPD_CATEGORY, SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import { formatDisplayDate } from '../utils/dates';
+import { searchFacilityEncounters } from '../services/supabaseData';
 import PatientEntry from './PatientEntry';
 
 export default function PatientRecords() {
-  const { records, diagnoses, deleteRecord, canManageFacility } = useAdultOpd();
+  const { records, diagnoses, deleteRecord, facilityId } = useAdultOpd();
   const [filters, setFilters] = useState({
     query: '',
     date: '',
@@ -20,8 +21,13 @@ export default function PatientRecords() {
   });
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
+  const [cloudFiltered, setCloudFiltered] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState('');
+  const [actionMessage, setActionMessage] = useState('');
+  const [actionMessageIsError, setActionMessageIsError] = useState(false);
 
-  const filtered = useMemo(() => {
+  const localFiltered = useMemo(() => {
     return records.filter((record) => {
       if (filters.query) {
         const hay = `${record.diagnosis} ${record.age} ${record.sex} ${record.ageGroup} ${record.opdCategory}`.toLowerCase();
@@ -40,8 +46,43 @@ export default function PatientRecords() {
     });
   }, [records, filters]);
 
+  useEffect(() => {
+    if (!facilityId) return undefined;
+    let active = true;
+    setSearchLoading(true);
+    setSearchError('');
+    searchFacilityEncounters(facilityId, filters)
+      .then((results) => {
+        if (active) setCloudFiltered(results);
+      })
+      .catch((error) => {
+        if (!active) return;
+        setCloudFiltered([]);
+        setSearchError(error.message || 'Could not search facility records in Supabase.');
+      })
+      .finally(() => {
+        if (active) setSearchLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [facilityId, filters, records]);
+
+  const filtered = facilityId ? cloudFiltered : localFiltered;
+
   function updateFilter(field, value) {
     setFilters((prev) => ({ ...prev, [field]: value }));
+  }
+
+  async function handleDelete(id) {
+    setActionMessage('');
+    const result = await deleteRecord(id);
+    setActionMessageIsError(!result.ok);
+    setActionMessage(result.ok
+      ? result.refreshError
+        ? 'Encounter deleted from Supabase, but the latest facility records could not be reloaded.'
+        : 'Encounter deleted from the facility database.'
+      : result.error);
   }
 
   if (editing) {
@@ -110,6 +151,10 @@ export default function PatientRecords() {
         </select>
       </div>
 
+      {searchLoading && <p role="status">Searching facility records in Supabase…</p>}
+      {searchError && <p className="aopd-error" role="alert">{searchError}</p>}
+      {actionMessage && <p className={actionMessageIsError ? 'aopd-error' : 'aopd-success'} role={actionMessageIsError ? 'alert' : 'status'}>{actionMessage}</p>}
+
       <div className="aopd-table-wrap">
         <table>
           <thead>
@@ -153,17 +198,17 @@ export default function PatientRecords() {
                   <button type="button" onClick={() => setEditing(record)}>
                     Edit
                   </button>
-                  {canManageFacility && <button
+                  <button
                     type="button"
                     className="danger-text"
                     onClick={() => {
                       if (window.confirm('Delete this encounter? Reports will update immediately.')) {
-                        deleteRecord(record.id);
+                        handleDelete(record.id);
                       }
                     }}
                   >
                     Delete
-                  </button>}
+                  </button>
                 </td>
               </tr>
             ))}
