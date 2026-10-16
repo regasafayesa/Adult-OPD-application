@@ -55,7 +55,9 @@ sensitive health information even when names are not collected.
    grants and row-level security policies. Never add a service-role or other
    privileged secret here.
 7. Set the Supabase Auth site URL and allowed redirect URLs to the deployed
-   Vercel URL and, if used, the production custom domain.
+   Vercel URL and, if used, the production custom domain. Include the login
+   route (for example, `https://your-domain/adult-opd/entry`) in allowed
+   redirects so password recovery can return to the application.
 8. Deploy and verify sign-in, facility access, and direct navigation to app
    routes. Use synthetic data only.
 

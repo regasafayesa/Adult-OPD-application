@@ -15,6 +15,13 @@ import './AdultOpd.css';
 
 const ALLOWED_ROLES = new Set(['owner', 'admin', 'data_entry', 'viewer']);
 
+function sessionRecoveryMessage(error) {
+  if (/expired|invalid.*(refresh )?token|refresh token/i.test(String(error?.message || ''))) {
+    return 'Your saved sign-in session has expired or is no longer valid. Retry to restore it, or sign out and sign in again.';
+  }
+  return 'We could not restore your sign-in session. Check your connection and retry, or sign out and sign in again.';
+}
+
 function LoadingScreen({ message }) {
   return (
     <main className="aopd-auth-screen" aria-live="polite">
@@ -60,8 +67,8 @@ function AccessIssue({ title, message, onRetry, onSignOut, loading }) {
     setSignOutError('');
     try {
       await onSignOut();
-    } catch (error) {
-      setSignOutError(error.message || 'Could not sign out. Please retry.');
+    } catch {
+      setSignOutError('Could not sign out. Check your connection and try again.');
     } finally {
       setSigningOut(false);
     }
@@ -95,6 +102,8 @@ function AuthGate() {
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authError, setAuthError] = useState('');
+  const [passwordRecovery, setPasswordRecovery] = useState(false);
+  const [passwordResetNotice, setPasswordResetNotice] = useState('');
   const [access, setAccess] = useState({ status: 'loading' });
   const [retryCount, setRetryCount] = useState(0);
   const authEventReceived = useRef(false);
@@ -106,9 +115,11 @@ function AuthGate() {
     }
 
     let mounted = true;
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, nextSession) => {
       authEventReceived.current = true;
       if (!mounted) return;
+      if (event === 'PASSWORD_RECOVERY') setPasswordRecovery(true);
+      if (event === 'SIGNED_OUT') setPasswordRecovery(false);
       setSession(nextSession);
       setAuthError('');
       setAuthLoading(false);
@@ -160,7 +171,7 @@ function AuthGate() {
             message: authUserError.message,
           });
         }
-        throw new Error(`Could not verify the signed-in user: ${authUserError.message}`);
+        throw new Error('We could not verify your sign-in session. Sign out and sign in again.');
       }
       if (!userId) {
         throw new Error('No authenticated user was returned. Please sign in again.');
@@ -194,7 +205,7 @@ function AuthGate() {
         });
       }
       if (membershipError) {
-        throw new Error(`Could not verify facility membership: ${membershipError.message}`);
+        throw new Error('We could not verify facility access. Check your connection and retry, or contact your facility administrator.');
       }
       if (memberships.length === 0) {
         throw new Error('No facility membership is visible to this account. Contact the facility administrator.');
@@ -234,7 +245,7 @@ function AuthGate() {
             hint: settingsError.hint,
           });
         }
-        throw new Error(`Could not load facility settings: ${settingsError.message}`);
+        throw new Error('We could not load the facility configuration. Retry or contact your facility administrator.');
       }
       if (!facilitySettings) {
         throw new Error('Facility settings are missing. Contact the facility administrator.');
@@ -297,7 +308,7 @@ function AuthGate() {
     return (
       <AccessIssue
         title="Session unavailable"
-        message={`${authError} Check your network connection and retry.`}
+        message={sessionRecoveryMessage(authError)}
         onRetry={() => {
           setAuthError('');
           setAuthLoading(true);
@@ -312,12 +323,32 @@ function AuthGate() {
               setAuthLoading(false);
             });
         }}
+        onSignOut={handleSignOut}
+      />
+    );
+  }
+
+  if (passwordRecovery && session) {
+    return (
+      <SignIn
+        recoveryMode
+        onRecoveryComplete={async () => {
+          const { error } = await supabase.auth.signOut();
+          if (error) throw error;
+          setPasswordRecovery(false);
+          setPasswordResetNotice('Your password has been updated. Sign in with your new password.');
+        }}
       />
     );
   }
 
   if (!session) {
-    return <SignIn />;
+    return (
+      <SignIn
+        resetNotice={passwordResetNotice}
+        onLoginSuccess={() => setPasswordResetNotice('')}
+      />
+    );
   }
 
   if (access.status === 'loading') {
