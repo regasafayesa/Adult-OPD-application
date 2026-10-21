@@ -86,6 +86,11 @@ export default function DiagnosisAutocomplete({
         <ul className="aopd-autocomplete-list" id="diagnosis-autocomplete-list" role="listbox">
           {!value.trim() && <li className="aopd-empty">Search by diagnosis name or ESV-1 code</li>}
           {value.trim() && matches.length === 0 && <li className="aopd-empty">No matching diagnosis</li>}
+          {value.trim() && matches.length > 0 && (
+            <li className="aopd-match-count" role="presentation">
+              {matches.length} matching {matches.length === 1 ? 'diagnosis' : 'diagnoses'} — scroll to view all
+            </li>
+          )}
           {matches.map((item, index) => (
             <li key={item.id}>
               <button

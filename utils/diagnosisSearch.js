@@ -63,7 +63,7 @@ function diagnosisScore(diagnosis, queryTokens, normalizedQuery) {
   return allTermsMatch ? 5 : Number.POSITIVE_INFINITY;
 }
 
-export function findDiagnosisMatches(diagnoses, query, limit = 25) {
+export function findDiagnosisMatches(diagnoses, query) {
   const normalizedQuery = normalize(query).trim();
   const queryTokens = tokens(normalizedQuery);
   if (!queryTokens.length) return [];
@@ -73,6 +73,5 @@ export function findDiagnosisMatches(diagnoses, query, limit = 25) {
     .map((item) => ({ item, score: diagnosisScore(item, queryTokens, normalizedQuery) }))
     .filter((result) => Number.isFinite(result.score))
     .sort((left, right) => left.score - right.score || left.item.name.localeCompare(right.item.name))
-    .slice(0, limit)
     .map(({ item }) => item);
 }

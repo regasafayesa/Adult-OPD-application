@@ -64,12 +64,21 @@ export async function loadFacilityData(facilityId) {
     offset += pageSize;
   }
 
-  const diagnosesResponse = await supabase
-    .from('diagnoses')
-    .select('id, code, name, active, official')
-    .eq('facility_id', facilityId)
-    .order('name');
-  const facilityDiagnoses = unwrap(diagnosesResponse);
+  const facilityDiagnoses = [];
+  const diagnosisPageSize = 500;
+  let diagnosisOffset = 0;
+
+  while (true) {
+    const page = unwrap(await supabase
+      .from('diagnoses')
+      .select('id, code, name, active, official')
+      .eq('facility_id', facilityId)
+      .order('name')
+      .range(diagnosisOffset, diagnosisOffset + diagnosisPageSize - 1));
+    facilityDiagnoses.push(...page);
+    if (page.length < diagnosisPageSize) break;
+    diagnosisOffset += diagnosisPageSize;
+  }
 
   return {
     records: records.map(mapEncounterRow),
