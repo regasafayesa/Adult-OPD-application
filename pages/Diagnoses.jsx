@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAdultOpd } from '../context/AdultOpdContext';
 
 export default function Diagnoses() {
-  const { diagnoses, addDiagnosis, updateDiagnosis } = useAdultOpd();
+  const { diagnoses, addDiagnosis, updateDiagnosis, canManageFacility } = useAdultOpd();
   const [name, setName] = useState('');
   const [query, setQuery] = useState('');
   const [message, setMessage] = useState('');
@@ -67,7 +67,7 @@ export default function Diagnoses() {
         presented as an official Ethiopian Ministry of Health diagnosis list.
       </p>
 
-      <form className="aopd-inline-form" onSubmit={handleAdd}>
+      {canManageFacility && <form className="aopd-inline-form" onSubmit={handleAdd}>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -77,7 +77,7 @@ export default function Diagnoses() {
           <button type="submit" className="aopd-btn" disabled={busy}>
             {busy ? 'Saving…' : 'Add'}
           </button>
-      </form>
+      </form>}
       {message && <p className={messageIsError ? 'aopd-error' : 'aopd-success'} role={messageIsError ? 'alert' : 'status'}>{message}</p>}
 
       <input
@@ -111,7 +111,7 @@ export default function Diagnoses() {
                 <td>{item.code || '—'}</td>
                 <td>{item.active === false ? 'Disabled' : 'Active'}</td>
                 <td className="aopd-row-actions">
-                  {item.official ? 'Approved catalog' : editingId === item.id ? (
+                  {item.official ? 'Approved catalog' : !canManageFacility ? 'Facility diagnosis' : editingId === item.id ? (
                     <>
                       <button
                         type="button"

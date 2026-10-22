@@ -76,7 +76,6 @@ export function generateMonthlyReport(records, year, month) {
   const monthRecords = recordsForMonth(records, year, month);
   const adultRecords = monthRecords.filter(isAdultRecord);
   const outsideRecords = monthRecords.filter((record) => !isAdultRecord(record));
-
   let overall = emptySexCounts();
   const ageGroups = emptyAgeGroupTable();
   const diagnoses = {};

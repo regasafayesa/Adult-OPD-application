@@ -4,7 +4,15 @@ import { ADULT_AGE_GROUPS, MONTH_NAMES } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 
 export default function Dashboard() {
-  const { settings, generateDashboardStats, hasDemoRecords, loadDemoData, clearDemoData } = useAdultOpd();
+  const {
+    settings,
+    generateDashboardStats,
+    hasDemoRecords,
+    loadDemoData,
+    clearDemoData,
+    canManageFacility,
+    canWriteEncounters,
+  } = useAdultOpd();
   const now = new Date();
   const [year, setYear] = useState(Number(settings.reportingYear) || now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -37,9 +45,11 @@ export default function Dashboard() {
               ))}
             </select>
           </label>
-          <Link className="aopd-btn" to="/adult-opd/entry">
-            New encounter
-          </Link>
+          {canWriteEncounters && (
+            <Link className="aopd-btn" to="/adult-opd/entry">
+              New encounter
+            </Link>
+          )}
         </div>
       </div>
 
@@ -53,12 +63,12 @@ export default function Dashboard() {
       </div>
 
       <div className="aopd-grid-2">
-        <section className="aopd-panel">
+        {canManageFacility && <section className="aopd-panel">
           <h3>Patients by age group</h3>
           {ADULT_AGE_GROUPS.map((group) => (
             <BarRow key={group} label={group} value={monthly.ageGroups[group].total} max={ageMax} />
           ))}
-        </section>
+        </section>}
         <section className="aopd-panel">
           <h3>Male vs Female</h3>
           <div className="aopd-stacked">

@@ -5,6 +5,7 @@ import { readLegacyLocalData } from '../services/storage';
 export default function Settings() {
   const {
     settings,
+    canManageFacility,
     updateSettings,
     saveSettings,
     loadDemoData,
@@ -100,37 +101,38 @@ export default function Settings() {
       <form className="aopd-settings" onSubmit={handleSaveSettings}>
         <label>
           Health center name
-          <input name="healthCenterName" value={settings.healthCenterName} onChange={handleChange} disabled={settingsSyncStatus === 'saving'} />
+          <input name="healthCenterName" value={settings.healthCenterName} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
         </label>
         <label>
           Region
-          <input name="region" value={settings.region} onChange={handleChange} disabled={settingsSyncStatus === 'saving'} />
+          <input name="region" value={settings.region} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
         </label>
         <label>
           Zone
-          <input name="zone" value={settings.zone} onChange={handleChange} disabled={settingsSyncStatus === 'saving'} />
+          <input name="zone" value={settings.zone} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
         </label>
         <label>
           Woreda
-          <input name="woreda" value={settings.woreda} onChange={handleChange} disabled={settingsSyncStatus === 'saving'} />
+          <input name="woreda" value={settings.woreda} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
         </label>
         <label>
           Reporting year
-          <input type="number" name="reportingYear" value={settings.reportingYear} onChange={handleChange} disabled={settingsSyncStatus === 'saving'} />
+          <input type="number" name="reportingYear" value={settings.reportingYear} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
         </label>
         <label>
           Responsible person name
-          <input name="responsiblePersonName" value={settings.responsiblePersonName} onChange={handleChange} disabled={settingsSyncStatus === 'saving'} />
+          <input name="responsiblePersonName" value={settings.responsiblePersonName} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
         </label>
         <label>
           Position
-          <input name="position" value={settings.position} onChange={handleChange} disabled={settingsSyncStatus === 'saving'} />
+          <input name="position" value={settings.position} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
         </label>
-        <button type="submit" className="aopd-btn" disabled={settingsSyncStatus === 'saving' || settingsSyncStatus !== 'dirty' && settingsSyncStatus !== 'error'}>
+        {canManageFacility && <button type="submit" className="aopd-btn" disabled={settingsSyncStatus === 'saving' || settingsSyncStatus !== 'dirty' && settingsSyncStatus !== 'error'}>
           {settingsSyncStatus === 'saving' ? 'Saving…' : 'Save facility settings'}
-        </button>
+        </button>}
       </form>
-      {isCloud && (
+      {!canManageFacility && <p className="aopd-save-status">Facility settings are read-only for your role.</p>}
+      {isCloud && canManageFacility && (
         <p className={`aopd-save-status${settingsSyncStatus === 'error' ? ' aopd-error' : ''}`} role="status">
           {settingsSyncStatus === 'saving' && 'Saving facility settings to Supabase…'}
           {settingsSyncStatus === 'saved' && 'Facility settings saved to Supabase.'}
@@ -138,7 +140,7 @@ export default function Settings() {
         </p>
       )}
 
-      {isCloud && (
+      {isCloud && canManageFacility && (
         <section className="aopd-panel">
           <h3>Import this browser’s legacy data</h3>
           <p>
@@ -198,7 +200,7 @@ export default function Settings() {
         </section>
       )}
 
-      <section className="aopd-panel">
+      {canManageFacility && <section className="aopd-panel">
         <h3>Demo data</h3>
         <p>
           Demo encounters are labelled <strong>DEMO DATA — NOT REAL PATIENT DATA</strong> and can be removed before
@@ -241,7 +243,7 @@ export default function Settings() {
             {recordActionMessage}
           </p>
         )}
-      </section>
+      </section>}
 
       <section className="aopd-panel">
         <h3>Privacy and future upgrades</h3>

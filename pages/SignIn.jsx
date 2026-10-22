@@ -103,6 +103,12 @@ export default function SignIn({
     } else if (formMode === 'signIn' && !password) {
       setError('Enter your password.');
       return;
+    } else if (formMode === 'createAccount' && password.length < 8) {
+      setError('Choose a password with at least 8 characters.');
+      return;
+    } else if (formMode === 'createAccount' && password !== confirmPassword) {
+      setError('The passwords do not match. Check both fields and try again.');
+      return;
     }
 
     submittingRef.current = true;
@@ -124,6 +130,23 @@ export default function SignIn({
         return;
       }
 
+      if (formMode === 'createAccount') {
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email: email.trim(),
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}${window.location.pathname}`,
+          },
+        });
+        if (signUpError) throw signUpError;
+        if (data.session) {
+          onLoginSuccess?.();
+        } else {
+          setNotice('Your account was created. Confirm your email, then sign in to register a health facility or accept an invitation.');
+        }
+        return;
+      }
+
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
@@ -139,6 +162,7 @@ export default function SignIn({
   }
 
   const isResetRequest = formMode === 'reset' && !recoveryMode;
+  const isCreateAccount = formMode === 'createAccount' && !recoveryMode;
 
   return (
     <main className="aopd-auth-screen">
@@ -159,6 +183,8 @@ export default function SignIn({
                 ? 'Set a new password'
                 : isResetRequest
                   ? 'Reset your password'
+                  : isCreateAccount
+                    ? 'Create your account'
                   : 'Sign in to your account'}
             </h2>
             <p>
@@ -166,6 +192,8 @@ export default function SignIn({
                 ? 'Choose a new password for your account.'
                 : isResetRequest
                   ? 'Enter your account email address to receive password reset instructions.'
+                  : isCreateAccount
+                    ? 'Create an account to request a new facility or accept a facility invitation.'
                   : 'Use the credentials provided by your facility administrator.'}
             </p>
           </div>
@@ -282,6 +310,23 @@ export default function SignIn({
                 </div>
               </>
             )}
+            {isCreateAccount && (
+              <>
+                <label htmlFor="aopd-confirm-password">Confirm password</label>
+                <div className="aopd-auth-input-wrap">
+                  <input
+                    id="aopd-confirm-password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    placeholder="Enter your password again"
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+              </>
+            )}
 
             {error && (
               <p className="aopd-auth-error" id="aopd-login-error" role="alert">
@@ -298,12 +343,14 @@ export default function SignIn({
               {submitting ? (
                 <>
                   <span className="aopd-auth-spinner" aria-hidden="true" />
-                  {recoveryMode ? 'Updating password…' : isResetRequest ? 'Sending instructions…' : 'Signing in…'}
+                  {recoveryMode ? 'Updating password…' : isResetRequest ? 'Sending instructions…' : isCreateAccount ? 'Creating account…' : 'Signing in…'}
                 </>
               ) : recoveryMode ? (
                 passwordUpdated ? 'Continue to sign in' : 'Update password'
               ) : isResetRequest ? (
                 'Send reset instructions'
+              ) : isCreateAccount ? (
+                'Create account'
               ) : (
                 <>Sign in <span aria-hidden="true">→</span></>
               )}
@@ -312,7 +359,7 @@ export default function SignIn({
 
           {!recoveryMode && (
             <div className="aopd-auth-form-links">
-              {isResetRequest ? (
+              {isResetRequest || isCreateAccount ? (
                 <button
                   type="button"
                   className="aopd-auth-text-link"
@@ -339,6 +386,20 @@ export default function SignIn({
                   Forgot Password?
                 </button>
               )}
+              {!isResetRequest && !isCreateAccount && (
+                <button
+                  type="button"
+                  className="aopd-auth-text-link"
+                  onClick={() => {
+                    setFormMode('createAccount');
+                    setError('');
+                    setNotice('');
+                  }}
+                  disabled={submitting}
+                >
+                  Create an account
+                </button>
+              )}
             </div>
           )}
 
@@ -353,7 +414,7 @@ export default function SignIn({
           </div>
           {!recoveryMode && (
             <p className="aopd-auth-admin-note">
-              Need an account? Contact your facility administrator. Public signup is disabled.
+              Creating an account does not grant access to any facility. You must receive an approved facility membership.
             </p>
           )}
         </div>

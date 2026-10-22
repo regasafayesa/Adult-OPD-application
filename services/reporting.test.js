@@ -1,4 +1,5 @@
 import { generateMonthlyReport } from '../services/reporting';
+import { buildMonthlyIctPdfRows, buildMonthlyIctTallyRows } from '../services/export';
 import { enrichEncounter } from '../services/storage';
 
 function record(partial) {
@@ -50,6 +51,47 @@ describe('generateMonthlyReport', () => {
     expect(report.diagnoses.UTI['5–14']).toEqual({ male: 1, female: 2, total: 3 });
     expect(report.diagnoses.UTI['15–29']).toEqual({ male: 0, female: 0, total: 0 });
     expect(report.diagnoses.Hypertension.total).toEqual({ male: 0, female: 2, total: 2 });
+  });
+
+  test('builds the ICT tally rows with fixed and facility diagnoses', () => {
+    const tallyRows = buildMonthlyIctTallyRows(report);
+    const utiRow = tallyRows.find((row) => row.code === 'N39.0');
+    const otherRow = tallyRows.find((row) => row.name === 'Diabetes Mellitus');
+
+    expect(tallyRows.filter(({ code }) => code).map(({ code }) => code).sort()).toEqual([
+      'A01', 'A09', 'B65-B83', 'E56.9', 'H66', 'J03', 'J18.9',
+      'K02', 'K30', 'L30.9', 'N39.0', 'R51', 'T14.9',
+    ]);
+    expect(utiRow.counts[0]).toEqual({ male: 1, female: 2 });
+    expect(utiRow.counts[1]).toEqual({ male: 1, female: 0 });
+    expect(utiRow.counts[4]).toEqual({ male: 0, female: 0 });
+    expect(otherRow.code).toBe('');
+    expect(otherRow.counts[2]).toEqual({ male: 1, female: 0 });
+  });
+
+  test('orders monthly tally diagnoses by descending total count', () => {
+    const frequencyRecords = [
+      ...Array.from({ length: 45 }, () => record({ age: 30, sex: 'Female', diagnosis: 'Helminthiasis' })),
+      ...Array.from({ length: 30 }, () => record({ age: 30, sex: 'Male', diagnosis: 'Typhoid fever' })),
+    ];
+    const frequencyReport = generateMonthlyReport(frequencyRecords, 2026, 9);
+    const tallyRows = buildMonthlyIctTallyRows(frequencyReport);
+
+    expect(tallyRows.slice(0, 2).map(({ name }) => name)).toEqual([
+      'Helminthiasis',
+      'Typhoid fever',
+    ]);
+    expect(tallyRows[0].counts.reduce((total, count) => total + count.male + count.female, 0)).toBe(45);
+    expect(tallyRows[1].counts.reduce((total, count) => total + count.male + count.female, 0)).toBe(30);
+  });
+
+  test('includes only diagnoses with at least one case in monthly PDF rows', () => {
+    const pdfRows = buildMonthlyIctPdfRows(report);
+
+    expect(pdfRows.map(({ name }) => name)).not.toContain('Typhoid fever');
+    expect(pdfRows.every(
+      ({ counts }) => counts.reduce((total, count) => total + count.male + count.female, 0) > 0
+    )).toBe(true);
   });
 
   test('validates that diagnosis and age-group totals match overall total', () => {

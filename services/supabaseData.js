@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { enrichEncounter } from './storage';
+import { mapDiagnosisRow, mergeDiagnosisCatalog } from './diagnosisCatalog';
 
 function assertSupabase() {
   if (!supabase) throw new Error('Supabase is not configured.');
@@ -22,16 +23,6 @@ export function mapEncounterRow(row) {
     },
     { id: row.id, createdAt: row.created_at, updatedAt: row.updated_at, isDemo: row.is_demo }
   );
-}
-
-export function mapDiagnosisRow(row) {
-  return {
-    id: row.id,
-    code: row.code,
-    name: row.name,
-    active: row.active,
-    official: row.official,
-  };
 }
 
 function encounterPayload(record) {
@@ -80,9 +71,15 @@ export async function loadFacilityData(facilityId) {
     diagnosisOffset += diagnosisPageSize;
   }
 
+  const officialDiagnoses = unwrap(await supabase
+    .from('official_diagnoses')
+    .select('id, code, name, active')
+    .eq('active', true)
+    .order('name'));
+
   return {
     records: records.map(mapEncounterRow),
-    diagnoses: facilityDiagnoses.map(mapDiagnosisRow),
+    diagnoses: mergeDiagnosisCatalog(officialDiagnoses, facilityDiagnoses),
   };
 }
 

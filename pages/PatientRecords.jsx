@@ -7,7 +7,14 @@ import { searchFacilityEncounters } from '../services/supabaseData';
 import PatientEntry from './PatientEntry';
 
 export default function PatientRecords() {
-  const { records, diagnoses, deleteRecord, facilityId } = useAdultOpd();
+  const {
+    records,
+    diagnoses,
+    deleteRecord,
+    facilityId,
+    canManageFacility,
+    canWriteEncounters,
+  } = useAdultOpd();
   const [filters, setFilters] = useState({
     query: '',
     date: '',
@@ -166,13 +173,13 @@ export default function PatientRecords() {
               <th>Sex</th>
               <th>Diagnosis</th>
               <th>Status</th>
-              <th>Actions</th>
+              {(canWriteEncounters || canManageFacility) && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={8} className="aopd-empty">
+                <td colSpan={canWriteEncounters || canManageFacility ? 8 : 7} className="aopd-empty">
                   No records match the current filters.
                 </td>
               </tr>
@@ -191,14 +198,14 @@ export default function PatientRecords() {
                 <td>
                   <StatusBadge record={record} />
                 </td>
-                <td className="aopd-row-actions">
+                {(canWriteEncounters || canManageFacility) && <td className="aopd-row-actions">
                   <button type="button" onClick={() => setViewing(record)}>
                     View
                   </button>
-                  <button type="button" onClick={() => setEditing(record)}>
+                  {canWriteEncounters && <button type="button" onClick={() => setEditing(record)}>
                     Edit
-                  </button>
-                  <button
+                  </button>}
+                  {canManageFacility && <button
                     type="button"
                     className="danger-text"
                     onClick={() => {
@@ -208,8 +215,8 @@ export default function PatientRecords() {
                     }}
                   >
                     Delete
-                  </button>
-                </td>
+                  </button>}
+                </td>}
               </tr>
             ))}
           </tbody>

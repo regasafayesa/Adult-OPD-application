@@ -33,10 +33,13 @@ sensitive health information even when names are not collected.
    `supabase/migrations/20261015_facility_member_access.sql`. Apply the updated
    20261015 migration even if an earlier version was already applied; it resets
    diagnosis grants so approved codes cannot be edited by authenticated clients.
-   Do not rerun the initial schema migration. Every provisioned facility member can manage that
-   facility's records, settings, and unofficial diagnosis entries; approved
-   diagnosis catalog entries and membership administration remain restricted
-   to trusted operators.
+   Then apply `supabase/migrations/20261022_secure_multifacility_onboarding.sql`
+   to add facility registration, invitations, and platform administration. For
+   a new project, apply that 20261022 migration after `supabase/schema.sql`.
+   Do not rerun the initial schema migration. Every provisioned facility member
+   can manage that facility's records, settings, and unofficial diagnosis
+   entries; approved diagnosis catalog entries and membership administration
+   remain restricted to trusted operators.
 4. In the Supabase project API settings, copy the project URL and publishable
    key. Never use a `service_role` key in the browser app.
 5. Import this repository into Vercel. The included `vercel.json` configures
@@ -103,3 +106,16 @@ legacy browser records, diagnoses, and settings; it does not erase the source
 browser data. Only uncoded, unofficial legacy diagnoses can be imported by the
 client; code-bearing or approved catalog additions require a trusted operator.
 Verify the database operations and configure backups before using clinical data.
+
+To load the bundled 219-entry ESV-1 catalog into one facility, generate a
+facility-scoped SQL import and run it in the Supabase SQL Editor as a trusted
+database operator. The import checks for conflicting existing entries and
+stops without changing the catalog if it finds any. It does not use or expose a
+service-role key.
+
+```powershell
+node .\scripts\generate-esv1-catalog-import.mjs <facility-uuid> .\supabase\esv1-catalog-import.sql
+```
+
+Review the generated SQL before running it. After it succeeds, reload the app;
+the facility diagnosis search will include the ESV-1 entries.

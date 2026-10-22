@@ -10,6 +10,9 @@ import PatientRecords from './pages/PatientRecords';
 import SignIn from './pages/SignIn';
 import Settings from './pages/Settings';
 import YearlyReport from './pages/YearlyReport';
+import FacilityAccess, { PlatformAdminRequests } from './pages/FacilityAccess';
+import FacilityMembers from './pages/FacilityMembers';
+import { isPlatformAdmin } from './services/facilityAccess';
 import { supabase, supabaseConfigError } from './services/supabase';
 import './AdultOpd.css';
 
@@ -106,6 +109,7 @@ function AuthGate() {
   const [passwordResetNotice, setPasswordResetNotice] = useState('');
   const [access, setAccess] = useState({ status: 'loading' });
   const [retryCount, setRetryCount] = useState(0);
+  const [selectedFacilityId, setSelectedFacilityId] = useState('');
   const authEventReceived = useRef(false);
 
   useEffect(() => {
@@ -161,101 +165,52 @@ function AuthGate() {
     async function loadFacilityAccess() {
       const { data: authData, error: authUserError } = await supabase.auth.getUser();
       const userId = authData?.user?.id;
-      if (import.meta.env.DEV) {
-        console.info('[Adult OPD] Authenticated user UUID from supabase.auth.getUser():', userId ?? null);
-      }
       if (authUserError) {
-        if (import.meta.env.DEV) {
-          console.error('[Adult OPD] Authenticated user lookup failed:', {
-            code: authUserError.code,
-            message: authUserError.message,
-          });
-        }
         throw new Error('We could not verify your sign-in session. Sign out and sign in again.');
       }
       if (!userId) {
         throw new Error('No authenticated user was returned. Please sign in again.');
       }
 
-      const membershipQuery = {
-        table: 'facility_memberships',
-        select: 'user_id, facility_id, role',
-        filters: { user_id: userId },
-      };
-      if (import.meta.env.DEV) {
-        console.info('[Adult OPD] Facility membership query:', membershipQuery);
-      }
-
-      const membershipResponse = await supabase
-        .from('facility_memberships')
-        .select(membershipQuery.select)
-        .eq('user_id', userId);
-      const { data: memberships, error: membershipError, status: membershipStatus } = membershipResponse;
-
-      if (import.meta.env.DEV) {
-        console.info('[Adult OPD] Facility membership query result:', {
-          data: memberships,
-          error: membershipError
-            ? {
-                message: membershipError.message,
-                code: membershipError.code,
-              }
-            : null,
-          status: membershipStatus,
-        });
-      }
+      const [membershipResponse, platformAdmin] = await Promise.all([
+        supabase
+          .from('facility_memberships')
+          .select('user_id, facility_id, role')
+          .eq('user_id', userId),
+        isPlatformAdmin(),
+      ]);
+      const { data: memberships, error: membershipError } = membershipResponse;
       if (membershipError) {
         throw new Error('We could not verify facility access. Check your connection and retry, or contact your facility administrator.');
       }
-      if (memberships.length === 0) {
-        throw new Error('No facility membership is visible to this account. Contact the facility administrator.');
-      }
-      if (import.meta.env.DEV) {
-        console.info(
-          '[Adult OPD] Facility membership UUID comparison:',
-          memberships.map(({ user_id: membershipUserId }) => ({
-            membershipUserId,
-            matchesAuthenticatedUser: membershipUserId === userId,
-          }))
-        );
-      }
-      if (memberships.length !== 1) {
-        throw new Error('Your account has more than one facility membership. Ask an administrator to resolve access before continuing.');
+      if (!memberships?.length) {
+        if (!cancelled) setAccess({ status: 'no_facility', isPlatformAdmin: platformAdmin });
+        return;
       }
 
-      const membership = memberships[0];
-      if (!ALLOWED_ROLES.has(membership.role)) {
+      if (memberships.some((membership) => !ALLOWED_ROLES.has(membership.role))) {
         throw new Error('Your facility membership has an unsupported role. Contact the facility administrator.');
       }
 
-      const { data: facilitySettings, error: settingsError } = await supabase
+      const facilityIds = memberships.map(({ facility_id: facilityId }) => facilityId);
+      const { data: settingsRows, error: settingsError } = await supabase
         .from('facility_settings')
-        .select('health_center_name, region, zone, woreda, reporting_year, responsible_person_name, position')
-        .eq('facility_id', membership.facility_id)
-        .maybeSingle();
+        .select('facility_id, health_center_name, region, zone, woreda, reporting_year, responsible_person_name, position')
+        .in('facility_id', facilityIds);
 
       if (settingsError) {
-        if (import.meta.env.DEV) {
-          console.error('[Adult OPD] Facility settings lookup failed:', {
-            userId,
-            facilityId: membership.facility_id,
-            code: settingsError.code,
-            message: settingsError.message,
-            details: settingsError.details,
-            hint: settingsError.hint,
-          });
-        }
         throw new Error('We could not load the facility configuration. Retry or contact your facility administrator.');
       }
-      if (!facilitySettings) {
-        throw new Error('Facility settings are missing. Contact the facility administrator.');
-      }
-
-      if (!cancelled) {
-        setAccess({
-          status: 'authorized',
+      const settingsByFacility = new Map((settingsRows || []).map((item) => [item.facility_id, item]));
+      const facilities = memberships.map((membership) => {
+        const facilitySettings = settingsByFacility.get(membership.facility_id);
+        if (!facilitySettings) {
+          throw new Error('Facility settings are missing. Contact the facility administrator.');
+        }
+        return {
           facilityId: membership.facility_id,
           role: membership.role,
+          healthCenterName: facilitySettings.health_center_name,
           settings: {
             healthCenterName: facilitySettings.health_center_name,
             region: facilitySettings.region,
@@ -265,15 +220,43 @@ function AuthGate() {
             responsiblePersonName: facilitySettings.responsible_person_name,
             position: facilitySettings.position,
           },
+        };
+      });
+
+      if (facilities.length > 1) {
+        const requestedId = selectedFacilityId
+          || window.sessionStorage.getItem('adult-opd-active-facility');
+        const selectedFacility = facilities.find((item) => item.facilityId === requestedId);
+        if (!selectedFacility) {
+          if (requestedId) window.sessionStorage.removeItem('adult-opd-active-facility');
+          if (!cancelled) {
+            setAccess({ status: 'select_facility', facilities, isPlatformAdmin: platformAdmin });
+          }
+          return;
+        }
+        if (!cancelled) {
+          setAccess({
+            status: 'authorized',
+            ...selectedFacility,
+            facilities,
+            isPlatformAdmin: platformAdmin,
+          });
+        }
+        return;
+      }
+
+      if (!cancelled) {
+        setAccess({
+          status: 'authorized',
+          ...facilities[0],
+          facilities,
+          isPlatformAdmin: platformAdmin,
         });
       }
     }
 
     loadFacilityAccess().catch((error) => {
       if (!cancelled) {
-        if (import.meta.env.DEV) {
-          console.error('[Adult OPD] Facility access verification failed:', error);
-        }
         setAccess({ status: 'error', message: error.message || 'Unable to verify facility access.' });
       }
     });
@@ -281,7 +264,7 @@ function AuthGate() {
     return () => {
       cancelled = true;
     };
-  }, [session, retryCount]);
+  }, [session, retryCount, selectedFacilityId]);
 
   if (import.meta.env.DEV && (!supabase || import.meta.env.VITE_LOCAL_DEMO_MODE === 'true')) {
     return (
@@ -366,23 +349,92 @@ function AuthGate() {
     );
   }
 
+  if (access.status === 'no_facility') {
+    return (
+      <FacilityAccess
+        userId={session.user.id}
+        isPlatformAdmin={access.isPlatformAdmin}
+        onAccessChanged={() => setRetryCount((count) => count + 1)}
+        onSignOut={handleSignOut}
+      />
+    );
+  }
+
+  if (access.status === 'select_facility') {
+    return (
+      <FacilitySelection
+        facilities={access.facilities}
+        onSelect={(facilityId) => {
+          window.sessionStorage.setItem('adult-opd-active-facility', facilityId);
+          setSelectedFacilityId(facilityId);
+        }}
+        onSignOut={handleSignOut}
+      />
+    );
+  }
+
   if (access.status !== 'authorized') {
     return <LoadingScreen message="Preparing your workspace." />;
   }
 
   return (
-    <AdultOpdProvider initialSettings={access.settings} facilityId={access.facilityId}>
+    <AdultOpdProvider
+      key={access.facilityId}
+      initialSettings={access.settings}
+      facilityId={access.facilityId}
+      role={access.role}
+    >
       <AdultOpdRoutes
         facilityId={access.facilityId}
         role={access.role}
         userEmail={session.user.email}
         onSignOut={handleSignOut}
+        isPlatformAdmin={access.isPlatformAdmin}
+        facilities={access.facilities}
+        onFacilityChange={(facilityId) => {
+          window.sessionStorage.setItem('adult-opd-active-facility', facilityId);
+          setSelectedFacilityId(facilityId);
+        }}
       />
     </AdultOpdProvider>
   );
 }
 
-function AdultOpdRoutes({ facilityId, role, userEmail, onSignOut, isLocalDemo = false }) {
+function FacilitySelection({ facilities, onSelect, onSignOut }) {
+  return (
+    <main className="aopd-auth-screen">
+      <section className="aopd-auth-card">
+        <h1>Select a facility</h1>
+        <p className="aopd-auth-description">Choose an authorized facility workspace. Your access is checked by the database for every request.</p>
+        <div className="aopd-facility-choice-list">
+          {facilities.map((facility) => (
+            <button
+              type="button"
+              className="aopd-facility-choice"
+              key={facility.facilityId}
+              onClick={() => onSelect(facility.facilityId)}
+            >
+              <strong>{facility.healthCenterName || 'Health facility'}</strong>
+              <span>{facility.settings.region} · {facility.role}</span>
+            </button>
+          ))}
+        </div>
+        <button type="button" className="aopd-auth-secondary" onClick={onSignOut}>Sign out</button>
+      </section>
+    </main>
+  );
+}
+
+function AdultOpdRoutes({
+  facilityId,
+  role,
+  userEmail,
+  onSignOut,
+  isPlatformAdmin = false,
+  facilities = [],
+  onFacilityChange,
+  isLocalDemo = false,
+}) {
   const { hasDemoRecords, settings, syncStatus, syncError } = useAdultOpd();
 
   if (syncStatus === 'loading') {
@@ -395,7 +447,10 @@ function AdultOpdRoutes({ facilityId, role, userEmail, onSignOut, isLocalDemo = 
       hasDemoRecords={hasDemoRecords}
       healthCenterName={settings.healthCenterName}
       facilityId={facilityId}
+      facilities={facilities}
+      onFacilityChange={onFacilityChange}
       role={role}
+      isPlatformAdmin={isPlatformAdmin}
       userEmail={userEmail}
       onSignOut={onSignOut}
       isLocalDemo={isLocalDemo}
@@ -404,12 +459,14 @@ function AdultOpdRoutes({ facilityId, role, userEmail, onSignOut, isLocalDemo = 
       <Routes>
         <Route path="/" element={<Navigate to="/adult-opd" replace />} />
         <Route path="/adult-opd" element={<Dashboard />} />
-        <Route path="/adult-opd/entry" element={<PatientEntry />} />
+        <Route path="/adult-opd/entry" element={role === 'viewer' ? <Navigate to="/adult-opd" replace /> : <PatientEntry />} />
         <Route path="/adult-opd/records" element={<PatientRecords />} />
         <Route path="/adult-opd/monthly" element={<MonthlyReport />} />
         <Route path="/adult-opd/yearly" element={<YearlyReport />} />
         <Route path="/adult-opd/diagnoses" element={<Diagnoses />} />
         <Route path="/adult-opd/settings" element={<Settings />} />
+        <Route path="/adult-opd/members" element={role === 'owner' || role === 'admin' ? <FacilityMembers /> : <Navigate to="/adult-opd" replace />} />
+        <Route path="/adult-opd/platform-admin" element={isPlatformAdmin ? <PlatformAdminRequests /> : <Navigate to="/adult-opd" replace />} />
         <Route path="*" element={<Navigate to="/adult-opd" replace />} />
       </Routes>
     </AdultOpdLayout>

@@ -3,12 +3,14 @@ import DeveloperCredit from './DeveloperCredit';
 
 const NAV_ITEMS = [
   { to: '/adult-opd', label: 'Dashboard', end: true },
-  { to: '/adult-opd/entry', label: 'Patient Entry' },
+  { to: '/adult-opd/entry', label: 'Patient Entry', roles: ['owner', 'admin', 'data_entry', 'local demo'] },
   { to: '/adult-opd/records', label: 'Patient Records' },
   { to: '/adult-opd/monthly', label: 'Monthly Report' },
   { to: '/adult-opd/yearly', label: 'Yearly Report' },
   { to: '/adult-opd/diagnoses', label: 'Diagnoses' },
   { to: '/adult-opd/settings', label: 'Settings' },
+  { to: '/adult-opd/members', label: 'Facility members', roles: ['owner', 'admin'] },
+  { to: '/adult-opd/platform-admin', label: 'Platform approvals', platformAdmin: true },
 ];
 
 export default function AdultOpdLayout({
@@ -16,11 +18,15 @@ export default function AdultOpdLayout({
   NavLink,
   hasDemoRecords,
   healthCenterName,
+  facilityId,
   role,
   userEmail,
   onSignOut,
   isLocalDemo = false,
   syncError = '',
+  facilities = [],
+  onFacilityChange,
+  isPlatformAdmin = false,
 }) {
   const [open, setOpen] = React.useState(false);
   const [signingOut, setSigningOut] = React.useState(false);
@@ -46,7 +52,8 @@ export default function AdultOpdLayout({
           <span>Monthly Reporting System</span>
         </div>
         <nav>
-          {NAV_ITEMS.filter((item) => !item.roles || item.roles.includes(role)).map((item) => (
+          {NAV_ITEMS.filter((item) => (!item.roles || item.roles.includes(role))
+            && (!item.platformAdmin || isPlatformAdmin)).map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -78,6 +85,21 @@ export default function AdultOpdLayout({
             <span className="aopd-topbar-mark" aria-hidden="true">OPD</span>
             <h1>Adult OPD Monthly Reporting System</h1>
           </div>
+          {facilities.length > 1 && (
+            <label className="aopd-active-facility">
+              Active facility
+              <select
+                value={facilityId || ''}
+                onChange={(event) => onFacilityChange?.(event.target.value)}
+              >
+                {facilities.map((facility) => (
+                  <option key={facility.facilityId} value={facility.facilityId}>
+                    {facility.healthCenterName || 'Health facility'}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <div className="aopd-account">
             <span className="aopd-account-email" title={userEmail}>{userEmail}</span>
             <span className="aopd-account-role">{role}</span>
