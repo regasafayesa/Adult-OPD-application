@@ -1637,6 +1637,12 @@ button:disabled,
   font-weight: 800;
 }
 
+.aopd-ict-table thead th {
+  font-size: 0.62rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
 .aopd-ict-table .aopd-ict-diagnosis-column {
   width: 16%;
 }
