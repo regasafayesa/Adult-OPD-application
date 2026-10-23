@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import { enrichEncounter } from './storage';
-import { mapDiagnosisRow, mergeDiagnosisCatalog } from './diagnosisCatalog';
+import { loadDiagnosisCatalog, mapDiagnosisRow } from './diagnosisCatalog.mjs';
 
 function assertSupabase() {
   if (!supabase) throw new Error('Supabase is not configured.');
@@ -55,31 +55,9 @@ export async function loadFacilityData(facilityId) {
     offset += pageSize;
   }
 
-  const facilityDiagnoses = [];
-  const diagnosisPageSize = 500;
-  let diagnosisOffset = 0;
-
-  while (true) {
-    const page = unwrap(await supabase
-      .from('diagnoses')
-      .select('id, code, name, active, official')
-      .eq('facility_id', facilityId)
-      .order('name')
-      .range(diagnosisOffset, diagnosisOffset + diagnosisPageSize - 1));
-    facilityDiagnoses.push(...page);
-    if (page.length < diagnosisPageSize) break;
-    diagnosisOffset += diagnosisPageSize;
-  }
-
-  const officialDiagnoses = unwrap(await supabase
-    .from('official_diagnoses')
-    .select('id, code, name, active')
-    .eq('active', true)
-    .order('name'));
-
   return {
     records: records.map(mapEncounterRow),
-    diagnoses: mergeDiagnosisCatalog(officialDiagnoses, facilityDiagnoses),
+    diagnoses: await loadDiagnosisCatalog(supabase, facilityId),
   };
 }
 

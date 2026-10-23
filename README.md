@@ -107,15 +107,20 @@ browser data. Only uncoded, unofficial legacy diagnoses can be imported by the
 client; code-bearing or approved catalog additions require a trusted operator.
 Verify the database operations and configure backups before using clinical data.
 
-To load the bundled 219-entry ESV-1 catalog into one facility, generate a
-facility-scoped SQL import and run it in the Supabase SQL Editor as a trusted
-database operator. The import checks for conflicting existing entries and
-stops without changing the catalog if it finds any. It does not use or expose a
-service-role key.
+The ESV-1 catalog is shared through `public.official_diagnoses`; facility
+custom diagnoses remain isolated in `public.diagnoses`. Authorized facility
+members can read both catalogs under the existing RLS policies. The source
+contains repeated identical code/name rows, so generation validates every
+source entry against the reviewed catalog before deduplicating. It stops if
+there are mismatched names, missing codes, or conflicting database IDs/codes.
+
+Generate and review the insert-only SQL seed, then run it in the Supabase SQL
+Editor as a trusted database operator. It never changes or deletes existing
+rows and does not target a facility ID.
 
 ```powershell
-node .\scripts\generate-esv1-catalog-import.mjs <facility-uuid> .\supabase\esv1-catalog-import.sql
+node .\scripts\generate-shared-esv1-import.mjs .\supabase\seed_official_diagnoses.sql
 ```
 
 Review the generated SQL before running it. After it succeeds, reload the app;
-the facility diagnosis search will include the ESV-1 entries.
+the shared ESV-1 entries will be searchable in every authorized facility.

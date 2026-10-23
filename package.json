@@ -15,7 +15,8 @@
     "start": "vite",
     "build": "vite build",
     "dev": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:catalog": "node --test services/diagnosisCatalog.test.mjs scripts/generate-shared-esv1-import.test.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
