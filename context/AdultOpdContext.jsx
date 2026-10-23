@@ -7,6 +7,7 @@ import {
   addFacilityDiagnosis,
   deleteEncounter,
   deleteFacilityEncounters,
+  insertEncounters,
   insertEncounter,
   importLegacyFacilityData,
   loadFacilityData,
@@ -100,6 +101,43 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     setRecords((prev) => [record, ...prev]);
     return { ok: true, record };
   }, [facilityId, refreshFacilityData, remote, reportSyncError, syncStatus]);
+
+  const addRecords = useCallback(async (inputs, options = {}) => {
+    if (!canWriteEncounters) {
+      return { ok: false, error: 'You do not have permission to add facility encounters.' };
+    }
+    if (remote && syncStatus !== 'ready') {
+      return reportSyncError(new Error('Cloud data is not loaded. No encounters were saved; retry after connection is restored.'));
+    }
+    const batch = inputs.map((input) => enrichEncounter(input));
+    if (!remote) {
+      setRecords((prev) => [...batch, ...prev]);
+      return { ok: true, savedRecords: batch, errors: [], uncertainIds: [] };
+    }
+
+    try {
+      const result = await insertEncounters(facilityId, batch, options);
+      if (result.savedRecords.length > 0) {
+        setRecords((prev) => [
+          ...result.savedRecords.filter((saved) => !prev.some((record) => record.id === saved.id)),
+          ...prev,
+        ]);
+        setSyncError('');
+        try {
+          await refreshFacilityData();
+        } catch (refreshError) {
+          result.refreshError = refreshError.message;
+          setSyncError(`Encounters saved, but the refreshed facility data could not be loaded: ${refreshError.message}`);
+        }
+      }
+      if (result.errors.length > 0) {
+        setSyncError(result.errors.map((item) => item.message).join(' '));
+      }
+      return { ok: true, ...result };
+    } catch (error) {
+      return reportSyncError(error);
+    }
+  }, [canWriteEncounters, facilityId, refreshFacilityData, remote, reportSyncError, syncStatus]);
 
   const updateRecord = useCallback(async (id, input) => {
     const existing = records.find((record) => record.id === id);
@@ -372,6 +410,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       syncStatus,
       syncError,
       addRecord,
+      addRecords,
       updateRecord,
       deleteRecord,
       addDiagnosis,
@@ -401,6 +440,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       syncStatus,
       syncError,
       addRecord,
+      addRecords,
       updateRecord,
       deleteRecord,
       addDiagnosis,

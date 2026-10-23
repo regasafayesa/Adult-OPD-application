@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { enrichEncounter } from './storage';
+import { insertEncounterBatches } from './batchInsert.mjs';
 import { loadDiagnosisCatalog, mapDiagnosisRow } from './diagnosisCatalog.mjs';
 
 function assertSupabase() {
@@ -141,6 +142,37 @@ export async function insertEncounter(facilityId, record) {
     throw new Error('This encounter ID already exists with different values; it was not overwritten.');
   }
   throw new Error(response.error?.message || 'Supabase did not confirm the encounter insert.');
+}
+
+export async function insertEncounters(facilityId, records, options = {}) {
+  assertSupabase();
+  return insertEncounterBatches(records, {
+    ...options,
+    insertBatch: async (batch) => {
+      const response = await supabase
+        .from('encounters')
+        .insert(batch.map((record) => ({
+          facility_id: facilityId,
+          id: record.id,
+          ...encounterPayload(record),
+        })))
+        .select('*');
+      if (response.error) throw new Error(response.error.message);
+      if (!Array.isArray(response.data)) {
+        throw new Error('Supabase did not confirm the encounter batch insert.');
+      }
+      return response.data.map(mapEncounterRow);
+    },
+    findByIds: async (ids) => {
+      const response = await supabase
+        .from('encounters')
+        .select('*')
+        .eq('facility_id', facilityId)
+        .in('id', ids);
+      if (response.error) throw new Error(response.error.message);
+      return response.data.map(mapEncounterRow);
+    },
+  });
 }
 
 export async function updateEncounter(facilityId, record) {

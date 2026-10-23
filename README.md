@@ -107,6 +107,12 @@ browser data. Only uncoded, unofficial legacy diagnoses can be imported by the
 client; code-bearing or approved catalog additions require a trusted operator.
 Verify the database operations and configure backups before using clinical data.
 
+Patient entry adds validated encounters to a temporary pending queue. Review,
+edit, or remove entries there, then use **Save All to Supabase** to submit
+batches of up to 100 encounters per request. Entries remain pending until their
+IDs and values are confirmed; an interrupted save is checked against those IDs
+before a retry so already-saved encounters are not submitted again.
+
 The ESV-1 catalog is shared through `public.official_diagnoses`; facility
 custom diagnoses remain isolated in `public.diagnoses`. Authorized facility
 members can read both catalogs under the existing RLS policies. The source

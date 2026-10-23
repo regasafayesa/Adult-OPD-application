@@ -1120,6 +1120,43 @@ tr.is-youth {
   margin: 0;
 }
 
+.aopd-pending {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.aopd-pending-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.aopd-pending-heading h3,
+.aopd-pending-heading p,
+.aopd-pending-progress {
+  margin: 0;
+}
+
+.aopd-pending-heading p,
+.aopd-pending-progress {
+  color: var(--aopd-muted);
+}
+
+.aopd-pending-table {
+  min-width: 760px;
+}
+
+.aopd-pending-table td {
+  vertical-align: top;
+}
+
+.aopd-pending-table .aopd-row-actions {
+  min-width: 150px;
+}
+
 .aopd-classification {
   border: 1px solid #d2e7d9;
   border-radius: 11px;

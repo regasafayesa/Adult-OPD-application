@@ -33,13 +33,11 @@ export function validateEncounter({ date, age, sex, diagnosis }, { diagnoses = [
   }
 
   const diagnosisName = typeof diagnosis === 'string' ? diagnosis.trim() : '';
+  const activeDiagnoses = diagnoses.filter((item) => item.active !== false);
   if (!diagnosisName) {
     errors.diagnosis = 'Diagnosis is required.';
-  } else {
-    const knownNames = diagnoses.map((item) => item.name);
-    if (knownNames.length > 0 && !knownNames.includes(diagnosisName)) {
-      errors.diagnosis = 'Select a diagnosis from the configured list.';
-    }
+  } else if (!activeDiagnoses.some((item) => item.name === diagnosisName)) {
+    errors.diagnosis = 'Select an active diagnosis from the configured list.';
   }
 
   const classification = Number.isInteger(Number(age)) ? classifyAge(Number(age)) : null;
