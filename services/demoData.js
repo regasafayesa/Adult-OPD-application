@@ -5,7 +5,7 @@ function iso(year, month, day) {
 }
 
 /**
- * Small labelled demo dataset spanning all Adult OPD age groups.
+ * Small labelled demo dataset spanning all OPD age groups.
  * Not official MOH statistics. Not real patient data.
  */
 export function buildDemoRecords(year, month) {

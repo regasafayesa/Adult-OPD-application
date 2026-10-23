@@ -170,7 +170,7 @@ export default function SignIn({
         <header className="aopd-login-header">
           <HealthcareMark />
           <p className="aopd-login-overline">HEALTH FACILITY REPORTING</p>
-          <h1 id="aopd-signin-heading">Adult OPD Monthly Reporting System</h1>
+          <h1 id="aopd-signin-heading">OPD Monthly Reporting System</h1>
           <p className="aopd-login-subtitle">Health Facility Reporting and Data Management.</p>
         </header>
 

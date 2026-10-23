@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { MONTH_NAMES } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
+import TallyMarks from '../components/common/TallyMarks';
 import {
   buildMonthlyIctTallyRows,
   exportMonthlyReportExcel,
   exportMonthlyReportPdf,
   ICT_TALLY_AGE_GROUPS,
   printMonthlyReport,
-  tallyMarks,
 } from '../services/export';
 
 export default function MonthlyReport() {
@@ -80,7 +80,7 @@ export default function MonthlyReport() {
 
       <article className="aopd-report">
         <header className="aopd-report-header aopd-ict-header">
-          <h2>ADULT OPD – ICT TALLY SHEET</h2>
+          <h2>OPD – ICT TALLY SHEET</h2>
           <h3>{settings.healthCenterName || 'Health Center Name not set'}</h3>
           <p>
             {[settings.region && `Region: ${settings.region}`, settings.zone && `Zone: ${settings.zone}`, settings.woreda && `Woreda: ${settings.woreda}`]
@@ -96,6 +96,15 @@ export default function MonthlyReport() {
 
         <section className="aopd-ict-table-wrap" aria-label="Monthly ICT tally">
           <table className="aopd-ict-table">
+            <colgroup>
+              <col className="aopd-ict-diagnosis-column" />
+              {Array.from({ length: ICT_TALLY_AGE_GROUPS.length * 2 }, (_, index) => (
+                <React.Fragment key={index}>
+                  <col className="aopd-ict-tally-column" />
+                  <col className="aopd-ict-count-column" />
+                </React.Fragment>
+              ))}
+            </colgroup>
             <thead>
               <tr>
                 <th rowSpan={3} className="aopd-ict-diagnosis">
@@ -136,13 +145,13 @@ export default function MonthlyReport() {
                   </td>
                   {counts.map(({ male }, index) => (
                     <React.Fragment key={index}>
-                      <td className="aopd-ict-tally">{tallyMarks(male)}</td>
+                      <td className="aopd-ict-tally"><TallyMarks count={male} /></td>
                       <td className="aopd-ict-count">{male || ''}</td>
                     </React.Fragment>
                   ))}
                   {counts.map(({ female }, index) => (
                     <React.Fragment key={`female-${index}`}>
-                      <td className="aopd-ict-tally">{tallyMarks(female)}</td>
+                      <td className="aopd-ict-tally"><TallyMarks count={female} /></td>
                       <td className="aopd-ict-count">{female || ''}</td>
                     </React.Fragment>
                   ))}
@@ -151,7 +160,7 @@ export default function MonthlyReport() {
               {tallyRows.length === 0 && (
                 <tr>
                   <td colSpan={1 + ICT_TALLY_AGE_GROUPS.length * 4}>
-                    No Adult OPD diagnoses were recorded for this month.
+                    No OPD diagnoses were recorded for this month.
                   </td>
                 </tr>
               )}

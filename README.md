@@ -1,4 +1,4 @@
-# Adult OPD Monthly Reporting System
+# OPD Monthly Reporting System
 
 ## Deployment status
 

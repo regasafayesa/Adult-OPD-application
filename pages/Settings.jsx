@@ -229,7 +229,7 @@ export default function Settings() {
             type="button"
             className="aopd-btn danger"
             onClick={() => {
-              if (window.confirm('Delete all Adult OPD encounters for this facility? This affects every authorized device.')) {
+              if (window.confirm('Delete all OPD encounters for this facility? This affects every authorized device.')) {
                 handleRecordAction(clearAllRecords, 'All facility encounters deleted from Supabase.');
               }
             }}

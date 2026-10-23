@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import DiagnosisAutocomplete from '../components/common/DiagnosisAutocomplete';
-import { SEX } from '../constants';
+import { OPD_CATEGORY, SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import { createId } from '../services/storage';
 import { classifyAge } from '../utils/ageClassification';
@@ -90,7 +90,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
     <div className="aopd-page">
       <h2>{editingRecord ? 'Edit encounter' : 'Patient entry'}</h2>
       <p className="aopd-lede">
-        Record each Adult OPD encounter once. Age group and OPD category are calculated automatically. Do not enter
+        Record each OPD encounter once. Age group and OPD category are calculated automatically. Do not enter
         patient names or other identifiers.
       </p>
 
@@ -169,16 +169,22 @@ export default function PatientEntry({ editingRecord, onDone }) {
               </div>
               <div>
                 <dt>OPD category</dt>
-                <dd>{preview.opdCategory}</dd>
+                <dd>
+                  {preview.opdCategory === OPD_CATEGORY.ADULT
+                    ? 'OPD'
+                    : preview.opdCategory === OPD_CATEGORY.OUTSIDE
+                      ? 'Outside OPD Categories'
+                      : preview.opdCategory}
+                </dd>
               </div>
               <div>
-                <dt>Included in Adult OPD report</dt>
+                <dt>Included in OPD report</dt>
                 <dd>{preview.includedInAdultReport ? 'YES' : 'NO'}</dd>
               </div>
             </dl>
           )}
-          {preview?.opdCategory === 'Outside Adult OPD Categories' && (
-            <p className="aopd-warn">This age is outside Adult OPD reporting categories.</p>
+          {preview?.opdCategory === OPD_CATEGORY.OUTSIDE && (
+            <p className="aopd-warn">This age is outside OPD reporting categories.</p>
           )}
         </div>
 

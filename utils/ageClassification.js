@@ -1,9 +1,9 @@
 import { OPD_CATEGORY } from '../constants';
 
 /**
- * Single source of truth for Adult OPD age classification.
- * Adult OPD reporting age groups are: 5–14, 15–29, 30–64, and ≥65.
- * Ages below 5 are outside Adult OPD categories.
+ * Single source of truth for OPD age classification.
+ * OPD reporting age groups are: 5–14, 15–29, 30–64, and ≥65.
+ * Ages below 5 are outside OPD categories.
  */
 export function classifyAge(age) {
   const numericAge = Number(age);

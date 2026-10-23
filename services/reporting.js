@@ -33,7 +33,7 @@ function validateReport({ overall, ageGroups, diagnoses, adultCount }) {
 
   const ageGroupSum = sumAgeGroupTable(ageGroups);
   if (ageGroupSum.total !== overall.total || ageGroupSum.male !== overall.male || ageGroupSum.female !== overall.female) {
-    warnings.push('Sum of age-group totals does not match overall Adult OPD total.');
+    warnings.push('Sum of age-group totals does not match overall OPD total.');
   }
 
   if (!rowAddsUp(overall)) {
@@ -59,11 +59,11 @@ function validateReport({ overall, ageGroups, diagnoses, adultCount }) {
   });
 
   if (diagnosisSum.total !== overall.total || diagnosisSum.male !== overall.male || diagnosisSum.female !== overall.female) {
-    warnings.push('Sum of diagnosis totals does not match overall Adult OPD total.');
+    warnings.push('Sum of diagnosis totals does not match overall OPD total.');
   }
 
   if (adultCount !== overall.total) {
-    warnings.push('Overall total does not match the number of Adult OPD records.');
+    warnings.push('Overall total does not match the number of OPD records.');
   }
 
   return {
@@ -178,7 +178,7 @@ export function generateYearlyReport(records, year) {
       warnings:
         yearTotal.total === adultRecords.length
           ? []
-          : ['Year total does not match Adult OPD records for the selected year.'],
+          : ['Year total does not match OPD records for the selected year.'],
     },
   };
 }

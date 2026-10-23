@@ -70,7 +70,7 @@ export function DiagnosisBreakdown({ name, block }) {
 
 export function StatusBadge({ record }) {
   if (record.includedInAdultReport) {
-    return <span className="aopd-badge aopd-badge-adult">Adult OPD</span>;
+    return <span className="aopd-badge aopd-badge-adult">OPD</span>;
   }
-  return <span className="aopd-badge aopd-badge-outside">Outside Adult OPD</span>;
+  return <span className="aopd-badge aopd-badge-outside">Outside OPD</span>;
 }

@@ -1,26 +1,29 @@
 import { ADULT_AGE_GROUPS } from '../constants';
+import { getTallyGroupSizes, tallyMarks } from '../utils/tallyMarks.mjs';
+
+export { tallyMarks };
 
 export const ICT_TALLY_AGE_GROUPS = [
+  { label: 'Below 1 year', reportKey: null },
+  { label: '12–59 months', reportKey: null },
   { label: '5–14 years', reportKey: '5–14' },
   { label: '15–29 years', reportKey: '15–29' },
   { label: '30–64 years', reportKey: '30–64' },
   { label: '65+ years', reportKey: '≥65' },
-  { label: 'Below 1 year', reportKey: null },
-  { label: '1–4 years', reportKey: null },
 ];
 
 const ICT_TALLY_DIAGNOSES = [
   { code: '1A07', name: 'Typhoid fever', aliases: ['typhoid fever'] },
   { code: '1F9Z', name: 'Helminthiasis', aliases: ['helminthiasis'] },
   { code: 'MD92', name: 'Dyspepsia', aliases: ['dyspepsia'] },
-  { code: 'N39.0', name: 'Urinary tract infection', aliases: ['urinary tract infection', 'uti'] },
+  { code: 'GBS1', name: 'Urinary tract infection', aliases: ['urinary tract infection', 'uti'] },
   { code: 'A09', name: 'Diarrhea', aliases: ['diarrhea', 'diarrhoea'] },
   { code: 'R51', name: 'Headache', aliases: ['headache'] },
   { code: 'E56.9', name: 'Avitaminosis', aliases: ['avitaminosis'] },
   { code: 'T14.9', name: 'Injury / unspecified', aliases: ['injury / unspecified', 'injury unspecified'] },
   { code: 'J03', name: 'Tonsillitis', aliases: ['tonsillitis'] },
   { code: 'L30.9', name: 'Dermatitis', aliases: ['dermatitis'] },
-  { code: 'J18.9', name: 'Pneumonia', aliases: ['pneumonia'] },
+  { code: 'CA40', name: 'Pneumonia', aliases: ['pneumonia'] },
   { code: 'K02', name: 'Tooth decay', aliases: ['tooth decay'] },
   { code: 'H66', name: 'Otitis media', aliases: ['otitis media'] },
 ];
@@ -52,10 +55,6 @@ function diagnosisAgeCounts(entries) {
   );
 }
 
-export function tallyMarks(count) {
-  return `${Array(Math.floor(count / 5)).fill('||||/').join(' ')}${count % 5 ? `${count >= 5 ? ' ' : ''}${'|'.repeat(count % 5)}` : ''}`;
-}
-
 function diagnosisRowTotal({ counts }) {
   return counts.reduce((total, { male, female }) => total + male + female, 0);
 }
@@ -81,13 +80,13 @@ export function buildMonthlyIctTallyRows(report) {
       counts: diagnosisAgeCounts([[name, block]]),
     }));
 
-  return [...rows, ...otherRows].sort(
-    (a, b) => diagnosisRowTotal(b) - diagnosisRowTotal(a)
-  );
+  return [...rows, ...otherRows]
+    .filter((row) => diagnosisRowTotal(row) > 0)
+    .sort((a, b) => diagnosisRowTotal(b) - diagnosisRowTotal(a));
 }
 
 export function buildMonthlyIctPdfRows(report) {
-  return buildMonthlyIctTallyRows(report).filter((row) => diagnosisRowTotal(row) > 0);
+  return buildMonthlyIctTallyRows(report);
 }
 
 function facilityLines(settings) {
@@ -157,7 +156,7 @@ function monthlyHtml(report, settings) {
 
   return `
     <html><head><meta charset="utf-8" /></head><body>
-      <h1>ADULT OPD – ICT TALLY SHEET</h1>
+      <h1>OPD – ICT TALLY SHEET</h1>
       <p><strong>Health Center: ${escapeHtml(settings.healthCenterName || '')}</strong></p>
       <p>Year: ${report.year} &nbsp; Month: ${escapeHtml(String(report.month).toUpperCase())}</p>
       <p>Reporting period: ${escapeHtml(String(report.month).toUpperCase())} ${report.year}</p>
@@ -184,7 +183,7 @@ export async function exportMonthlyReportExcel(report, settings) {
     const XLSX = await import('xlsx');
     const rows = [];
     rows.push([settings.healthCenterName || 'Health Center Name not set']);
-    rows.push(['ADULT OPD – ICT TALLY SHEET']);
+    rows.push(['OPD – ICT TALLY SHEET']);
     rows.push([`Year: ${report.year}`, `Month: ${String(report.month).toUpperCase()}`]);
     rows.push([`Reporting period: ${String(report.month).toUpperCase()} ${report.year}`]);
     if (settings.region) rows.push([`Region: ${settings.region}`]);
@@ -212,11 +211,11 @@ export async function exportMonthlyReportExcel(report, settings) {
       })),
     ];
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Adult OPD ICT Tally');
-    XLSX.writeFile(workbook, `Adult-OPD-Monthly-${report.month}-${report.year}.xlsx`);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'OPD ICT Tally');
+    XLSX.writeFile(workbook, `OPD-Monthly-${report.month}-${report.year}.xlsx`);
   } catch {
     downloadBlob(
-      `Adult-OPD-Monthly-${report.month}-${report.year}.xls`,
+      `OPD-Monthly-${report.month}-${report.year}.xls`,
       'application/vnd.ms-excel',
       monthlyHtml(report, settings)
     );
@@ -236,7 +235,7 @@ export async function exportMonthlyReportPdf(report, settings) {
   let y = 28;
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
-  doc.text('ADULT OPD – ICT TALLY SHEET', pageWidth / 2, y, { align: 'center' });
+  doc.text('OPD – ICT TALLY SHEET', pageWidth / 2, y, { align: 'center' });
   y += 24;
 
   doc.setFont('helvetica', 'normal');
@@ -270,16 +269,16 @@ export async function exportMonthlyReportPdf(report, settings) {
 
   const bodyRows = rows.map(({ code, name, counts }) => [
     code ? `${code}\n${name}` : name,
-    ...counts.flatMap(({ male }) => [tallyMarks(male), male || '']),
-    ...counts.flatMap(({ female }) => [tallyMarks(female), female || '']),
+    ...counts.flatMap(({ male }) => ['', male || '']),
+    ...counts.flatMap(({ female }) => ['', female || '']),
   ]);
   const subcolumnCount = ICT_TALLY_AGE_GROUPS.length * 4;
   const columnStyles = { 0: { cellWidth: 128, halign: 'left', fontSize: 7 } };
   for (let index = 1; index <= subcolumnCount; index += 1) {
     columnStyles[index] = {
-      cellWidth: index % 2 === 1 ? 32 : 24,
+      cellWidth: index % 2 === 1 ? 36 : 20,
       halign: 'center',
-      fontSize: index % 2 === 1 ? 4.5 : 6,
+      fontSize: index % 2 === 1 ? 4 : 6,
     };
   }
 
@@ -299,6 +298,63 @@ export async function exportMonthlyReportPdf(report, settings) {
       lineWidth: 0.5,
       textColor: [0, 0, 0],
     },
+    didParseCell: (data) => {
+      if (data.section !== 'body' || data.column.index < 1 || data.column.index % 2 !== 1) return;
+
+      const rowCounts = rows[data.row.index].counts;
+      const countIndex = Math.floor((data.column.index - 1) / 2);
+      const count = countIndex < ICT_TALLY_AGE_GROUPS.length
+        ? rowCounts[countIndex].male
+        : rowCounts[countIndex - ICT_TALLY_AGE_GROUPS.length].female;
+      const groupCount = getTallyGroupSizes(count).length;
+      const availableWidth = data.cell.width - 4;
+      const groupWidth = 10;
+      const groupGap = 1.5;
+      const groupsPerLine = Math.max(1, Math.floor((availableWidth + groupGap) / (groupWidth + groupGap)));
+      const lineCount = Math.ceil(groupCount / groupsPerLine);
+      data.cell.styles.minCellHeight = Math.max(
+        data.cell.styles.minCellHeight || 0,
+        4 + lineCount * 9
+      );
+    },
+    didDrawCell: (data) => {
+      if (data.section !== 'body' || data.column.index < 1 || data.column.index % 2 !== 1) return;
+
+      const rowCounts = rows[data.row.index].counts;
+      const countIndex = Math.floor((data.column.index - 1) / 2);
+      const count = countIndex < ICT_TALLY_AGE_GROUPS.length
+        ? rowCounts[countIndex].male
+        : rowCounts[countIndex - ICT_TALLY_AGE_GROUPS.length].female;
+      const groups = getTallyGroupSizes(count);
+      const groupWidth = 10;
+      const groupHeight = 8;
+      const groupGap = 1.5;
+      const lineGap = 1.5;
+      const columns = Math.max(1, Math.floor((data.cell.width - 4 + groupGap) / (groupWidth + groupGap)));
+      const lines = Math.ceil(groups.length / columns);
+      const totalWidth = Math.min(groups.length, columns) * groupWidth
+        + Math.max(0, Math.min(groups.length, columns) - 1) * groupGap;
+      const totalHeight = lines * groupHeight + Math.max(0, lines - 1) * lineGap;
+      const startX = data.cell.x + (data.cell.width - totalWidth) / 2;
+      const startY = data.cell.y + (data.cell.height - totalHeight) / 2;
+
+      doc.setDrawColor(25, 25, 25);
+      doc.setLineWidth(0.55);
+      groups.forEach((size, index) => {
+        const row = Math.floor(index / columns);
+        const column = index % columns;
+        const x = startX + column * (groupWidth + groupGap);
+        const y = startY + row * (groupHeight + lineGap);
+        const verticalCount = size === 5 ? 4 : size;
+
+        for (let mark = 0; mark < verticalCount; mark += 1) {
+          const markX = x + 1.5 + mark * 1.75;
+          doc.line(markX, y, markX, y + groupHeight);
+        }
+
+        if (size === 5) doc.line(x + 0.5, y + groupHeight, x + 8.5, y);
+      });
+    },
     headStyles: {
       fillColor: [255, 255, 255],
       textColor: [0, 0, 0],
@@ -314,12 +370,12 @@ export async function exportMonthlyReportPdf(report, settings) {
       if (pageNumber > 1) {
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(9);
-        doc.text('ADULT OPD – ICT TALLY SHEET', pageWidth / 2, 20, { align: 'center' });
+        doc.text('OPD – ICT TALLY SHEET', pageWidth / 2, 20, { align: 'center' });
       }
     },
   });
 
-  doc.save(`Adult-OPD-Monthly-${report.month}-${report.year}.pdf`);
+  doc.save(`OPD-Monthly-${report.month}-${report.year}.pdf`);
 }
 
 export async function exportYearlyReportExcel(report, settings) {
@@ -327,7 +383,7 @@ export async function exportYearlyReportExcel(report, settings) {
     const XLSX = await import('xlsx');
     const rows = [
       [settings.healthCenterName || 'Health Center Name not set'],
-      ['ADULT OPD YEARLY REPORT'],
+      ['OPD YEARLY REPORT'],
       [`Reporting Year: ${report.year}`],
       [],
       ['Month', 'Male', 'Female', 'Total'],
@@ -339,18 +395,18 @@ export async function exportYearlyReportExcel(report, settings) {
     ];
     const worksheet = XLSX.utils.aoa_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Adult OPD Yearly');
-    XLSX.writeFile(workbook, `Adult-OPD-Yearly-${report.year}.xlsx`);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'OPD Yearly');
+    XLSX.writeFile(workbook, `OPD-Yearly-${report.year}.xlsx`);
   } catch {
     const monthRows = report.months
       .map((row) => `<tr><td>${row.month}</td>${cell(row.male)}${cell(row.female)}${cell(row.total)}</tr>`)
       .join('');
     const html = `<html><body>
-      <h1>ADULT OPD YEARLY REPORT</h1>
+      <h1>OPD YEARLY REPORT</h1>
       <p>${settings.healthCenterName || 'Health Center Name not set'}</p>
       <p>Year: ${report.year}</p>
       <table border="1">${monthRows}<tr><th>YEAR TOTAL</th><th>${report.yearTotal.male}</th><th>${report.yearTotal.female}</th><th>${report.yearTotal.total}</th></tr></table>
     </body></html>`;
-    downloadBlob(`Adult-OPD-Yearly-${report.year}.xls`, 'application/vnd.ms-excel', html);
+    downloadBlob(`OPD-Yearly-${report.year}.xls`, 'application/vnd.ms-excel', html);
   }
 }

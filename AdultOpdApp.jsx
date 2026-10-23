@@ -30,7 +30,7 @@ function LoadingScreen({ message }) {
     <main className="aopd-auth-screen" aria-live="polite">
       <div className="aopd-auth-card">
         <span className="aopd-auth-mark" aria-hidden="true">OPD</span>
-        <h1>Adult OPD</h1>
+        <h1>OPD</h1>
         <p>{message}</p>
         <div className="aopd-auth-loading" role="status">Loading…</div>
       </div>

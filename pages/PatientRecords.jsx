@@ -148,12 +148,12 @@ export default function PatientRecords() {
         </select>
         <select value={filters.opdCategory} onChange={(e) => updateFilter('opdCategory', e.target.value)}>
           <option value="">All OPD categories</option>
-          <option value={OPD_CATEGORY.ADULT}>Adult OPD</option>
-          <option value={OPD_CATEGORY.OUTSIDE}>Outside Adult OPD Categories</option>
+          <option value={OPD_CATEGORY.ADULT}>OPD</option>
+          <option value={OPD_CATEGORY.OUTSIDE}>Outside OPD Categories</option>
         </select>
         <select value={filters.status} onChange={(e) => updateFilter('status', e.target.value)}>
           <option value="">All reporting status</option>
-          <option value="adult">Included in Adult report</option>
+          <option value="adult">Included in OPD report</option>
           <option value="outside">Outside reporting age groups</option>
         </select>
       </div>

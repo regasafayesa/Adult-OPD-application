@@ -20,7 +20,7 @@ export function validateEncounter({ date, age, sex, diagnosis }, { diagnoses = [
     } else if (numericAge < 0) {
       errors.age = 'Age cannot be negative.';
     } else if (numericAge < 5) {
-      errors.age = 'Ages below 5 are not included in Adult OPD reporting. Do not assign this patient to an Adult OPD age group.';
+      errors.age = 'Ages below 5 are not included in OPD reporting. Do not assign this patient to an OPD age group.';
     } else if (numericAge > 120) {
       errors.age = 'Enter a realistic age (0–120).';
     }

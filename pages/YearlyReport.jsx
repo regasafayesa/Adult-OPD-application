@@ -48,12 +48,12 @@ export default function YearlyReport() {
       <article className="aopd-report">
         <header className="aopd-report-header">
           <h2>{settings.healthCenterName || 'Health Center Name not set'}</h2>
-          <h3>ADULT OPD YEARLY REPORT</h3>
+          <h3>OPD YEARLY REPORT</h3>
           <p>Reporting Year: {report.year}</p>
         </header>
 
         <section className="aopd-table-card">
-          <h3>Monthly Adult OPD totals</h3>
+          <h3>Monthly OPD totals</h3>
           <div className="aopd-table-wrap">
             <table>
               <thead>
@@ -101,7 +101,7 @@ export default function YearlyReport() {
               <tbody>
                 {Object.keys(report.diagnoses).length === 0 && (
                   <tr>
-                    <td colSpan={4}>No Adult OPD diagnoses for this year.</td>
+                    <td colSpan={4}>No OPD diagnoses for this year.</td>
                   </tr>
                 )}
                 {Object.entries(report.diagnoses).map(([name, counts]) => (

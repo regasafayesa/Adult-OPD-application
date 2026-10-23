@@ -54,7 +54,7 @@ export default function Dashboard() {
       </div>
 
       <div className="aopd-card-grid">
-        <StatCard label="Adult OPD patients" value={monthly.overall.total} />
+        <StatCard label="OPD patients" value={monthly.overall.total} />
         <StatCard label="Male" value={monthly.overall.male} />
         <StatCard label="Female" value={monthly.overall.female} />
         {ADULT_AGE_GROUPS.map((group) => (
@@ -82,13 +82,13 @@ export default function Dashboard() {
         </section>
         <section className="aopd-panel">
           <h3>Patients by diagnosis</h3>
-          {stats.diagnosisBars.length === 0 && <p>No Adult OPD diagnoses this month.</p>}
+          {stats.diagnosisBars.length === 0 && <p>No OPD diagnoses this month.</p>}
           {stats.diagnosisBars.slice(0, 8).map((item) => (
             <BarRow key={item.name} label={item.name} value={item.total} max={diagnosisMax} />
           ))}
         </section>
         <section className="aopd-panel">
-          <h3>Monthly Adult OPD trend ({year})</h3>
+          <h3>Monthly OPD trend ({year})</h3>
           <div className="aopd-trend">
             {stats.trend.map((item) => (
               <div key={item.month} className="aopd-trend-col">

@@ -48,7 +48,7 @@ export default function AdultOpdLayout({
     <div className="aopd-shell">
       <aside className={`aopd-sidebar ${open ? 'is-open' : ''}`}>
         <div className="aopd-brand">
-          <strong>Adult OPD</strong>
+          <strong>OPD</strong>
           <span>Monthly Reporting System</span>
         </div>
         <nav>
@@ -83,7 +83,7 @@ export default function AdultOpdLayout({
           </button>
           <div className="aopd-topbar-heading">
             <span className="aopd-topbar-mark" aria-hidden="true">OPD</span>
-            <h1>Adult OPD Monthly Reporting System</h1>
+            <h1>OPD Monthly Reporting System</h1>
           </div>
           {facilities.length > 1 && (
             <label className="aopd-active-facility">
