@@ -7,6 +7,15 @@ describe('ESV-1 diagnosis catalogue', () => {
     expect(new Set(ESV1_DIAGNOSES.map((item) => item.code)).size).toBe(219);
     expect(ESV1_DIAGNOSES.every((item) => item.code && item.name && item.official)).toBe(true);
   });
+
+  test('finds Typhoid fever by name and ESV-1 code', () => {
+    expect(findDiagnosisMatches(ESV1_DIAGNOSES, 'typhoid fever')).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: '1A07', name: 'Typhoid fever' })])
+    );
+    expect(findDiagnosisMatches(ESV1_DIAGNOSES, '1A07')).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: '1A07', name: 'Typhoid fever' })])
+    );
+  });
 });
 
 describe('findDiagnosisMatches', () => {
@@ -39,5 +48,15 @@ describe('findDiagnosisMatches', () => {
   test('does not offer inactive diagnoses or list all diagnoses for an empty query', () => {
     expect(findDiagnosisMatches(diagnoses, 'Shigella')).toEqual([]);
     expect(findDiagnosisMatches(diagnoses, '')).toEqual([]);
+  });
+
+  test('returns every diagnosis matching a broad query', () => {
+    const manyDiagnoses = Array.from({ length: 30 }, (_, index) => ({
+      id: `diagnosis-${index}`,
+      name: `Sample diagnosis ${index}`,
+      active: true,
+    }));
+
+    expect(findDiagnosisMatches(manyDiagnoses, 'sample')).toHaveLength(30);
   });
 });

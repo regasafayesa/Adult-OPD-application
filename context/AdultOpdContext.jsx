@@ -17,8 +17,10 @@ import {
 
 const AdultOpdContext = createContext(null);
 
-export function AdultOpdProvider({ children, initialSettings, facilityId }) {
+export function AdultOpdProvider({ children, initialSettings, facilityId, role = 'local demo' }) {
   const remote = Boolean(facilityId);
+  const canManageFacility = !remote || role === 'owner' || role === 'admin';
+  const canWriteEncounters = !remote || canManageFacility || role === 'data_entry';
   const [records, setRecords] = useState([]);
   const [diagnoses, setDiagnoses] = useState([]);
   const [settings, setSettingsState] = useState(() => ({ ...DEFAULT_SETTINGS, ...initialSettings }));
@@ -363,6 +365,9 @@ export function AdultOpdProvider({ children, initialSettings, facilityId }) {
       settingsSyncStatus,
       isCloud: remote,
       facilityId,
+      role,
+      canManageFacility,
+      canWriteEncounters,
       hasDemoRecords,
       syncStatus,
       syncError,
@@ -389,6 +394,9 @@ export function AdultOpdProvider({ children, initialSettings, facilityId }) {
       settingsSyncStatus,
       remote,
       facilityId,
+      role,
+      canManageFacility,
+      canWriteEncounters,
       hasDemoRecords,
       syncStatus,
       syncError,

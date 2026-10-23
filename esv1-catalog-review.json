@@ -1,0 +1,9846 @@
+[
+  {
+    "code": "1A00",
+    "name": "Cholera"
+  },
+  {
+    "code": "1A02",
+    "name": "Intestinal infections due to Shigella"
+  },
+  {
+    "code": "1A03",
+    "name": "Intestinal infections due to Escherichia coli"
+  },
+  {
+    "code": "1A07",
+    "name": "Typhoid fever"
+  },
+  {
+    "code": "1A08",
+    "name": "Paratyphoid fever"
+  },
+  {
+    "code": "1A09",
+    "name": "Infections due to other Salmonella"
+  },
+  {
+    "code": "1A0Y",
+    "name": "Other specified bacterial intestinal infections"
+  },
+  {
+    "code": "1A0Z",
+    "name": "Bacterial intestinal infections, unspecified"
+  },
+  {
+    "code": "1A11",
+    "name": "Botulism"
+  },
+  {
+    "code": "1A1Z",
+    "name": "Bacterial foodborne intoxications, unspecified"
+  },
+  {
+    "code": "1A2Z",
+    "name": "Viral intestinal infections, unspecified"
+  },
+  {
+    "code": "1A31",
+    "name": "Giardiasis"
+  },
+  {
+    "code": "1A32",
+    "name": "Cryptosporidiosis"
+  },
+  {
+    "code": "1A33",
+    "name": "Cystoisosporiasis"
+  },
+  {
+    "code": "1A36",
+    "name": "Amoebiasis"
+  },
+  {
+    "code": "1A36.10",
+    "name": "Amoebic liver abscess"
+  },
+  {
+    "code": "1A36.1Y",
+    "name": "Amoebiasis of other specified sites"
+  },
+  {
+    "code": "1A3Y",
+    "name": "Other specified protozoal intestinal infections"
+  },
+  {
+    "code": "1A40",
+    "name": "Gastroenteritis or colitis without specification of infectious agent"
+  },
+  {
+    "code": "1A60",
+    "name": "Congenital syphilis"
+  },
+  {
+    "code": "1A61",
+    "name": "Early syphilis"
+  },
+  {
+    "code": "1A62",
+    "name": "Late syphilis"
+  },
+  {
+    "code": "1A62.0",
+    "name": "Neurosyphilis"
+  },
+  {
+    "code": "1A62.1",
+    "name": "Cardiovascular late syphilis"
+  },
+  {
+    "code": "1A6Z",
+    "name": "Syphilis, unspecified"
+  },
+  {
+    "code": "1A70",
+    "name": "Gonococcal genitourinary infection"
+  },
+  {
+    "code": "1A72",
+    "name": "Gonococcal infection of other sites"
+  },
+  {
+    "code": "1A73",
+    "name": "Disseminated gonococcal infection"
+  },
+  {
+    "code": "1A7Z",
+    "name": "Gonococcal infection, unspecified"
+  },
+  {
+    "code": "1A80",
+    "name": "Chlamydial lymphogranuloma"
+  },
+  {
+    "code": "1A8Z",
+    "name": "Sexually transmissible infections due to chlamydia, unspecified"
+  },
+  {
+    "code": "1A90",
+    "name": "Chancroid"
+  },
+  {
+    "code": "1A91",
+    "name": "Granuloma inguinale"
+  },
+  {
+    "code": "1A92",
+    "name": "Trichomoniasis"
+  },
+  {
+    "code": "1A93",
+    "name": "Sexually transmissible infestations"
+  },
+  {
+    "code": "1A94",
+    "name": "Anogenital herpes simplex infection"
+  },
+  {
+    "code": "1A95.0",
+    "name": "Anal warts"
+  },
+  {
+    "code": "1A95.1",
+    "name": "Genital warts"
+  },
+  {
+    "code": "1B10.0",
+    "name": "Respiratory tuberculosis, confirmed"
+  },
+  {
+    "code": "1B10.1",
+    "name": "Respiratory tuberculosis, not confirmed"
+  },
+  {
+    "code": "1B11.0",
+    "name": "Tuberculous meningitis"
+  },
+  {
+    "code": "1B11.3",
+    "name": "Tuberculous granuloma of brain"
+  },
+  {
+    "code": "1B11.Z",
+    "name": "Tuberculosis of the nervous system, unspecified"
+  },
+  {
+    "code": "1B12.4",
+    "name": "Tuberculosis of the musculoskeletal system"
+  },
+  {
+    "code": "1B12.5",
+    "name": "Tuberculosis of the genitourinary system"
+  },
+  {
+    "code": "1B12.6",
+    "name": "Tuberculous peripheral lymphadenopathy"
+  },
+  {
+    "code": "1B12.7",
+    "name": "Tuberculosis of the digestive system"
+  },
+  {
+    "code": "1B12.Y",
+    "name": "Tuberculosis of other specified organ or site"
+  },
+  {
+    "code": "1B13",
+    "name": "Miliary tuberculosis"
+  },
+  {
+    "code": "1B14",
+    "name": "Latent tuberculosis"
+  },
+  {
+    "code": "1B1Z",
+    "name": "Tuberculosis, unspecified"
+  },
+  {
+    "code": "1B20.0",
+    "name": "Paucibacillary leprosy"
+  },
+  {
+    "code": "1B20.1",
+    "name": "Multibacillary leprosy"
+  },
+  {
+    "code": "1B20.2",
+    "name": "Leprosy reactions"
+  },
+  {
+    "code": "1B20.20",
+    "name": "Type I leprosy reaction"
+  },
+  {
+    "code": "1B20.21",
+    "name": "Type II leprosy reaction"
+  },
+  {
+    "code": "1B20.Z",
+    "name": "Leprosy, unspecified"
+  },
+  {
+    "code": "1B2Z",
+    "name": "Mycobacterial diseases, unspecified"
+  },
+  {
+    "code": "1B40",
+    "name": "Acute rheumatic fever without mention of heart involvement"
+  },
+  {
+    "code": "1B41",
+    "name": "Acute rheumatic fever with heart involvement"
+  },
+  {
+    "code": "1B42",
+    "name": "Rheumatic chorea"
+  },
+  {
+    "code": "1B50",
+    "name": "Scarlet fever"
+  },
+  {
+    "code": "1B51",
+    "name": "Streptococcal pharyngitis"
+  },
+  {
+    "code": "1B52",
+    "name": "Toxic shock syndrome"
+  },
+  {
+    "code": "1B53",
+    "name": "Meningitis due to Streptococcus"
+  },
+  {
+    "code": "1B70.0",
+    "name": "Erysipelas"
+  },
+  {
+    "code": "1B70.Z",
+    "name": "Bacterial cellulitis or lymphangitis due to unspecified bacterium"
+  },
+  {
+    "code": "1B71",
+    "name": "Necrotising fasciitis"
+  },
+  {
+    "code": "1B72.Z",
+    "name": "Impetigo, unspecified"
+  },
+  {
+    "code": "1B73.Z",
+    "name": "Ecthyma, unspecified"
+  },
+  {
+    "code": "1B74",
+    "name": "Superficial bacterial folliculitis"
+  },
+  {
+    "code": "1B75",
+    "name": "Deep bacterial folliculitis or pyogenic abscess of the skin"
+  },
+  {
+    "code": "1B75.0",
+    "name": "Furuncle"
+  },
+  {
+    "code": "1B75.1",
+    "name": "Carbuncle"
+  },
+  {
+    "code": "1B75.3",
+    "name": "Pyogenic abscess of the skin"
+  },
+  {
+    "code": "1B7Y",
+    "name": "Other specified pyogenic bacterial infection of skin and subcutaneous tissue"
+  },
+  {
+    "code": "1B91",
+    "name": "Leptospirosis"
+  },
+  {
+    "code": "1B93.Z",
+    "name": "Plague, unspecified"
+  },
+  {
+    "code": "1B95",
+    "name": "Brucellosis"
+  },
+  {
+    "code": "1B97",
+    "name": "Anthrax"
+  },
+  {
+    "code": "1B98",
+    "name": "Cat-scratch disease"
+  },
+  {
+    "code": "1C10.Z",
+    "name": "Actinomycosis, unspecified"
+  },
+  {
+    "code": "1C12",
+    "name": "Whooping cough"
+  },
+  {
+    "code": "1C13",
+    "name": "Tetanus"
+  },
+  {
+    "code": "1C14",
+    "name": "Obstetrical tetanus"
+  },
+  {
+    "code": "1C15",
+    "name": "Tetanus neonatorum"
+  },
+  {
+    "code": "1C16",
+    "name": "Gas gangrene"
+  },
+  {
+    "code": "1C17",
+    "name": "Diphtheria"
+  },
+  {
+    "code": "1C19",
+    "name": "Legionellosis"
+  },
+  {
+    "code": "1C1A",
+    "name": "Listeriosis"
+  },
+  {
+    "code": "1C1C.0",
+    "name": "Meningococcal meningitis"
+  },
+  {
+    "code": "1C1C.2",
+    "name": "Meningococcaemia"
+  },
+  {
+    "code": "1C1J",
+    "name": "Relapsing fever"
+  },
+  {
+    "code": "1C20",
+    "name": "Chlamydial conjunctivitis"
+  },
+  {
+    "code": "1C23.0",
+    "name": "Initial stage of trachoma"
+  },
+  {
+    "code": "1C23.1",
+    "name": "Active stage of trachoma"
+  },
+  {
+    "code": "1C23.Z",
+    "name": "Trachoma, unspecified"
+  },
+  {
+    "code": "1C30.Z",
+    "name": "Typhus fever, unspecified"
+  },
+  {
+    "code": "1C43",
+    "name": "Actinomycetoma"
+  },
+  {
+    "code": "1C44",
+    "name": "Non-pyogenic bacterial infections of the skin"
+  },
+  {
+    "code": "1C4Y",
+    "name": "Other specified bacterial diseases"
+  },
+  {
+    "code": "1C60",
+    "name": "Human immunodeficiency virus disease associated with tuberculosis"
+  },
+  {
+    "code": "1C62",
+    "name": "Human immunodeficiency virus disease without mention of tuberculosis or malaria"
+  },
+  {
+    "code": "1C80",
+    "name": "Viral encephalitis not elsewhere classified"
+  },
+  {
+    "code": "1C81",
+    "name": "Acute poliomyelitis"
+  },
+  {
+    "code": "1C82",
+    "name": "Rabies"
+  },
+  {
+    "code": "1C8Y",
+    "name": "Other specified viral infections of the central nervous system"
+  },
+  {
+    "code": "1D00.0",
+    "name": "Bacterial encephalitis"
+  },
+  {
+    "code": "1D00.1",
+    "name": "Fungal encephalitis"
+  },
+  {
+    "code": "1D01.0",
+    "name": "Bacterial meningitis"
+  },
+  {
+    "code": "1D01.10",
+    "name": "Meningitis due to Cryptococcus neoformans"
+  },
+  {
+    "code": "1D01.1Z",
+    "name": "Fungal meningitis, unspecified"
+  },
+  {
+    "code": "1D01.Z",
+    "name": "Infectious meningitis not elsewhere classified, unspecified"
+  },
+  {
+    "code": "1D02.Z",
+    "name": "Infectious myelitis not elsewhere classified, unspecified"
+  },
+  {
+    "code": "1D03",
+    "name": "Infectious abscess of the central nervous system"
+  },
+  {
+    "code": "1D04.Z",
+    "name": "Infectious granulomas of the central nervous system, unspecified"
+  },
+  {
+    "code": "1D05.Z",
+    "name": "Infectious cysts of the central nervous system, unspecified"
+  },
+  {
+    "code": "1D22",
+    "name": "Severe dengue"
+  },
+  {
+    "code": "1D2Z",
+    "name": "Dengue fever, unspecified"
+  },
+  {
+    "code": "1D40",
+    "name": "Chikungunya virus disease"
+  },
+  {
+    "code": "1D47",
+    "name": "Yellow fever"
+  },
+  {
+    "code": "1D48",
+    "name": "Zika virus disease"
+  },
+  {
+    "code": "1D60.0",
+    "name": "Ebola disease"
+  },
+  {
+    "code": "1D64",
+    "name": "Middle East respiratory syndrome"
+  },
+  {
+    "code": "1D65",
+    "name": "Severe acute respiratory syndrome"
+  },
+  {
+    "code": "1D6Y",
+    "name": "Other specified zoonotic viral diseases"
+  },
+  {
+    "code": "1D80",
+    "name": "Mumps"
+  },
+  {
+    "code": "1D81",
+    "name": "Infectious mononucleosis"
+  },
+  {
+    "code": "1D82",
+    "name": "Cytomegaloviral disease"
+  },
+  {
+    "code": "1D84",
+    "name": "Viral conjunctivitis"
+  },
+  {
+    "code": "1D86",
+    "name": "Viral haemorrhagic fever, not elsewhere classified"
+  },
+  {
+    "code": "1E32",
+    "name": "Influenza, virus not identified"
+  },
+  {
+    "code": "1E50",
+    "name": "Acute viral hepatitis"
+  },
+  {
+    "code": "1E50.0",
+    "name": "Acute hepatitis A"
+  },
+  {
+    "code": "1E50.1",
+    "name": "Acute hepatitis B"
+  },
+  {
+    "code": "1E50.2",
+    "name": "Acute hepatitis C"
+  },
+  {
+    "code": "1E50.4",
+    "name": "Acute hepatitis E"
+  },
+  {
+    "code": "1E51",
+    "name": "Chronic viral hepatitis"
+  },
+  {
+    "code": "1E51.Y",
+    "name": "Other specified chronic viral hepatitis"
+  },
+  {
+    "code": "1E76",
+    "name": "Molluscum contagiosum"
+  },
+  {
+    "code": "1E80",
+    "name": "Common warts"
+  },
+  {
+    "code": "1E80.0",
+    "name": "Digital or periungual warts"
+  },
+  {
+    "code": "1E80.1",
+    "name": "Plantar warts"
+  },
+  {
+    "code": "1E81",
+    "name": "Plane warts"
+  },
+  {
+    "code": "1E8Z",
+    "name": "Viral warts, not elsewhere classified"
+  },
+  {
+    "code": "1E90",
+    "name": "Varicella"
+  },
+  {
+    "code": "1E91",
+    "name": "Zoster"
+  },
+  {
+    "code": "1E91.5",
+    "name": "Postherpetic polyneuropathy"
+  },
+  {
+    "code": "1F00",
+    "name": "Herpes simplex infections"
+  },
+  {
+    "code": "1F00.0",
+    "name": "Herpes simplex infection of skin or mucous membrane"
+  },
+  {
+    "code": "1F01",
+    "name": "Roseola infantum"
+  },
+  {
+    "code": "1F03",
+    "name": "Measles"
+  },
+  {
+    "code": "1F03.Y",
+    "name": "Measles with other complications"
+  },
+  {
+    "code": "1F20",
+    "name": "Aspergillosis"
+  },
+  {
+    "code": "1F23",
+    "name": "Candidosis"
+  },
+  {
+    "code": "1F23.10",
+    "name": "Vulvovaginal candidosis"
+  },
+  {
+    "code": "1F23.12",
+    "name": "Flexural or intertriginous candidosis"
+  },
+  {
+    "code": "1F23.13",
+    "name": "Candidosis of nail or paronychium"
+  },
+  {
+    "code": "1F23.2",
+    "name": "Candidosis of gastrointestinal tract"
+  },
+  {
+    "code": "1F23.3",
+    "name": "Systemic or invasive candidosis"
+  },
+  {
+    "code": "1F25",
+    "name": "Coccidioidomycosis"
+  },
+  {
+    "code": "1F27.1",
+    "name": "Cerebral cryptococcosis"
+  },
+  {
+    "code": "1F27.2",
+    "name": "Disseminated cryptococcosis"
+  },
+  {
+    "code": "1F28",
+    "name": "Dermatophytosis"
+  },
+  {
+    "code": "1F28.0",
+    "name": "Dermatophytosis of scalp"
+  },
+  {
+    "code": "1F28.1",
+    "name": "Dermatophytosis of nail"
+  },
+  {
+    "code": "1F28.2",
+    "name": "Dermatophytosis of foot"
+  },
+  {
+    "code": "1F28.3",
+    "name": "Genitocrural dermatophytosis"
+  },
+  {
+    "code": "1F28.4",
+    "name": "Kerion"
+  },
+  {
+    "code": "1F28.5",
+    "name": "Disseminated dermatophytosis"
+  },
+  {
+    "code": "1F28.Y",
+    "name": "Other specified dermatophytosis"
+  },
+  {
+    "code": "1F29",
+    "name": "Eumycetoma"
+  },
+  {
+    "code": "1F2A",
+    "name": "Histoplasmosis"
+  },
+  {
+    "code": "1F2C",
+    "name": "Mucormycosis"
+  },
+  {
+    "code": "1F2D.0",
+    "name": "Pityriasis versicolor"
+  },
+  {
+    "code": "1F2G",
+    "name": "Pneumocystosis"
+  },
+  {
+    "code": "1F2Z",
+    "name": "Mycoses, unspecified"
+  },
+  {
+    "code": "1F40",
+    "name": "Malaria due to Plasmodium falciparum"
+  },
+  {
+    "code": "1F41",
+    "name": "Malaria due to Plasmodium vivax"
+  },
+  {
+    "code": "1F42",
+    "name": "Malaria due to Plasmodium malariae"
+  },
+  {
+    "code": "1F43",
+    "name": "Malaria due to Plasmodium ovale"
+  },
+  {
+    "code": "1F4Z",
+    "name": "Malaria, unspecified"
+  },
+  {
+    "code": "1F51",
+    "name": "African trypanosomiasis"
+  },
+  {
+    "code": "1F53",
+    "name": "Chagas disease"
+  },
+  {
+    "code": "1F54.0",
+    "name": "Visceral leishmaniasis"
+  },
+  {
+    "code": "1F54.1",
+    "name": "Cutaneous leishmaniasis"
+  },
+  {
+    "code": "1F54.2",
+    "name": "Mucocutaneous leishmaniasis"
+  },
+  {
+    "code": "1F54.Z",
+    "name": "Leishmaniasis, unspecified"
+  },
+  {
+    "code": "1F57",
+    "name": "Toxoplasmosis"
+  },
+  {
+    "code": "1F57.1",
+    "name": "Meningoencephalitis due to Toxoplasma gondii"
+  },
+  {
+    "code": "1F62",
+    "name": "Ascariasis"
+  },
+  {
+    "code": "1F64",
+    "name": "Dracunculiasis"
+  },
+  {
+    "code": "1F65",
+    "name": "Enterobiasis"
+  },
+  {
+    "code": "1F66.3",
+    "name": "Lymphatic filariasis"
+  },
+  {
+    "code": "1F66.Z",
+    "name": "Filariasis, unspecified"
+  },
+  {
+    "code": "1F68",
+    "name": "Hookworm diseases"
+  },
+  {
+    "code": "1F6A",
+    "name": "Onchocerciasis"
+  },
+  {
+    "code": "1F6B",
+    "name": "Strongyloidiasis"
+  },
+  {
+    "code": "1F6G",
+    "name": "Trichuriasis"
+  },
+  {
+    "code": "1F6Z",
+    "name": "Diseases due to nematodes, unspecified"
+  },
+  {
+    "code": "1F70",
+    "name": "Cysticercosis"
+  },
+  {
+    "code": "1F73.Z",
+    "name": "Echinococcosis, unspecified"
+  },
+  {
+    "code": "1F74",
+    "name": "Hymenolepiasis"
+  },
+  {
+    "code": "1F76.0",
+    "name": "Taeniasis due to Taenia solium"
+  },
+  {
+    "code": "1F76.1",
+    "name": "Taeniasis due to Taenia saginata"
+  },
+  {
+    "code": "1F76.Z",
+    "name": "Taeniasis, unspecified"
+  },
+  {
+    "code": "1F86",
+    "name": "Schistosomiasis"
+  },
+  {
+    "code": "1F86.0",
+    "name": "Schistosomiasis due to Schistosoma haematobium"
+  },
+  {
+    "code": "1F86.1",
+    "name": "Schistosomiasis due to Schistosoma mansoni"
+  },
+  {
+    "code": "1F9Z",
+    "name": "Helminthiases, unspecified"
+  },
+  {
+    "code": "1G00",
+    "name": "Pediculosis"
+  },
+  {
+    "code": "1G01",
+    "name": "Myiasis"
+  },
+  {
+    "code": "1G02",
+    "name": "External hirudiniasis"
+  },
+  {
+    "code": "1G03",
+    "name": "Pthiriasis"
+  },
+  {
+    "code": "1G04",
+    "name": "Scabies"
+  },
+  {
+    "code": "1G2Y",
+    "name": "Other specified parasitic diseases"
+  },
+  {
+    "code": "1G40",
+    "name": "Sepsis without septic shock"
+  },
+  {
+    "code": "1G41",
+    "name": "Sepsis with septic shock"
+  },
+  {
+    "code": "1G8Y",
+    "name": "Sequelae of other specified infectious diseases"
+  },
+  {
+    "code": "2A00",
+    "name": "Primary neoplasms of brain"
+  },
+  {
+    "code": "2A00.0",
+    "name": "Gliomas of brain"
+  },
+  {
+    "code": "2A00.00",
+    "name": "Glioblastoma of brain"
+  },
+  {
+    "code": "2A00.1",
+    "name": "Embryonal tumours of brain"
+  },
+  {
+    "code": "2A00.10",
+    "name": "Medulloblastoma of brain"
+  },
+  {
+    "code": "2A00.2",
+    "name": "Tumours of neuroepithelial tissue of brain"
+  },
+  {
+    "code": "2A00.4",
+    "name": "Astroblastoma of the brain"
+  },
+  {
+    "code": "2A01",
+    "name": "Primary neoplasms of meninges"
+  },
+  {
+    "code": "2A01.0",
+    "name": "Meningiomas"
+  },
+  {
+    "code": "2A02",
+    "name": "Primary neoplasm of spinal cord, cranial nerves or remaining parts of central nervous system"
+  },
+  {
+    "code": "2A02.0",
+    "name": "Gliomas of spinal cord, cranial nerves or other parts of the central nervous system"
+  },
+  {
+    "code": "2A0Z",
+    "name": "Other and unspecified neoplasms of brain or central nervous system"
+  },
+  {
+    "code": "2A20",
+    "name": "Non mast cell myeloproliferative neoplasms"
+  },
+  {
+    "code": "2A20.2",
+    "name": "Primary myelofibrosis"
+  },
+  {
+    "code": "2A20.4",
+    "name": "Polycythaemia vera"
+  },
+  {
+    "code": "2A30",
+    "name": "Refractory anaemia"
+  },
+  {
+    "code": "2A32",
+    "name": "Refractory thrombocytopenia"
+  },
+  {
+    "code": "2A3Z",
+    "name": "Myelodysplastic syndromes, unspecified"
+  },
+  {
+    "code": "2A40",
+    "name": "Chronic myelomonocytic leukaemia"
+  },
+  {
+    "code": "2A41",
+    "name": "Atypical chronic myeloid leukaemia, BCR-ABL1- negative"
+  },
+  {
+    "code": "2A42",
+    "name": "Juvenile myelomonocytic leukaemia"
+  },
+  {
+    "code": "2A4Z",
+    "name": "Myelodysplastic and myeloproliferative neoplasms, unspecified"
+  },
+  {
+    "code": "2A60",
+    "name": "Acute myeloid leukaemias and related precursor neoplasms"
+  },
+  {
+    "code": "2A60.39",
+    "name": "Myeloid sarcoma"
+  },
+  {
+    "code": "2A60.3Z",
+    "name": "Acute myeloid leukaemia, unspecified"
+  },
+  {
+    "code": "2A61",
+    "name": "Acute leukaemias of ambiguous lineage"
+  },
+  {
+    "code": "2A70",
+    "name": "Precursor B-lymphoblastic neoplasms"
+  },
+  {
+    "code": "2A70.0",
+    "name": "B Lymphoblastic leukaemia or lymphoma, not elsewhere classified"
+  },
+  {
+    "code": "2A71",
+    "name": "Precursor T-lymphoblastic neoplasms"
+  },
+  {
+    "code": "2A7Z",
+    "name": "Precursor lymphoid neoplasms, unspecified"
+  },
+  {
+    "code": "2A80",
+    "name": "Follicular lymphoma"
+  },
+  {
+    "code": "2A81",
+    "name": "Diffuse large B-cell lymphomas"
+  },
+  {
+    "code": "2A82",
+    "name": "Mature B-cell neoplasm with leukaemic behaviour"
+  },
+  {
+    "code": "2A82.0",
+    "name": "Chronic lymphocytic leukaemia or small lymphocytic lymphoma"
+  },
+  {
+    "code": "2A82.00",
+    "name": "Chronic lymphocytic leukaemia of B-cell type"
+  },
+  {
+    "code": "2A83",
+    "name": "Plasma cell neoplasms"
+  },
+  {
+    "code": "2A85.6",
+    "name": "Burkitt lymphoma including Burkitt leukaemia"
+  },
+  {
+    "code": "2A86",
+    "name": "B-cell lymphoma, mixed features"
+  },
+  {
+    "code": "2A8Z",
+    "name": "Mature B-cell neoplasms, unspecified"
+  },
+  {
+    "code": "2A90",
+    "name": "Mature T-cell lymphoma, specified types, nodal or systemic"
+  },
+  {
+    "code": "2B2Z",
+    "name": "Mature T-cell or NK-cell neoplasms, unspecified"
+  },
+  {
+    "code": "2B30",
+    "name": "Hodgkin lymphoma"
+  },
+  {
+    "code": "2B33",
+    "name": "Malignant haematopoietic neoplasms without further specification"
+  },
+  {
+    "code": "2B33.0",
+    "name": "Acute leukaemia, not elsewhere classified"
+  },
+  {
+    "code": "2B33.1",
+    "name": "Myeloid leukaemia"
+  },
+  {
+    "code": "2B33.3",
+    "name": "Lymphoid leukaemia, not elsewhere classified"
+  },
+  {
+    "code": "2B33.4",
+    "name": "Leukaemia, unspecified"
+  },
+  {
+    "code": "2B3Z",
+    "name": "Neoplasms of haematopoietic or lymphoid tissues, unspecified"
+  },
+  {
+    "code": "2B50",
+    "name": "Chondrosarcoma, primary site"
+  },
+  {
+    "code": "2B51",
+    "name": "Osteosarcoma, primary site"
+  },
+  {
+    "code": "2B51.Y",
+    "name": "Osteosarcoma of bone and articular cartilage of other specified sites"
+  },
+  {
+    "code": "2B52",
+    "name": "Ewing sarcoma, primary site"
+  },
+  {
+    "code": "2B53",
+    "name": "Fibroblastic or myofibroblastic tumour, primary site"
+  },
+  {
+    "code": "2B55",
+    "name": "Rhabdomyosarcoma, primary site"
+  },
+  {
+    "code": "2B56",
+    "name": "Angiosarcoma, primary site"
+  },
+  {
+    "code": "2B57",
+    "name": "Kaposi sarcoma, primary site"
+  },
+  {
+    "code": "2B58",
+    "name": "Leiomyosarcoma, primary site"
+  },
+  {
+    "code": "2B59",
+    "name": "Liposarcoma, primary site"
+  },
+  {
+    "code": "2B5A",
+    "name": "Synovial sarcoma, primary site"
+  },
+  {
+    "code": "2B5B",
+    "name": "Gastrointestinal stromal tumour, primary site"
+  },
+  {
+    "code": "2B5E",
+    "name": "Malignant nerve sheath tumour of peripheral nerves or autonomic nervous system, primary site"
+  },
+  {
+    "code": "2B60",
+    "name": "Malignant neoplasms of lip"
+  },
+  {
+    "code": "2B61",
+    "name": "Malignant neoplasms of base of tongue"
+  },
+  {
+    "code": "2B65",
+    "name": "Malignant neoplasms of palate"
+  },
+  {
+    "code": "2B67",
+    "name": "Malignant neoplasms of parotid gland"
+  },
+  {
+    "code": "2B68",
+    "name": "Malignant neoplasms of submandibular or sublingual glands"
+  },
+  {
+    "code": "2B6A",
+    "name": "Malignant neoplasms of oropharynx"
+  },
+  {
+    "code": "2B6B",
+    "name": "Malignant neoplasms of nasopharynx"
+  },
+  {
+    "code": "2B6Z",
+    "name": "Malignant neoplasms of lip, oral cavity or pharynx, unspecified"
+  },
+  {
+    "code": "2B70",
+    "name": "Malignant neoplasms of oesophagus"
+  },
+  {
+    "code": "2B71",
+    "name": "Malignant neoplasms of oesophagogastric junction"
+  },
+  {
+    "code": "2B72",
+    "name": "Malignant neoplasms of stomach"
+  },
+  {
+    "code": "2B80",
+    "name": "Malignant neoplasms of small intestine"
+  },
+  {
+    "code": "2B81",
+    "name": "Malignant neoplasms of appendix"
+  },
+  {
+    "code": "2B90",
+    "name": "Malignant neoplasms of colon"
+  },
+  {
+    "code": "2B91",
+    "name": "Malignant neoplasms of rectosigmoid junction"
+  },
+  {
+    "code": "2B92",
+    "name": "Malignant neoplasms of rectum"
+  },
+  {
+    "code": "2B93",
+    "name": "Malignant neoplasms of large intestine, site unspecified"
+  },
+  {
+    "code": "2C00",
+    "name": "Malignant neoplasms of anus or anal canal"
+  },
+  {
+    "code": "2C0Z",
+    "name": "Malignant neoplasms of intestine, unspecified"
+  },
+  {
+    "code": "2C10",
+    "name": "Malignant neoplasm of pancreas"
+  },
+  {
+    "code": "2C12.0",
+    "name": "Malignant neoplasm of liver"
+  },
+  {
+    "code": "2C12.00",
+    "name": "Combined hepatocellular-cholangiocarcinoma"
+  },
+  {
+    "code": "2C12.01",
+    "name": "Hepatoblastoma"
+  },
+  {
+    "code": "2C12.02",
+    "name": "Hepatocellular carcinoma of liver"
+  },
+  {
+    "code": "2C12.1",
+    "name": "Malignant neoplasm of intrahepatic bile ducts"
+  },
+  {
+    "code": "2C13",
+    "name": "Malignant neoplasms of gallbladder"
+  },
+  {
+    "code": "2C14",
+    "name": "Malignant neoplasms of proximal biliary tract, cystic duct"
+  },
+  {
+    "code": "2C15",
+    "name": "Malignant neoplasms of biliary tract, distal bile duct"
+  },
+  {
+    "code": "2C16",
+    "name": "Malignant neoplasms of ampulla of Vater"
+  },
+  {
+    "code": "2C18",
+    "name": "Malignant neoplasms of perihilar bile duct"
+  },
+  {
+    "code": "2C20",
+    "name": "Malignant neoplasms of nasal cavity"
+  },
+  {
+    "code": "2C21",
+    "name": "Malignant neoplasms of middle ear"
+  },
+  {
+    "code": "2C22",
+    "name": "Malignant neoplasms of accessory sinuses"
+  },
+  {
+    "code": "2C23",
+    "name": "Malignant neoplasms of larynx"
+  },
+  {
+    "code": "2C24",
+    "name": "Malignant neoplasms of trachea"
+  },
+  {
+    "code": "2C25",
+    "name": "Malignant neoplasms of bronchus or lung"
+  },
+  {
+    "code": "2C26",
+    "name": "Malignant neoplasms of the pleura"
+  },
+  {
+    "code": "2C26.0",
+    "name": "Mesothelioma of pleura"
+  },
+  {
+    "code": "2C27",
+    "name": "Malignant neoplasms of thymus"
+  },
+  {
+    "code": "2C30",
+    "name": "Melanoma of skin"
+  },
+  {
+    "code": "2C31",
+    "name": "Squamous cell carcinoma of skin"
+  },
+  {
+    "code": "2C32",
+    "name": "Basal cell carcinoma of skin"
+  },
+  {
+    "code": "2C50",
+    "name": "Malignant neoplasms of retroperitoneum"
+  },
+  {
+    "code": "2C51",
+    "name": "Malignant neoplasms of peritoneum"
+  },
+  {
+    "code": "2C52",
+    "name": "Malignant neoplasms of omentum"
+  },
+  {
+    "code": "2C61",
+    "name": "Invasive carcinoma of breast"
+  },
+  {
+    "code": "2C62",
+    "name": "Inflammatory carcinoma of breast"
+  },
+  {
+    "code": "2C63",
+    "name": "Malignant phyllodes tumour of breast"
+  },
+  {
+    "code": "2C6Z",
+    "name": "Malignant neoplasms of breast, unspecified"
+  },
+  {
+    "code": "2C70",
+    "name": "Malignant neoplasms of vulva"
+  },
+  {
+    "code": "2C71",
+    "name": "Malignant neoplasms of vagina"
+  },
+  {
+    "code": "2C72",
+    "name": "Malignant neoplasms of uterine ligament, parametrium, or uterine adnexa"
+  },
+  {
+    "code": "2C73",
+    "name": "Malignant neoplasms of ovary"
+  },
+  {
+    "code": "2C73.0",
+    "name": "Carcinomas of ovary"
+  },
+  {
+    "code": "2C74",
+    "name": "Malignant neoplasms of fallopian tube"
+  },
+  {
+    "code": "2C75",
+    "name": "Malignant neoplasms of placenta"
+  },
+  {
+    "code": "2C76",
+    "name": "Malignant neoplasms of corpus uteri"
+  },
+  {
+    "code": "2C77",
+    "name": "Malignant neoplasms of cervix uteri"
+  },
+  {
+    "code": "2C78",
+    "name": "Malignant neoplasms of uterus, part not specified"
+  },
+  {
+    "code": "2C80",
+    "name": "Malignant neoplasms of testis"
+  },
+  {
+    "code": "2C81",
+    "name": "Malignant neoplasms of penis"
+  },
+  {
+    "code": "2C82",
+    "name": "Malignant neoplasms of prostate"
+  },
+  {
+    "code": "2C83",
+    "name": "Malignant neoplasms of scrotum"
+  },
+  {
+    "code": "2C90",
+    "name": "Malignant neoplasms of kidney, except renal pelvis"
+  },
+  {
+    "code": "2C91",
+    "name": "Malignant neoplasms of renal pelvis"
+  },
+  {
+    "code": "2C92",
+    "name": "Malignant neoplasms of ureter"
+  },
+  {
+    "code": "2C93",
+    "name": "Malignant neoplasms of urethra or paraurethral gland"
+  },
+  {
+    "code": "2C94",
+    "name": "Malignant neoplasms of bladder"
+  },
+  {
+    "code": "2D00",
+    "name": "Malignant neoplasm of conjunctiva"
+  },
+  {
+    "code": "2D02",
+    "name": "Malignant neoplasm of retina"
+  },
+  {
+    "code": "2D02.2",
+    "name": "Retinoblastoma"
+  },
+  {
+    "code": "2D03",
+    "name": "Malignant neoplasm of lacrimal apparatus"
+  },
+  {
+    "code": "2D04",
+    "name": "Malignant neoplasm of orbit"
+  },
+  {
+    "code": "2D05",
+    "name": "Malignant neoplasm of choroid"
+  },
+  {
+    "code": "2D06",
+    "name": "Malignant neoplasm of ciliary body"
+  },
+  {
+    "code": "2D07",
+    "name": "Malignant neoplasm of iris"
+  },
+  {
+    "code": "2D10",
+    "name": "Malignant neoplasms of thyroid gland"
+  },
+  {
+    "code": "2D11",
+    "name": "Malignant neoplasms of adrenal gland"
+  },
+  {
+    "code": "2D11.2",
+    "name": "Neuroblastoma of adrenal gland"
+  },
+  {
+    "code": "2D12",
+    "name": "Malignant neoplasms of other endocrine glands or related structures"
+  },
+  {
+    "code": "2D50",
+    "name": "Malignant neoplasm metastasis in brain"
+  },
+  {
+    "code": "2D51",
+    "name": "Malignant neoplasm metastasis in meninges"
+  },
+  {
+    "code": "2D52",
+    "name": "Malignant neoplasm metastasis in spinal cord, cranial nerves or remaining parts of central nervous system"
+  },
+  {
+    "code": "2D60",
+    "name": "Malignant neoplasm metastasis in lymph node of a single region"
+  },
+  {
+    "code": "2D61",
+    "name": "Malignant neoplasm metastases in lymph nodes of multiple regions"
+  },
+  {
+    "code": "2D6Z",
+    "name": "Metastatic malignant neoplasm to unspecified lymph node"
+  },
+  {
+    "code": "2D70",
+    "name": "Malignant neoplasm metastasis in lung"
+  },
+  {
+    "code": "2D71",
+    "name": "Malignant neoplasm metastasis in mediastinum"
+  },
+  {
+    "code": "2D72",
+    "name": "Malignant neoplasm metastasis in pleura"
+  },
+  {
+    "code": "2D80",
+    "name": "Malignant neoplasm metastasis in liver or intrahepatic bile duct"
+  },
+  {
+    "code": "2D90",
+    "name": "Malignant neoplasm metastasis in retroperitoneum"
+  },
+  {
+    "code": "2D91",
+    "name": "Malignant neoplasm metastasis in peritoneum"
+  },
+  {
+    "code": "2E03",
+    "name": "Malignant neoplasm metastasis in bone or bone marrow"
+  },
+  {
+    "code": "2E60.1",
+    "name": "Carcinoma in situ of oesophagus"
+  },
+  {
+    "code": "2E60.2",
+    "name": "Carcinoma in situ of stomach"
+  },
+  {
+    "code": "2E61.0",
+    "name": "Carcinoma in situ of colon"
+  },
+  {
+    "code": "2E61.1",
+    "name": "Carcinoma in situ of rectum"
+  },
+  {
+    "code": "2E61.2",
+    "name": "Carcinoma in situ of anal canal"
+  },
+  {
+    "code": "2E63.0",
+    "name": "Melanoma in situ of skin"
+  },
+  {
+    "code": "2E65",
+    "name": "Carcinoma in situ of breast"
+  },
+  {
+    "code": "2E66",
+    "name": "Carcinoma in situ of cervix uteri"
+  },
+  {
+    "code": "2E67.0",
+    "name": "Carcinoma in situ of endometrium"
+  },
+  {
+    "code": "2E67.1",
+    "name": "Carcinoma in situ of vulva"
+  },
+  {
+    "code": "2E80.0",
+    "name": "Lipoma"
+  },
+  {
+    "code": "2E81.0",
+    "name": "Neoplastic haemangioma"
+  },
+  {
+    "code": "2E83",
+    "name": "Benign osteogenic tumours"
+  },
+  {
+    "code": "2E86.0",
+    "name": "Leiomyoma of uterus"
+  },
+  {
+    "code": "2E86.2",
+    "name": "Rhabdomyoma"
+  },
+  {
+    "code": "2E87",
+    "name": "Benign gastrointestinal stromal tumour"
+  },
+  {
+    "code": "2E8Z",
+    "name": "Benign mesenchymal neoplasms, unspecified"
+  },
+  {
+    "code": "2E91",
+    "name": "Benign neoplasm of major salivary glands"
+  },
+  {
+    "code": "2E92",
+    "name": "Benign neoplasm of digestive organs"
+  },
+  {
+    "code": "2F20",
+    "name": "Benign cutaneous melanocytic neoplasms"
+  },
+  {
+    "code": "2F21",
+    "name": "Benign keratinocytic acanthomas"
+  },
+  {
+    "code": "2F30.2",
+    "name": "Intraductal papilloma of breast"
+  },
+  {
+    "code": "2F30.3",
+    "name": "Benign phyllodes tumour of breast"
+  },
+  {
+    "code": "2F30.4",
+    "name": "Fibromatosis of breast"
+  },
+  {
+    "code": "2F30.5",
+    "name": "Fibroadenoma of breast"
+  },
+  {
+    "code": "2F31.00",
+    "name": "Cervical Intraepithelial neoplasia grade I"
+  },
+  {
+    "code": "2F32.Z",
+    "name": "Benign neoplasm of ovary, unspecified"
+  },
+  {
+    "code": "2F33",
+    "name": "Benign neoplasm of other or unspecified female genital organs"
+  },
+  {
+    "code": "2F37.0",
+    "name": "Non-secreting pituitary adenoma"
+  },
+  {
+    "code": "2F9Y",
+    "name": "Neoplasms of unknown behaviour of other specified site"
+  },
+  {
+    "code": "3A00.0",
+    "name": "Acquired iron deficiency anaemia due to blood loss"
+  },
+  {
+    "code": "3A00.1",
+    "name": "Acquired iron deficiency anaemia due to low intake"
+  },
+  {
+    "code": "3A00.Z",
+    "name": "Iron deficiency anaemia, unspecified"
+  },
+  {
+    "code": "3A01",
+    "name": "Megaloblastic anaemia due to vitamin B12 deficiency"
+  },
+  {
+    "code": "3A01.2",
+    "name": "Vitamin B12 deficiency anaemia due to low intake"
+  },
+  {
+    "code": "3A01.5",
+    "name": "Drug-induced vitamin B12 deficiency anaemia"
+  },
+  {
+    "code": "3A02",
+    "name": "Folate deficiency anaemia"
+  },
+  {
+    "code": "3A10",
+    "name": "Hereditary haemolytic anaemia"
+  },
+  {
+    "code": "3A20.4",
+    "name": "Alloimmune haemolytic anaemia"
+  },
+  {
+    "code": "3A20.5",
+    "name": "Evans syndrome"
+  },
+  {
+    "code": "3A21.0",
+    "name": "Paroxysmal nocturnal haemoglobinuria"
+  },
+  {
+    "code": "3A21.1",
+    "name": "Microangiopathic haemolytic anaemia"
+  },
+  {
+    "code": "3A21.2",
+    "name": "Haemolytic uraemic syndrome"
+  },
+  {
+    "code": "3A2Z",
+    "name": "Acquired haemolytic anaemia, unspecified"
+  },
+  {
+    "code": "3A4Z",
+    "name": "Haemolytic anaemias, unspecified"
+  },
+  {
+    "code": "3A50",
+    "name": "Thalassaemias"
+  },
+  {
+    "code": "3A51",
+    "name": "Sickle cell disorders or other haemoglobinopathies"
+  },
+  {
+    "code": "3A70.0",
+    "name": "Congenital aplastic anaemia"
+  },
+  {
+    "code": "3A70.1",
+    "name": "Acquired aplastic anaemias"
+  },
+  {
+    "code": "3A70.Z",
+    "name": "Aplastic anaemia, unspecified"
+  },
+  {
+    "code": "3A71",
+    "name": "Anaemia due to chronic disease"
+  },
+  {
+    "code": "3A73",
+    "name": "Congenital dyserythropoietic anaemia"
+  },
+  {
+    "code": "3A81",
+    "name": "Acquired polycythaemia"
+  },
+  {
+    "code": "3A8Z",
+    "name": "Polycythaemia, unspecified"
+  },
+  {
+    "code": "3A90",
+    "name": "Anaemia due to acute disease"
+  },
+  {
+    "code": "3A94",
+    "name": "Acute posthaemorrhagic anaemia"
+  },
+  {
+    "code": "3A9Y",
+    "name": "Other specified anaemias and erythrocyte disorders"
+  },
+  {
+    "code": "3B10",
+    "name": "Hereditary factor VIII deficiency"
+  },
+  {
+    "code": "3B11",
+    "name": "Hereditary factor IX deficiency"
+  },
+  {
+    "code": "3B12",
+    "name": "Von Willebrand disease"
+  },
+  {
+    "code": "3B14.2",
+    "name": "Combined deficiency of vitamin K-dependent clotting factors"
+  },
+  {
+    "code": "3B20",
+    "name": "Disseminated intravascular coagulation"
+  },
+  {
+    "code": "3B4Z",
+    "name": "Coagulation defects, unspecified"
+  },
+  {
+    "code": "3B60",
+    "name": "Non-thrombocytopenic purpura"
+  },
+  {
+    "code": "3B61",
+    "name": "Thrombophilia"
+  },
+  {
+    "code": "3B62.5",
+    "name": "Haemophagocytic syndrome associated with infection"
+  },
+  {
+    "code": "3B63",
+    "name": "Thrombocytosis"
+  },
+  {
+    "code": "3B64.0",
+    "name": "Congenital thrombocytopenia"
+  },
+  {
+    "code": "3B64.1",
+    "name": "Acquired thrombocytopenia"
+  },
+  {
+    "code": "3B64.Z",
+    "name": "Thrombocytopenia, unspecified"
+  },
+  {
+    "code": "3B65",
+    "name": "Thrombotic microangiopathy, not elsewhere classified"
+  },
+  {
+    "code": "3B6Z",
+    "name": "Coagulation defects, purpura or other haemorrhagic or related conditions, unspecified"
+  },
+  {
+    "code": "3B80",
+    "name": "Congenital disorders of spleen"
+  },
+  {
+    "code": "3B81",
+    "name": "Acquired disorders of spleen"
+  },
+  {
+    "code": "3B81.1",
+    "name": "Postsurgical asplenia"
+  },
+  {
+    "code": "3B81.6",
+    "name": "Infarction of spleen"
+  },
+  {
+    "code": "3B81.71",
+    "name": "Abscess of spleen"
+  },
+  {
+    "code": "3B81.B",
+    "name": "Hypersplenism"
+  },
+  {
+    "code": "3C0Y",
+    "name": "Other specified diseases of the blood or blood-forming organs"
+  },
+  {
+    "code": "4A00",
+    "name": "Primary immunodeficiencies due to disorders of innate immunity"
+  },
+  {
+    "code": "4A0Y",
+    "name": "Other specified primary immunodeficiencies"
+  },
+  {
+    "code": "4A20",
+    "name": "Acquired immunodeficiencies"
+  },
+  {
+    "code": "4A40",
+    "name": "Lupus erythematosus"
+  },
+  {
+    "code": "4A40.0",
+    "name": "Systemic lupus erythematosus"
+  },
+  {
+    "code": "4A40.1",
+    "name": "Drug-induced lupus erythematosus"
+  },
+  {
+    "code": "4A41",
+    "name": "Idiopathic inflammatory myopathy"
+  },
+  {
+    "code": "4A41.0",
+    "name": "Dermatomyositis"
+  },
+  {
+    "code": "4A41.1",
+    "name": "Polymyositis"
+  },
+  {
+    "code": "4A42.Z",
+    "name": "Systemic sclerosis, unspecified"
+  },
+  {
+    "code": "4A43.2",
+    "name": "Sjögren syndrome"
+  },
+  {
+    "code": "4A44",
+    "name": "Vasculitis"
+  },
+  {
+    "code": "4A44.2",
+    "name": "Giant cell arteritis"
+  },
+  {
+    "code": "4A44.4",
+    "name": "Polyarteritis nodosa"
+  },
+  {
+    "code": "4A45",
+    "name": "Antiphospholipid syndrome"
+  },
+  {
+    "code": "4A84",
+    "name": "Anaphylaxis"
+  },
+  {
+    "code": "4A85.02",
+    "name": "Drug-induced cytopenia"
+  },
+  {
+    "code": "4A85.22",
+    "name": "Allergic contact dermatitis due to food allergen"
+  },
+  {
+    "code": "4A8Y",
+    "name": "Allergic or hypersensitivity conditions of other specified type"
+  },
+  {
+    "code": "4B00.0",
+    "name": "Neutropaenia"
+  },
+  {
+    "code": "4B02",
+    "name": "Eosinopenia"
+  },
+  {
+    "code": "4B03",
+    "name": "Eosinophilia"
+  },
+  {
+    "code": "4B06",
+    "name": "Acquired lymphopenia"
+  },
+  {
+    "code": "4B07",
+    "name": "Acquired lymphocytosis"
+  },
+  {
+    "code": "4B20",
+    "name": "Sarcoidosis"
+  },
+  {
+    "code": "4B23",
+    "name": "Immune reconstitution inflammatory syndrome"
+  },
+  {
+    "code": "4B24.Z",
+    "name": "Graft-versus-host disease, unspecified"
+  },
+  {
+    "code": "4B4Y",
+    "name": "Other specified diseases of the immune system"
+  },
+  {
+    "code": "5A00",
+    "name": "Hypothyroidism"
+  },
+  {
+    "code": "5A00.0",
+    "name": "Congenital hypothyroidism"
+  },
+  {
+    "code": "5A00.2",
+    "name": "Acquired hypothyroidism"
+  },
+  {
+    "code": "5A01.0",
+    "name": "Nontoxic diffuse goitre"
+  },
+  {
+    "code": "5A01.1",
+    "name": "Nontoxic single thyroid nodule"
+  },
+  {
+    "code": "5A01.2",
+    "name": "Nontoxic multinodular goitre"
+  },
+  {
+    "code": "5A01.Z",
+    "name": "Nontoxic goitre, unspecified"
+  },
+  {
+    "code": "5A02",
+    "name": "Thyrotoxicosis"
+  },
+  {
+    "code": "5A02.1",
+    "name": "Thyrotoxicosis with toxic single thyroid nodule"
+  },
+  {
+    "code": "5A02.2",
+    "name": "Thyrotoxicosis with toxic multinodular goitre"
+  },
+  {
+    "code": "5A02.3",
+    "name": "Thyrotoxicosis from ectopic thyroid tissue"
+  },
+  {
+    "code": "5A02.5",
+    "name": "Thyroid crisis"
+  },
+  {
+    "code": "5A02.6",
+    "name": "Secondary hyperthyroidism"
+  },
+  {
+    "code": "5A03",
+    "name": "Thyroiditis"
+  },
+  {
+    "code": "5A06",
+    "name": "Sick-euthyroid syndrome"
+  },
+  {
+    "code": "5A10",
+    "name": "Type 1 diabetes mellitus"
+  },
+  {
+    "code": "5A11",
+    "name": "Type 2 diabetes mellitus"
+  },
+  {
+    "code": "5A12",
+    "name": "Malnutrition-related diabetes mellitus"
+  },
+  {
+    "code": "5A13.4",
+    "name": "Diabetes mellitus due to drug or chemical"
+  },
+  {
+    "code": "5A14",
+    "name": "Diabetes mellitus, type unspecified"
+  },
+  {
+    "code": "5A20.0",
+    "name": "Hyperosmolar hyperglycaemic state without coma"
+  },
+  {
+    "code": "5A20.1",
+    "name": "Hyperosmolar hyperglycaemic state with coma"
+  },
+  {
+    "code": "5A21.Z",
+    "name": "Hypoglycaemia in the context of diabetes, unspecified"
+  },
+  {
+    "code": "5A22",
+    "name": "Diabetic acidosis"
+  },
+  {
+    "code": "5A22.0",
+    "name": "Diabetic ketoacidosis without coma"
+  },
+  {
+    "code": "5A22.3",
+    "name": "Diabetic ketoacidosis with coma"
+  },
+  {
+    "code": "5A23",
+    "name": "Diabetic coma"
+  },
+  {
+    "code": "5A24",
+    "name": "Uncontrolled or unstable diabetes mellitus"
+  },
+  {
+    "code": "5A40",
+    "name": "Intermediate hyperglycaemia"
+  },
+  {
+    "code": "5A40.0",
+    "name": "Impaired fasting glucose"
+  },
+  {
+    "code": "5A41",
+    "name": "Hypoglycaemia without associated diabetes"
+  },
+  {
+    "code": "5A44",
+    "name": "Insulin-resistance syndromes"
+  },
+  {
+    "code": "5A45",
+    "name": "Persistent hyperinsulinaemic hypoglycaemia of infancy"
+  },
+  {
+    "code": "5A50",
+    "name": "Hypoparathyroidism"
+  },
+  {
+    "code": "5A51",
+    "name": "Hyperparathyroidism"
+  },
+  {
+    "code": "5A60",
+    "name": "Hyperfunction of pituitary gland"
+  },
+  {
+    "code": "5A60.0",
+    "name": "Acromegaly or pituitary gigantism"
+  },
+  {
+    "code": "5A60.1",
+    "name": "Hyperprolactinaemia"
+  },
+  {
+    "code": "5A61.0",
+    "name": "Hypopituitarism"
+  },
+  {
+    "code": "5A61.5",
+    "name": "Central diabetes insipidus"
+  },
+  {
+    "code": "5A70",
+    "name": "Cushing syndrome"
+  },
+  {
+    "code": "5A71",
+    "name": "Adrenogenital disorders"
+  },
+  {
+    "code": "5A72.0",
+    "name": "Primary hyperaldosteronism"
+  },
+  {
+    "code": "5A72.1",
+    "name": "Secondary hyperaldosteronism"
+  },
+  {
+    "code": "5A74",
+    "name": "Adrenocortical insufficiency"
+  },
+  {
+    "code": "5A74.1",
+    "name": "Adrenal crisis"
+  },
+  {
+    "code": "5A75",
+    "name": "Adrenomedullary hyperfunction"
+  },
+  {
+    "code": "5A80",
+    "name": "Ovarian dysfunction"
+  },
+  {
+    "code": "5A80.1",
+    "name": "Polycystic ovary syndrome"
+  },
+  {
+    "code": "5A81",
+    "name": "Testicular dysfunction or testosterone-related disorders"
+  },
+  {
+    "code": "5A81.1",
+    "name": "Testicular hypofunction"
+  },
+  {
+    "code": "5A91",
+    "name": "Delayed puberty"
+  },
+  {
+    "code": "5A92",
+    "name": "Peripheral precocious puberty"
+  },
+  {
+    "code": "5B01",
+    "name": "Polyglandular hyperfunction"
+  },
+  {
+    "code": "5B11",
+    "name": "Short stature, not elsewhere classified"
+  },
+  {
+    "code": "5B3Y",
+    "name": "Other specified endocrine diseases"
+  },
+  {
+    "code": "5B50",
+    "name": "Underweight in infants, children or adolescents"
+  },
+  {
+    "code": "5B51",
+    "name": "Wasting in infants, children or adolescents"
+  },
+  {
+    "code": "5B52",
+    "name": "Acute malnutrition in infants, children or adolescents"
+  },
+  {
+    "code": "5B53",
+    "name": "Stunting in infants, children or adolescents"
+  },
+  {
+    "code": "5B54",
+    "name": "Underweight in adults"
+  },
+  {
+    "code": "5B55",
+    "name": "Vitamin A deficiency"
+  },
+  {
+    "code": "5B55.0",
+    "name": "Vitamin A deficiency with night blindness"
+  },
+  {
+    "code": "5B55.1",
+    "name": "Vitamin A deficiency with conjunctival xerosis"
+  },
+  {
+    "code": "5B55.2",
+    "name": "Vitamin A deficiency with conjunctival xerosis or Bitot’s spots"
+  },
+  {
+    "code": "5B55.3",
+    "name": "Vitamin A deficiency with corneal xerosis"
+  },
+  {
+    "code": "5B55.4",
+    "name": "Vitamin A deficiency with corneal ulceration or keratomalacia"
+  },
+  {
+    "code": "5B55.5",
+    "name": "Vitamin A deficiency with xerophthalmic scars of cornea or blindness"
+  },
+  {
+    "code": "5B56.0",
+    "name": "Scurvy"
+  },
+  {
+    "code": "5B57.0",
+    "name": "Vitamin D deficiency rickets"
+  },
+  {
+    "code": "5B57.1",
+    "name": "Vitamin D deficiency osteomalacia"
+  },
+  {
+    "code": "5B58",
+    "name": "Vitamin E deficiency"
+  },
+  {
+    "code": "5B59",
+    "name": "Vitamin K deficiency"
+  },
+  {
+    "code": "5B5A.0",
+    "name": "Beriberi"
+  },
+  {
+    "code": "5B5B",
+    "name": "Vitamin B2 deficiency"
+  },
+  {
+    "code": "5B5C.0",
+    "name": "Pellagra"
+  },
+  {
+    "code": "5B5D",
+    "name": "Vitamin B6 deficiency"
+  },
+  {
+    "code": "5B5E",
+    "name": "Folate deficiency"
+  },
+  {
+    "code": "5B5F",
+    "name": "Vitamin B12 deficiency"
+  },
+  {
+    "code": "5B5K.0",
+    "name": "Iron deficiency"
+  },
+  {
+    "code": "5B5K.1",
+    "name": "Calcium deficiency"
+  },
+  {
+    "code": "5B5K.10",
+    "name": "Tetany due to acute calcium deficiency"
+  },
+  {
+    "code": "5B5K.3",
+    "name": "Iodine deficiency"
+  },
+  {
+    "code": "5B70",
+    "name": "Essential fatty acid deficiency"
+  },
+  {
+    "code": "5B7Z",
+    "name": "Unspecified undernutrition"
+  },
+  {
+    "code": "5B80.0",
+    "name": "Overweight"
+  },
+  {
+    "code": "5B81",
+    "name": "Obesity"
+  },
+  {
+    "code": "5B90",
+    "name": "Vitamin excesses"
+  },
+  {
+    "code": "5B91",
+    "name": "Mineral excesses"
+  },
+  {
+    "code": "5B91.0",
+    "name": "Hypercalcaemia"
+  },
+  {
+    "code": "5B91.3",
+    "name": "Fluorine excess"
+  },
+  {
+    "code": "5C3Y",
+    "name": "Other specified nutritional disorders"
+  },
+  {
+    "code": "5C50",
+    "name": "Inborn errors of amino acid or other organic acid metabolism"
+  },
+  {
+    "code": "5C58.1",
+    "name": "Porphyrias"
+  },
+  {
+    "code": "5C61.6",
+    "name": "Lactose intolerance"
+  },
+  {
+    "code": "5C6Y",
+    "name": "Other specified disorders of metabolite absorption or transport"
+  },
+  {
+    "code": "5C70.0",
+    "name": "Dehydration"
+  },
+  {
+    "code": "5C70.1",
+    "name": "Hypovolaemia"
+  },
+  {
+    "code": "5C71",
+    "name": "Hyperosmolality or hypernatraemia"
+  },
+  {
+    "code": "5C72",
+    "name": "Hypo-osmolality or hyponatraemia"
+  },
+  {
+    "code": "5C73.0",
+    "name": "Acute respiratory acidosis"
+  },
+  {
+    "code": "5C73.1",
+    "name": "Chronic respiratory acidosis"
+  },
+  {
+    "code": "5C73.2",
+    "name": "Anion gap metabolic acidosis"
+  },
+  {
+    "code": "5C74",
+    "name": "Alkalosis"
+  },
+  {
+    "code": "5C75",
+    "name": "Mixed disorder of acid-base balance"
+  },
+  {
+    "code": "5C76",
+    "name": "Hyperkalaemia"
+  },
+  {
+    "code": "5C77",
+    "name": "Hypokalaemia"
+  },
+  {
+    "code": "5C78",
+    "name": "Fluid overload"
+  },
+  {
+    "code": "5C7Y",
+    "name": "Other specified disorders of fluid, electrolyte or acid-base balance"
+  },
+  {
+    "code": "5C80",
+    "name": "Hyperlipoproteinaemia"
+  },
+  {
+    "code": "5C80.0",
+    "name": "Hypercholesterolaemia"
+  },
+  {
+    "code": "5C80.1",
+    "name": "Hypertriglyceridaemia"
+  },
+  {
+    "code": "5D00",
+    "name": "Amyloidosis"
+  },
+  {
+    "code": "5D01",
+    "name": "Tumour lysis syndrome"
+  },
+  {
+    "code": "5D0Y",
+    "name": "Other specified metabolic disorders"
+  },
+  {
+    "code": "5D40",
+    "name": "Postprocedural hypothyroidism"
+  },
+  {
+    "code": "5D42",
+    "name": "Postprocedural hypoparathyroidism"
+  },
+  {
+    "code": "5D43",
+    "name": "Postprocedural hypopituitarism"
+  },
+  {
+    "code": "6A00",
+    "name": "Disorders of intellectual development"
+  },
+  {
+    "code": "6A01",
+    "name": "Developmental speech or language disorders"
+  },
+  {
+    "code": "6A02",
+    "name": "Autism spectrum disorder"
+  },
+  {
+    "code": "6A03",
+    "name": "Developmental learning disorder"
+  },
+  {
+    "code": "6A05",
+    "name": "Attention deficit hyperactivity disorder"
+  },
+  {
+    "code": "6A0Y",
+    "name": "Other specified neurodevelopmental disorders"
+  },
+  {
+    "code": "6A20",
+    "name": "Schizophrenia"
+  },
+  {
+    "code": "6A21",
+    "name": "Schizoaffective disorder"
+  },
+  {
+    "code": "6A22",
+    "name": "Schizotypal disorder"
+  },
+  {
+    "code": "6A23",
+    "name": "Acute and transient psychotic disorder"
+  },
+  {
+    "code": "6A24",
+    "name": "Delusional disorder"
+  },
+  {
+    "code": "6A2Y",
+    "name": "Other specified primary psychotic disorder"
+  },
+  {
+    "code": "6A40",
+    "name": "Catatonia associated with another mental disorder"
+  },
+  {
+    "code": "6A41",
+    "name": "Catatonia induced by substances or medications"
+  },
+  {
+    "code": "6A4Z",
+    "name": "Catatonia, unspecified"
+  },
+  {
+    "code": "6A60",
+    "name": "Bipolar type I disorder"
+  },
+  {
+    "code": "6A61",
+    "name": "Bipolar type II disorder"
+  },
+  {
+    "code": "6A62",
+    "name": "Cyclothymic disorder"
+  },
+  {
+    "code": "6A6Z",
+    "name": "Bipolar or related disorders, unspecified"
+  },
+  {
+    "code": "6A71",
+    "name": "Recurrent depressive disorder"
+  },
+  {
+    "code": "6A72",
+    "name": "Dysthymic disorder"
+  },
+  {
+    "code": "6A73",
+    "name": "Mixed depressive and anxiety disorder"
+  },
+  {
+    "code": "6A7Z",
+    "name": "Depressive disorders, unspecified"
+  },
+  {
+    "code": "6A8Z",
+    "name": "Mood disorders, unspecified"
+  },
+  {
+    "code": "6B00",
+    "name": "Generalised anxiety disorder"
+  },
+  {
+    "code": "6B01",
+    "name": "Panic disorder"
+  },
+  {
+    "code": "6B02",
+    "name": "Agoraphobia"
+  },
+  {
+    "code": "6B03",
+    "name": "Specific phobia"
+  },
+  {
+    "code": "6B04",
+    "name": "Social anxiety disorder"
+  },
+  {
+    "code": "6B05",
+    "name": "Separation anxiety disorder"
+  },
+  {
+    "code": "6B06",
+    "name": "Selective mutism"
+  },
+  {
+    "code": "6B0Z",
+    "name": "Anxiety or fear-related disorders, unspecified"
+  },
+  {
+    "code": "6B20",
+    "name": "Obsessive-compulsive disorder"
+  },
+  {
+    "code": "6B21",
+    "name": "Body dysmorphic disorder"
+  },
+  {
+    "code": "6B23",
+    "name": "Hypochondriasis"
+  },
+  {
+    "code": "6B25.0",
+    "name": "Trichotillomania"
+  },
+  {
+    "code": "6B25.1",
+    "name": "Excoriation disorder"
+  },
+  {
+    "code": "6B25.Y",
+    "name": "Other specified body-focused repetitive behaviour disorders"
+  },
+  {
+    "code": "6B40",
+    "name": "Post traumatic stress disorder"
+  },
+  {
+    "code": "6B41",
+    "name": "Complex post traumatic stress disorder"
+  },
+  {
+    "code": "6B42",
+    "name": "Prolonged grief disorder"
+  },
+  {
+    "code": "6B43",
+    "name": "Adjustment disorder"
+  },
+  {
+    "code": "6B4Z",
+    "name": "Disorders specifically associated with stress, unspecified"
+  },
+  {
+    "code": "6B60",
+    "name": "Dissociative neurological symptom disorder"
+  },
+  {
+    "code": "6B61",
+    "name": "Dissociative amnesia"
+  },
+  {
+    "code": "6B62",
+    "name": "Trance disorder"
+  },
+  {
+    "code": "6B63",
+    "name": "Possession trance disorder"
+  },
+  {
+    "code": "6B64",
+    "name": "Dissociative identity disorder"
+  },
+  {
+    "code": "6B66",
+    "name": "Depersonalization-derealization disorder"
+  },
+  {
+    "code": "6B80",
+    "name": "Anorexia Nervosa"
+  },
+  {
+    "code": "6B81",
+    "name": "Bulimia Nervosa"
+  },
+  {
+    "code": "6B84",
+    "name": "Pica"
+  },
+  {
+    "code": "6B8Z",
+    "name": "Feeding or eating disorders, unspecified"
+  },
+  {
+    "code": "6C00",
+    "name": "Enuresis"
+  },
+  {
+    "code": "6C40",
+    "name": "Disorders due to use of alcohol"
+  },
+  {
+    "code": "6C41",
+    "name": "Disorders due to use of cannabis"
+  },
+  {
+    "code": "6C43",
+    "name": "Disorders due to use of opioids"
+  },
+  {
+    "code": "6C45",
+    "name": "Disorders due to use of cocaine"
+  },
+  {
+    "code": "6C46",
+    "name": "Disorders due to use of stimulants including amphetamines, methamphetamine or methcathinone"
+  },
+  {
+    "code": "6C49",
+    "name": "Disorders due to use of hallucinogens"
+  },
+  {
+    "code": "6C4A",
+    "name": "Disorders due to use of nicotine"
+  },
+  {
+    "code": "6C4B",
+    "name": "Disorders due to use of volatile inhalants"
+  },
+  {
+    "code": "6C4Z",
+    "name": "Disorders due to substance use, unspecified"
+  },
+  {
+    "code": "6C70",
+    "name": "Pyromania"
+  },
+  {
+    "code": "6C73",
+    "name": "Intermittent explosive disorder"
+  },
+  {
+    "code": "6C90",
+    "name": "Oppositional defiant disorder"
+  },
+  {
+    "code": "6C91",
+    "name": "Conduct-dissocial disorder"
+  },
+  {
+    "code": "6D10",
+    "name": "Personality disorder"
+  },
+  {
+    "code": "6D30",
+    "name": "Exhibitionistic disorder"
+  },
+  {
+    "code": "6D32",
+    "name": "Pedophilic disorder"
+  },
+  {
+    "code": "6D34",
+    "name": "Frotteuristic disorder"
+  },
+  {
+    "code": "6D3Z",
+    "name": "Paraphilic disorders, unspecified"
+  },
+  {
+    "code": "6D5Z",
+    "name": "Factitious disorders, unspecified"
+  },
+  {
+    "code": "6D70",
+    "name": "Delirium"
+  },
+  {
+    "code": "6D71",
+    "name": "Mild neurocognitive disorder"
+  },
+  {
+    "code": "6D72",
+    "name": "Amnestic disorder"
+  },
+  {
+    "code": "6D80",
+    "name": "Dementia due to Alzheimer disease"
+  },
+  {
+    "code": "6D81",
+    "name": "Dementia due to cerebrovascular disease"
+  },
+  {
+    "code": "6D84",
+    "name": "Dementia due to psychoactive substances including medications"
+  },
+  {
+    "code": "6D85",
+    "name": "Dementia due to diseases classified elsewhere"
+  },
+  {
+    "code": "6D85.0",
+    "name": "Dementia due to Parkinson disease"
+  },
+  {
+    "code": "6D85.3",
+    "name": "Dementia due to human immunodeficiency virus"
+  },
+  {
+    "code": "6D85.6",
+    "name": "Dementia due to normal pressure hydrocephalus"
+  },
+  {
+    "code": "6D85.7",
+    "name": "Dementia due to injury to the head"
+  },
+  {
+    "code": "6D86",
+    "name": "Behavioural or psychological disturbances in dementia"
+  },
+  {
+    "code": "6D86.4",
+    "name": "Agitation or aggression in dementia"
+  },
+  {
+    "code": "6D86.5",
+    "name": "Disinhibition in dementia"
+  },
+  {
+    "code": "6D86.6",
+    "name": "Wandering in dementia"
+  },
+  {
+    "code": "6D8Z",
+    "name": "Dementia, unknown or unspecified cause"
+  },
+  {
+    "code": "6E0Y",
+    "name": "Other specified neurocognitive disorders"
+  },
+  {
+    "code": "6E20",
+    "name": "Mental or behavioural disorders associated with pregnancy, childbirth or the puerperium, without psychotic symptoms"
+  },
+  {
+    "code": "6E21",
+    "name": "Mental or behavioural disorders associated with pregnancy, childbirth or the puerperium, with psychotic symptoms"
+  },
+  {
+    "code": "6E2Z",
+    "name": "Mental or behavioural disorders associated with pregnancy, childbirth or the puerperium, unspecified"
+  },
+  {
+    "code": "6E61",
+    "name": "Secondary psychotic syndrome"
+  },
+  {
+    "code": "6E67",
+    "name": "Secondary neurocognitive syndrome"
+  },
+  {
+    "code": "7A00",
+    "name": "Chronic insomnia"
+  },
+  {
+    "code": "7A0Z",
+    "name": "Insomnia disorders, unspecified"
+  },
+  {
+    "code": "7A20",
+    "name": "Narcolepsy"
+  },
+  {
+    "code": "7A40",
+    "name": "Central sleep apnoeas"
+  },
+  {
+    "code": "7A41",
+    "name": "Obstructive sleep apnoea"
+  },
+  {
+    "code": "7A64",
+    "name": "Circadian rhythm sleep-wake disorder, shift work type"
+  },
+  {
+    "code": "7A80",
+    "name": "Restless legs syndrome"
+  },
+  {
+    "code": "7B00.1",
+    "name": "Sleepwalking disorder"
+  },
+  {
+    "code": "7B00.2",
+    "name": "Sleep terrors"
+  },
+  {
+    "code": "7B01.2",
+    "name": "Nightmare disorder"
+  },
+  {
+    "code": "8A00.0",
+    "name": "Parkinson disease"
+  },
+  {
+    "code": "8A01",
+    "name": "Choreiform disorders"
+  },
+  {
+    "code": "8A02",
+    "name": "Dystonic disorders"
+  },
+  {
+    "code": "8A02.3",
+    "name": "Functional dystonia or spasms"
+  },
+  {
+    "code": "8A03",
+    "name": "Ataxic disorders"
+  },
+  {
+    "code": "8A03.1",
+    "name": "Hereditary ataxia"
+  },
+  {
+    "code": "8A03.3",
+    "name": "Acquired ataxia"
+  },
+  {
+    "code": "8A04.1",
+    "name": "Essential tremor or related tremors"
+  },
+  {
+    "code": "8A04.3",
+    "name": "Secondary tremor"
+  },
+  {
+    "code": "8A04.4",
+    "name": "Functional tremor"
+  },
+  {
+    "code": "8A05",
+    "name": "Tic disorders"
+  },
+  {
+    "code": "8A06",
+    "name": "Myoclonic disorders"
+  },
+  {
+    "code": "8A07.1",
+    "name": "Akathisia"
+  },
+  {
+    "code": "8A0Y",
+    "name": "Other specified movement disorders"
+  },
+  {
+    "code": "8A20",
+    "name": "Alzheimer disease"
+  },
+  {
+    "code": "8A21",
+    "name": "Progressive focal atrophies"
+  },
+  {
+    "code": "8A22",
+    "name": "Lewy body disease"
+  },
+  {
+    "code": "8A23",
+    "name": "Frontotemporal lobar degeneration"
+  },
+  {
+    "code": "8A2Y",
+    "name": "Other specified disorders with neurocognitive impairment as a major feature"
+  },
+  {
+    "code": "8A40",
+    "name": "Multiple sclerosis"
+  },
+  {
+    "code": "8A41.0",
+    "name": "Transverse myelitis"
+  },
+  {
+    "code": "8A42",
+    "name": "Acute disseminated encephalomyelitis"
+  },
+  {
+    "code": "8A43",
+    "name": "Neuromyelitis optica"
+  },
+  {
+    "code": "8A44",
+    "name": "Leukodystrophies"
+  },
+  {
+    "code": "8A45",
+    "name": "Secondary white matter disorders"
+  },
+  {
+    "code": "8A62",
+    "name": "Epileptic encephalopathies"
+  },
+  {
+    "code": "8A62.0",
+    "name": "Infantile spasms"
+  },
+  {
+    "code": "8A62.1",
+    "name": "Lennox-Gastaut syndrome"
+  },
+  {
+    "code": "8A63.0",
+    "name": "Febrile seizures"
+  },
+  {
+    "code": "8A66",
+    "name": "Status epilepticus"
+  },
+  {
+    "code": "8A66.0",
+    "name": "Convulsive status epilepticus"
+  },
+  {
+    "code": "8A66.1",
+    "name": "Non-convulsive status epilepticus"
+  },
+  {
+    "code": "8A67",
+    "name": "Acute repetitive seizures"
+  },
+  {
+    "code": "8A68.0",
+    "name": "Focal unaware seizure"
+  },
+  {
+    "code": "8A68.1",
+    "name": "Absence seizures, atypical"
+  },
+  {
+    "code": "8A68.2",
+    "name": "Absence seizures, typical"
+  },
+  {
+    "code": "8A68.3",
+    "name": "Focal aware seizure"
+  },
+  {
+    "code": "8A68.4",
+    "name": "Generalised tonic-clonic seizure"
+  },
+  {
+    "code": "8A68.5",
+    "name": "Generalised myoclonic seizure"
+  },
+  {
+    "code": "8A68.6",
+    "name": "Generalised tonic seizure"
+  },
+  {
+    "code": "8A68.7",
+    "name": "Generalised atonic seizure"
+  },
+  {
+    "code": "8A6Y",
+    "name": "Other specified epilepsy or seizures"
+  },
+  {
+    "code": "8A80",
+    "name": "Migraine"
+  },
+  {
+    "code": "8A81",
+    "name": "Tension-type headache"
+  },
+  {
+    "code": "8A82",
+    "name": "Trigeminal autonomic cephalalgias"
+  },
+  {
+    "code": "8B00",
+    "name": "Intracerebral haemorrhage"
+  },
+  {
+    "code": "8B01",
+    "name": "Subarachnoid haemorrhage"
+  },
+  {
+    "code": "8B02",
+    "name": "Nontraumatic subdural haemorrhage"
+  },
+  {
+    "code": "8B03",
+    "name": "Nontraumatic epidural haemorrhage"
+  },
+  {
+    "code": "8B0Z",
+    "name": "Intracranial haemorrhage, unspecified"
+  },
+  {
+    "code": "8B10",
+    "name": "Transient ischaemic attack"
+  },
+  {
+    "code": "8B11",
+    "name": "Cerebral ischaemic stroke"
+  },
+  {
+    "code": "8B1Y",
+    "name": "Other specified cerebral ischaemia"
+  },
+  {
+    "code": "8B20",
+    "name": "Stroke not known if ischaemic or haemorrhagic"
+  },
+  {
+    "code": "8B22.0",
+    "name": "Dissection of cerebral arteries"
+  },
+  {
+    "code": "8B22.1",
+    "name": "Cerebral venous thrombosis"
+  },
+  {
+    "code": "8B22.2",
+    "name": "Cerebral vasoconstriction syndromes"
+  },
+  {
+    "code": "8B22.3",
+    "name": "Isolated cerebral amyloid angiopathy"
+  },
+  {
+    "code": "8B22.4",
+    "name": "Intracranial vascular malformation"
+  },
+  {
+    "code": "8B22.5",
+    "name": "Cerebral aneurysm, nonruptured"
+  },
+  {
+    "code": "8B22.8",
+    "name": "Hypertensive encephalopathy"
+  },
+  {
+    "code": "8B22.Y",
+    "name": "Other specified cerebrovascular disease"
+  },
+  {
+    "code": "8B24",
+    "name": "Hypoxic-ischaemic encephalopathy"
+  },
+  {
+    "code": "8B26.4",
+    "name": "Posterior cerebral artery syndrome"
+  },
+  {
+    "code": "8B40",
+    "name": "Cauda equina syndrome"
+  },
+  {
+    "code": "8B41",
+    "name": "Myelitis"
+  },
+  {
+    "code": "8B42",
+    "name": "Myelopathy"
+  },
+  {
+    "code": "8B44",
+    "name": "Degenerative myelopathic disorders"
+  },
+  {
+    "code": "8B4Y",
+    "name": "Other specified spinal cord disorders excluding trauma"
+  },
+  {
+    "code": "8B60",
+    "name": "Motor neuron disease"
+  },
+  {
+    "code": "8B61",
+    "name": "Spinal muscular atrophy"
+  },
+  {
+    "code": "8B62",
+    "name": "Post polio progressive muscular atrophy"
+  },
+  {
+    "code": "8B80",
+    "name": "Disorders of olfactory nerve"
+  },
+  {
+    "code": "8B81",
+    "name": "Disorders of vestibulocochlear nerve"
+  },
+  {
+    "code": "8B82.0",
+    "name": "Trigeminal neuralgia"
+  },
+  {
+    "code": "8B83",
+    "name": "Disorders of spinal accessory nerve"
+  },
+  {
+    "code": "8B84",
+    "name": "Disorders of hypoglossal nerve"
+  },
+  {
+    "code": "8B85",
+    "name": "Disorders of multiple cranial nerves"
+  },
+  {
+    "code": "8B86",
+    "name": "Disorders of vagus nerve"
+  },
+  {
+    "code": "8B87",
+    "name": "Disorders of glossopharyngeal nerve"
+  },
+  {
+    "code": "8B88",
+    "name": "Disorders of facial nerve"
+  },
+  {
+    "code": "8B88.0",
+    "name": "Bell palsy"
+  },
+  {
+    "code": "8B90",
+    "name": "Nerve root and plexus compressions"
+  },
+  {
+    "code": "8B91",
+    "name": "Brachial plexus disorders"
+  },
+  {
+    "code": "8B92",
+    "name": "Lumbosacral plexus disorders"
+  },
+  {
+    "code": "8B93.7",
+    "name": "Radiculopathy due to neoplastic disease"
+  },
+  {
+    "code": "8B93.8",
+    "name": "Radiculopathy due to spondylosis"
+  },
+  {
+    "code": "8B94",
+    "name": "Diabetic radiculoplexoneuropathy"
+  },
+  {
+    "code": "8C01",
+    "name": "Inflammatory polyneuropathy"
+  },
+  {
+    "code": "8C03.0",
+    "name": "Diabetic polyneuropathy"
+  },
+  {
+    "code": "8C0Z",
+    "name": "Polyneuropathy, unspecified"
+  },
+  {
+    "code": "8C10",
+    "name": "Mononeuropathies of upper limb"
+  },
+  {
+    "code": "8C10.0",
+    "name": "Carpal tunnel syndrome"
+  },
+  {
+    "code": "8C11",
+    "name": "Mononeuropathies of lower limb"
+  },
+  {
+    "code": "8C11.1",
+    "name": "Meralgia paraesthetica"
+  },
+  {
+    "code": "8C11.2",
+    "name": "Lesion of femoral nerve"
+  },
+  {
+    "code": "8C11.3",
+    "name": "Lesion of common peroneal nerve"
+  },
+  {
+    "code": "8C11.4",
+    "name": "Lesion of tibial nerve"
+  },
+  {
+    "code": "8C11.5",
+    "name": "Tarsal tunnel syndrome"
+  },
+  {
+    "code": "8C12.0",
+    "name": "Intercostal neuropathy"
+  },
+  {
+    "code": "8C12.1",
+    "name": "Mononeuritis multiplex"
+  },
+  {
+    "code": "8C4Y",
+    "name": "Other specified disorders of nerve root, plexus or peripheral nerves"
+  },
+  {
+    "code": "8C60",
+    "name": "Myasthenia gravis"
+  },
+  {
+    "code": "8C61",
+    "name": "Congenital myasthenic syndromes"
+  },
+  {
+    "code": "8C62",
+    "name": "Lambert-Eaton syndrome"
+  },
+  {
+    "code": "8C70",
+    "name": "Muscular dystrophy"
+  },
+  {
+    "code": "8C70.4",
+    "name": "Limb-girdle muscular dystrophy"
+  },
+  {
+    "code": "8C70.5",
+    "name": "Scapuloperoneal muscular dystrophy"
+  },
+  {
+    "code": "8C71",
+    "name": "Myotonic disorders"
+  },
+  {
+    "code": "8C75",
+    "name": "Distal myopathies"
+  },
+  {
+    "code": "8C76",
+    "name": "Myofibrillar myopathy"
+  },
+  {
+    "code": "8C78",
+    "name": "Malignant hyperthermia or hyperpyrexia"
+  },
+  {
+    "code": "8C7Z",
+    "name": "Primary disorders of muscles, unspecified"
+  },
+  {
+    "code": "8C84",
+    "name": "Secondary rhabdomyolysis"
+  },
+  {
+    "code": "8C8Z",
+    "name": "Secondary myopathies, unspecified"
+  },
+  {
+    "code": "8D20",
+    "name": "Spastic cerebral palsy"
+  },
+  {
+    "code": "8D21",
+    "name": "Dyskinetic cerebral palsy"
+  },
+  {
+    "code": "8D22",
+    "name": "Ataxic cerebral palsy"
+  },
+  {
+    "code": "8D2Y",
+    "name": "Other specified cerebral palsy"
+  },
+  {
+    "code": "8D40",
+    "name": "Neurological disorders due to nutrient deficiency"
+  },
+  {
+    "code": "8D41",
+    "name": "Neurological disorders due to an excess of micro or macro nutrients"
+  },
+  {
+    "code": "8D43",
+    "name": "Neurological disorders due to toxicity"
+  },
+  {
+    "code": "8D44",
+    "name": "Alcohol-related neurological disorders"
+  },
+  {
+    "code": "8D60",
+    "name": "Increased intracranial pressure"
+  },
+  {
+    "code": "8D60.0",
+    "name": "Brain herniation syndromes"
+  },
+  {
+    "code": "8D61",
+    "name": "Intracranial hypotension"
+  },
+  {
+    "code": "8D62",
+    "name": "Cerebrospinal fluid rhinorrhoea"
+  },
+  {
+    "code": "8D63",
+    "name": "Cerebrospinal fluid otorrhoea"
+  },
+  {
+    "code": "8D64.0",
+    "name": "Communicating hydrocephalus"
+  },
+  {
+    "code": "8D64.1",
+    "name": "Non-communicating hydrocephalus"
+  },
+  {
+    "code": "8D64.2",
+    "name": "Ex-vacuo hydrocephalus"
+  },
+  {
+    "code": "8D64.Z",
+    "name": "Hydrocephalus, unspecified"
+  },
+  {
+    "code": "8D67",
+    "name": "Intracranial arachnoid cyst"
+  },
+  {
+    "code": "8D68",
+    "name": "Porencephalic cyst"
+  },
+  {
+    "code": "8D88",
+    "name": "Autonomic neuropathies"
+  },
+  {
+    "code": "8D89",
+    "name": "Disorders of orthostatic tolerance"
+  },
+  {
+    "code": "8D8A",
+    "name": "Focal or segmental autonomic disorders"
+  },
+  {
+    "code": "8D8A.1",
+    "name": "Horner syndrome"
+  },
+  {
+    "code": "8D8C",
+    "name": "Autonomic dysreflexia"
+  },
+  {
+    "code": "8D8Z",
+    "name": "Disorders of autonomic nervous system, unspecified"
+  },
+  {
+    "code": "8E41",
+    "name": "Pachymeningitis"
+  },
+  {
+    "code": "8E42",
+    "name": "Superficial siderosis of the nervous system"
+  },
+  {
+    "code": "8E43.00",
+    "name": "Phantom limb syndrome"
+  },
+  {
+    "code": "8E45",
+    "name": "Locked-in syndrome"
+  },
+  {
+    "code": "8E46",
+    "name": "Reye syndrome"
+  },
+  {
+    "code": "8E48",
+    "name": "Encephalitis, not elsewhere classified"
+  },
+  {
+    "code": "8E49",
+    "name": "Postviral fatigue syndrome"
+  },
+  {
+    "code": "8E62",
+    "name": "Postprocedural meningitis"
+  },
+  {
+    "code": "8E64",
+    "name": "Multifocal cerebral infarctions"
+  },
+  {
+    "code": "8E66",
+    "name": "Intracranial hypotension due to lumbar puncture"
+  },
+  {
+    "code": "8E7Y",
+    "name": "Other specified diseases of the nervous system"
+  },
+  {
+    "code": "9A00",
+    "name": "Congenital malposition of eyelids"
+  },
+  {
+    "code": "9A01.3",
+    "name": "Infectious blepharitis"
+  },
+  {
+    "code": "9A02",
+    "name": "Inflammatory disorders of eyelid"
+  },
+  {
+    "code": "9A02.0",
+    "name": "Chalazion"
+  },
+  {
+    "code": "9A03.0",
+    "name": "Blepharoptosis"
+  },
+  {
+    "code": "9A03.1",
+    "name": "Entropion of eyelid"
+  },
+  {
+    "code": "9A03.2",
+    "name": "Ectropion of eyelid"
+  },
+  {
+    "code": "9A03.3",
+    "name": "Eyelid retraction"
+  },
+  {
+    "code": "9A03.4",
+    "name": "Lagophthalmos"
+  },
+  {
+    "code": "9A04.0",
+    "name": "Trichiasis without entropion"
+  },
+  {
+    "code": "9A06.2",
+    "name": "Symblepharon, acquired"
+  },
+  {
+    "code": "9A06.7",
+    "name": "Dermatitis or eczema of eyelids"
+  },
+  {
+    "code": "9A0Y",
+    "name": "Other specified disorders of eyelid or peri-ocular area"
+  },
+  {
+    "code": "9A10",
+    "name": "Disorders of lacrimal gland"
+  },
+  {
+    "code": "9A10.1",
+    "name": "Orbital inflammatory syndrome"
+  },
+  {
+    "code": "9A11.1",
+    "name": "Canaliculitis"
+  },
+  {
+    "code": "9A11.2",
+    "name": "Dacryocystitis"
+  },
+  {
+    "code": "9A11.5",
+    "name": "Nasolacrimal canalicular stenosis"
+  },
+  {
+    "code": "9A11.8",
+    "name": "Nasolacrimal duct obstruction"
+  },
+  {
+    "code": "9A20.00",
+    "name": "Outward displacement of eyeball"
+  },
+  {
+    "code": "9A20.01",
+    "name": "Inward displacement of eyeball"
+  },
+  {
+    "code": "9A21.0",
+    "name": "Orbital cellulitis"
+  },
+  {
+    "code": "9A22.0",
+    "name": "Dysthyroid orbitopathy"
+  },
+  {
+    "code": "9A23",
+    "name": "Orbital cyst"
+  },
+  {
+    "code": "9A24",
+    "name": "Bony deformity of orbit"
+  },
+  {
+    "code": "9A25.0",
+    "name": "Anophthalmic socket"
+  },
+  {
+    "code": "9A25.4",
+    "name": "Haemorrhage of orbit"
+  },
+  {
+    "code": "9A2Y",
+    "name": "Other specified disorders of orbit"
+  },
+  {
+    "code": "9A4Y",
+    "name": "Other specified disorders of the ocular adnexa or orbit"
+  },
+  {
+    "code": "9A60",
+    "name": "Conjunctivitis"
+  },
+  {
+    "code": "9A60.02",
+    "name": "Allergic conjunctivitis"
+  },
+  {
+    "code": "9A60.5",
+    "name": "Vernal keratoconjunctivitis"
+  },
+  {
+    "code": "9A61.1",
+    "name": "Pterygium"
+  },
+  {
+    "code": "9A61.5",
+    "name": "Conjunctival or subconjunctival haemorrhage"
+  },
+  {
+    "code": "9A71",
+    "name": "Infectious keratitis"
+  },
+  {
+    "code": "9A72",
+    "name": "Traumatic keratitis"
+  },
+  {
+    "code": "9A73",
+    "name": "Exposure keratitis"
+  },
+  {
+    "code": "9A74",
+    "name": "Neurotrophic keratitis"
+  },
+  {
+    "code": "9A76",
+    "name": "Corneal ulcer"
+  },
+  {
+    "code": "9A77",
+    "name": "Corneal scars or opacities"
+  },
+  {
+    "code": "9A78.2",
+    "name": "Corneal oedema"
+  },
+  {
+    "code": "9A78.4",
+    "name": "Corneal degeneration"
+  },
+  {
+    "code": "9A79",
+    "name": "Keratoconjunctivitis sicca"
+  },
+  {
+    "code": "9A80",
+    "name": "Hyphaema"
+  },
+  {
+    "code": "9A96",
+    "name": "Anterior uveitis"
+  },
+  {
+    "code": "9B10",
+    "name": "Cataract"
+  },
+  {
+    "code": "9B10.02",
+    "name": "Mature age-related cataract"
+  },
+  {
+    "code": "9B10.1",
+    "name": "Infantile or juvenile cataract"
+  },
+  {
+    "code": "9B10.20",
+    "name": "Traumatic cataract"
+  },
+  {
+    "code": "9B10.21",
+    "name": "Diabetic cataract"
+  },
+  {
+    "code": "9B11.0",
+    "name": "Aphakia"
+  },
+  {
+    "code": "9B11.1",
+    "name": "Dislocation of lens"
+  },
+  {
+    "code": "9B50",
+    "name": "Episcleritis"
+  },
+  {
+    "code": "9B51",
+    "name": "Scleritis"
+  },
+  {
+    "code": "9B52",
+    "name": "Scleral staphyloma"
+  },
+  {
+    "code": "9B62",
+    "name": "Chorioretinal scars"
+  },
+  {
+    "code": "9B63",
+    "name": "Choroidal haemorrhage or rupture"
+  },
+  {
+    "code": "9B65",
+    "name": "Choroiditis"
+  },
+  {
+    "code": "9B65.2",
+    "name": "Chorioretinal inflammation"
+  },
+  {
+    "code": "9B70",
+    "name": "Inherited retinal dystrophies"
+  },
+  {
+    "code": "9B71.00",
+    "name": "Nonproliferative diabetic retinopathy"
+  },
+  {
+    "code": "9B71.01",
+    "name": "Proliferative diabetic retinopathy"
+  },
+  {
+    "code": "9B71.02",
+    "name": "Diabetic macular oedema"
+  },
+  {
+    "code": "9B71.0Z",
+    "name": "Diabetic retinopathy, unspecified"
+  },
+  {
+    "code": "9B71.1",
+    "name": "Hypertensive retinopathy"
+  },
+  {
+    "code": "9B73.0",
+    "name": "Retinal detachment with retinal break"
+  },
+  {
+    "code": "9B74",
+    "name": "Retinal vascular occlusions"
+  },
+  {
+    "code": "9B75.0",
+    "name": "Age related macular degeneration"
+  },
+  {
+    "code": "9B76",
+    "name": "Degenerative high myopia"
+  },
+  {
+    "code": "9B77",
+    "name": "Eales disease"
+  },
+  {
+    "code": "9B78.12",
+    "name": "Retinal vasculitis"
+  },
+  {
+    "code": "9B80",
+    "name": "Inherited vitreoretinal disorders"
+  },
+  {
+    "code": "9B81",
+    "name": "Posterior vitreous detachment"
+  },
+  {
+    "code": "9B83",
+    "name": "Vitreous haemorrhage"
+  },
+  {
+    "code": "9C20",
+    "name": "Panuveitis"
+  },
+  {
+    "code": "9C21",
+    "name": "Endophthalmitis"
+  },
+  {
+    "code": "9C21.0",
+    "name": "Sympathetic uveitis"
+  },
+  {
+    "code": "9C22",
+    "name": "Eyeball deformity"
+  },
+  {
+    "code": "9C40",
+    "name": "Disorder of the optic nerve"
+  },
+  {
+    "code": "9C40.1",
+    "name": "Optic neuritis"
+  },
+  {
+    "code": "9C40.A0",
+    "name": "Papilloedema"
+  },
+  {
+    "code": "9C40.B",
+    "name": "Optic atrophy"
+  },
+  {
+    "code": "9C43",
+    "name": "Disorder of visual cortex"
+  },
+  {
+    "code": "9C60",
+    "name": "Glaucoma suspect"
+  },
+  {
+    "code": "9C61",
+    "name": "Glaucoma"
+  },
+  {
+    "code": "9C61.0",
+    "name": "Primary open-angle glaucoma"
+  },
+  {
+    "code": "9C61.2",
+    "name": "Secondary open-angle glaucoma"
+  },
+  {
+    "code": "9C80.0",
+    "name": "Esotropia"
+  },
+  {
+    "code": "9C80.1",
+    "name": "Exotropia"
+  },
+  {
+    "code": "9C80.2",
+    "name": "Vertical or torsional strabismus"
+  },
+  {
+    "code": "9C81.0",
+    "name": "Third nerve palsy"
+  },
+  {
+    "code": "9C81.2",
+    "name": "Sixth nerve palsy"
+  },
+  {
+    "code": "9C84",
+    "name": "Nystagmus"
+  },
+  {
+    "code": "9D00",
+    "name": "Disorders of refraction"
+  },
+  {
+    "code": "9D00.0",
+    "name": "Myopia"
+  },
+  {
+    "code": "9D00.1",
+    "name": "Hypermetropia"
+  },
+  {
+    "code": "9D00.2",
+    "name": "Astigmatism"
+  },
+  {
+    "code": "9D00.3",
+    "name": "Presbyopia"
+  },
+  {
+    "code": "9D00.4",
+    "name": "Anisometropia"
+  },
+  {
+    "code": "9D01",
+    "name": "Disorders of accommodation"
+  },
+  {
+    "code": "9D20",
+    "name": "Bullous aphakic keratopathy following cataract surgery"
+  },
+  {
+    "code": "9D21",
+    "name": "Cataract lens fragments in eye following cataract surgery"
+  },
+  {
+    "code": "9D22",
+    "name": "Chorioretinal scars after surgery for detachment"
+  },
+  {
+    "code": "9D23",
+    "name": "Conjunctival blebitis after glaucoma surgery"
+  },
+  {
+    "code": "9D24",
+    "name": "Complications with glaucoma drainage devices"
+  },
+  {
+    "code": "9D25",
+    "name": "Glaucoma due to ocular surgery or laser"
+  },
+  {
+    "code": "9D40",
+    "name": "Impairment of visual acuity"
+  },
+  {
+    "code": "9D44",
+    "name": "Impairment of colour vision"
+  },
+  {
+    "code": "9D51",
+    "name": "Transient visual loss"
+  },
+  {
+    "code": "9D90",
+    "name": "Vision impairment including blindness"
+  },
+  {
+    "code": "9D90.4",
+    "name": "Blindness, binocular"
+  },
+  {
+    "code": "9D90.5",
+    "name": "Blindness, monocular"
+  },
+  {
+    "code": "9D91",
+    "name": "Near vision deficits"
+  },
+  {
+    "code": "9E1Y",
+    "name": "Other specified diseases of the visual system"
+  },
+  {
+    "code": "AA00",
+    "name": "Abscess of external ear"
+  },
+  {
+    "code": "AA01",
+    "name": "Cellulitis of external ear"
+  },
+  {
+    "code": "AA02",
+    "name": "Malignant otitis externa"
+  },
+  {
+    "code": "AA03",
+    "name": "Otomycosis"
+  },
+  {
+    "code": "AA04",
+    "name": "Perichondritis of external ear"
+  },
+  {
+    "code": "AA10",
+    "name": "Seborrhoeic otitis externa"
+  },
+  {
+    "code": "AA13",
+    "name": "Chronic otitis externa"
+  },
+  {
+    "code": "AA3Z",
+    "name": "Otitis externa, unspecified"
+  },
+  {
+    "code": "AA40",
+    "name": "Acquired deformity of external auditory canal"
+  },
+  {
+    "code": "AA41",
+    "name": "Acquired deformity of pinna"
+  },
+  {
+    "code": "AA42",
+    "name": "Impacted cerumen"
+  },
+  {
+    "code": "AA90",
+    "name": "Acute suppurative otitis media"
+  },
+  {
+    "code": "AA91",
+    "name": "Chronic suppurative otitis media"
+  },
+  {
+    "code": "AB00",
+    "name": "Acute otitis media"
+  },
+  {
+    "code": "AB01",
+    "name": "Chronic otitis media"
+  },
+  {
+    "code": "AB0Z",
+    "name": "Otitis media, unspecified"
+  },
+  {
+    "code": "AB10",
+    "name": "Disorders of Eustachian tube"
+  },
+  {
+    "code": "AB11",
+    "name": "Mastoiditis or related conditions"
+  },
+  {
+    "code": "AB11.0",
+    "name": "Acute mastoiditis"
+  },
+  {
+    "code": "AB11.1",
+    "name": "Chronic mastoiditis"
+  },
+  {
+    "code": "AB12",
+    "name": "Cholesteatoma of middle ear"
+  },
+  {
+    "code": "AB13",
+    "name": "Perforation of tympanic membrane"
+  },
+  {
+    "code": "AB14",
+    "name": "Acute myringitis"
+  },
+  {
+    "code": "AB15",
+    "name": "Chronic myringitis"
+  },
+  {
+    "code": "AB16",
+    "name": "Tympanosclerosis"
+  },
+  {
+    "code": "AB17",
+    "name": "Adhesive middle ear disease"
+  },
+  {
+    "code": "AB18",
+    "name": "Discontinuity or dislocation of ear ossicles"
+  },
+  {
+    "code": "AB1A",
+    "name": "Polyp of middle ear"
+  },
+  {
+    "code": "AB1Y",
+    "name": "Other specified diseases of middle ear or mastoid"
+  },
+  {
+    "code": "AB30",
+    "name": "Acute vestibular syndrome"
+  },
+  {
+    "code": "AB30.0",
+    "name": "Vestibular neuritis"
+  },
+  {
+    "code": "AB30.1",
+    "name": "Labyrinthitis"
+  },
+  {
+    "code": "AB31",
+    "name": "Episodic vestibular syndrome"
+  },
+  {
+    "code": "AB31.0",
+    "name": "Meniere disease"
+  },
+  {
+    "code": "AB31.2",
+    "name": "Benign positional paroxysmal vertigo"
+  },
+  {
+    "code": "AB32",
+    "name": "Chronic vestibular syndrome"
+  },
+  {
+    "code": "AB33",
+    "name": "Otosclerosis"
+  },
+  {
+    "code": "AB34",
+    "name": "Disorders of vestibular function"
+  },
+  {
+    "code": "AB36",
+    "name": "Labyrinthine dysfunction"
+  },
+  {
+    "code": "AB37",
+    "name": "Noise effects on inner ear"
+  },
+  {
+    "code": "AB3Y",
+    "name": "Other specified diseases of inner ear"
+  },
+  {
+    "code": "AB50.0",
+    "name": "Congenital conductive hearing loss"
+  },
+  {
+    "code": "AB50.1",
+    "name": "Congenital sensorineural hearing loss"
+  },
+  {
+    "code": "AB50.Z",
+    "name": "Congenital hearing impairment, unspecified"
+  },
+  {
+    "code": "AB51.0",
+    "name": "Acquired conductive hearing loss"
+  },
+  {
+    "code": "AB51.Z",
+    "name": "Acquired hearing impairment, unspecified"
+  },
+  {
+    "code": "AB53",
+    "name": "Ototoxic hearing loss"
+  },
+  {
+    "code": "AB54",
+    "name": "Presbycusis"
+  },
+  {
+    "code": "AB55",
+    "name": "Sudden idiopathic hearing loss"
+  },
+  {
+    "code": "AB56",
+    "name": "Hereditary hearing loss"
+  },
+  {
+    "code": "AB5Z",
+    "name": "Disorders with hearing impairment, unspecified"
+  },
+  {
+    "code": "AB70.2",
+    "name": "Otalgia"
+  },
+  {
+    "code": "AC0Z",
+    "name": "Diseases of the ear or mastoid process, unspecified"
+  },
+  {
+    "code": "BA00",
+    "name": "Essential hypertension"
+  },
+  {
+    "code": "BA03",
+    "name": "Hypertensive crisis"
+  },
+  {
+    "code": "BA04",
+    "name": "Secondary hypertension"
+  },
+  {
+    "code": "BA20",
+    "name": "Idiopathic hypotension"
+  },
+  {
+    "code": "BA21",
+    "name": "Orthostatic hypotension"
+  },
+  {
+    "code": "BA2Z",
+    "name": "Hypotension, unspecified"
+  },
+  {
+    "code": "BA40",
+    "name": "Angina pectoris"
+  },
+  {
+    "code": "BA40.0",
+    "name": "Unstable angina"
+  },
+  {
+    "code": "BA40.1",
+    "name": "Stable angina"
+  },
+  {
+    "code": "BA41.0",
+    "name": "Acute ST elevation myocardial infarction"
+  },
+  {
+    "code": "BA41.1",
+    "name": "Acute non-ST elevation myocardial infarction"
+  },
+  {
+    "code": "BA41.Z",
+    "name": "Acute myocardial infarction, unspecified"
+  },
+  {
+    "code": "BA4Z",
+    "name": "Acute ischaemic heart disease, unspecified"
+  },
+  {
+    "code": "BA50",
+    "name": "Old myocardial infarction"
+  },
+  {
+    "code": "BA51",
+    "name": "Ischaemic cardiomyopathy"
+  },
+  {
+    "code": "BA6Z",
+    "name": "Ischaemic heart diseases, unspecified"
+  },
+  {
+    "code": "BA80",
+    "name": "Coronary atherosclerosis"
+  },
+  {
+    "code": "BA81",
+    "name": "Coronary artery aneurysm"
+  },
+  {
+    "code": "BA82",
+    "name": "Coronary artery dissection"
+  },
+  {
+    "code": "BA84",
+    "name": "Chronic total occlusion of coronary artery"
+  },
+  {
+    "code": "BA8Y",
+    "name": "Other specified diseases of coronary artery"
+  },
+  {
+    "code": "BB00.Z",
+    "name": "Pulmonary thromboembolism, unspecified"
+  },
+  {
+    "code": "BB01",
+    "name": "Pulmonary hypertension"
+  },
+  {
+    "code": "BB01.5",
+    "name": "Cor pulmonale"
+  },
+  {
+    "code": "BB20",
+    "name": "Acute pericarditis"
+  },
+  {
+    "code": "BB21",
+    "name": "Chronic rheumatic pericarditis"
+  },
+  {
+    "code": "BB22",
+    "name": "Constrictive pericarditis"
+  },
+  {
+    "code": "BB23",
+    "name": "Cardiac tamponade"
+  },
+  {
+    "code": "BB24",
+    "name": "Haemopericardium"
+  },
+  {
+    "code": "BB25",
+    "name": "Pericardial effusion"
+  },
+  {
+    "code": "BB2Z",
+    "name": "Pericarditis, unspecified"
+  },
+  {
+    "code": "BB40",
+    "name": "Acute or subacute infectious endocarditis"
+  },
+  {
+    "code": "BB60",
+    "name": "Mitral valve stenosis"
+  },
+  {
+    "code": "BB61",
+    "name": "Mitral valve insufficiency"
+  },
+  {
+    "code": "BB62",
+    "name": "Mitral valve prolapse"
+  },
+  {
+    "code": "BB6Z",
+    "name": "Mitral valve disease, unspecified"
+  },
+  {
+    "code": "BB70",
+    "name": "Aortic valve stenosis"
+  },
+  {
+    "code": "BB71",
+    "name": "Aortic valve insufficiency"
+  },
+  {
+    "code": "BB7Z",
+    "name": "Aortic valve disease, unspecified"
+  },
+  {
+    "code": "BB80",
+    "name": "Tricuspid valve stenosis"
+  },
+  {
+    "code": "BB81",
+    "name": "Tricuspid valve insufficiency"
+  },
+  {
+    "code": "BB8Z",
+    "name": "Tricuspid valve disease, unspecified"
+  },
+  {
+    "code": "BB90",
+    "name": "Pulmonary valve stenosis"
+  },
+  {
+    "code": "BB91",
+    "name": "Pulmonary valve insufficiency"
+  },
+  {
+    "code": "BB9Z",
+    "name": "Pulmonary valve disease, unspecified"
+  },
+  {
+    "code": "BC00",
+    "name": "Multiple valve disease"
+  },
+  {
+    "code": "BC01",
+    "name": "Prosthetic valve disease"
+  },
+  {
+    "code": "BC02",
+    "name": "Acquired abnormality of congenitally malformed valve"
+  },
+  {
+    "code": "BC20.1",
+    "name": "Rheumatic heart disease, unspecified"
+  },
+  {
+    "code": "BC42.Z",
+    "name": "Myocarditis, unspecified"
+  },
+  {
+    "code": "BC43.0",
+    "name": "Dilated cardiomyopathy"
+  },
+  {
+    "code": "BC43.1",
+    "name": "Hypertrophic cardiomyopathy"
+  },
+  {
+    "code": "BC43.2",
+    "name": "Restrictive cardiomyopathy"
+  },
+  {
+    "code": "BC43.7",
+    "name": "Diabetic cardiomyopathy"
+  },
+  {
+    "code": "BC43.Y",
+    "name": "Other specified cardiomyopathy"
+  },
+  {
+    "code": "BC44",
+    "name": "Noncompaction cardiomyopathy"
+  },
+  {
+    "code": "BC45",
+    "name": "Cardiomegaly"
+  },
+  {
+    "code": "BC4Y",
+    "name": "Other specified diseases of the myocardium or cardiac chambers"
+  },
+  {
+    "code": "BC60",
+    "name": "Atrial premature depolarization"
+  },
+  {
+    "code": "BC63.0",
+    "name": "Atrioventricular block, first degree"
+  },
+  {
+    "code": "BC63.1",
+    "name": "Atrioventricular block, second degree"
+  },
+  {
+    "code": "BC63.2",
+    "name": "Complete atrioventricular block"
+  },
+  {
+    "code": "BC63.3",
+    "name": "Right bundle branch block"
+  },
+  {
+    "code": "BC63.4",
+    "name": "Left bundle branch block"
+  },
+  {
+    "code": "BC64",
+    "name": "Sudden arrhythmic death syndrome"
+  },
+  {
+    "code": "BC65.4",
+    "name": "Idiopathic ventricular fibrillation"
+  },
+  {
+    "code": "BC70",
+    "name": "Ventricular premature depolarization"
+  },
+  {
+    "code": "BC71",
+    "name": "Ventricular tachyarrhythmia"
+  },
+  {
+    "code": "BC80",
+    "name": "Supraventricular bradyarrhythmia"
+  },
+  {
+    "code": "BC81",
+    "name": "Supraventricular tachyarrhythmia"
+  },
+  {
+    "code": "BC81.3",
+    "name": "Atrial fibrillation"
+  },
+  {
+    "code": "BC81.30",
+    "name": "Paroxysmal atrial fibrillation"
+  },
+  {
+    "code": "BC9Y",
+    "name": "Other specified cardiac arrhythmia"
+  },
+  {
+    "code": "BD10",
+    "name": "Congestive heart failure"
+  },
+  {
+    "code": "BD11",
+    "name": "Left ventricular failure"
+  },
+  {
+    "code": "BD12",
+    "name": "High output syndromes"
+  },
+  {
+    "code": "BD13",
+    "name": "Right ventricular failure"
+  },
+  {
+    "code": "BD14",
+    "name": "Biventricular failure"
+  },
+  {
+    "code": "BD1Z",
+    "name": "Heart failure, unspecified"
+  },
+  {
+    "code": "BD30",
+    "name": "Acute arterial occlusion"
+  },
+  {
+    "code": "BD40",
+    "name": "Atherosclerotic chronic arterial occlusive disease"
+  },
+  {
+    "code": "BD42",
+    "name": "Raynaud phenomenon"
+  },
+  {
+    "code": "BD4Z",
+    "name": "Chronic arterial occlusive disease, unspecified"
+  },
+  {
+    "code": "BD50",
+    "name": "Aortic aneurysm or dissection"
+  },
+  {
+    "code": "BD50.3",
+    "name": "Thoracic aortic aneurysm"
+  },
+  {
+    "code": "BD50.4",
+    "name": "Abdominal aortic aneurysm"
+  },
+  {
+    "code": "BD51",
+    "name": "Arterial aneurysm or dissection, excluding aorta"
+  },
+  {
+    "code": "BD54",
+    "name": "Diabetic foot ulcer"
+  },
+  {
+    "code": "BD5Y",
+    "name": "Other specified diseases of arteries or arterioles"
+  },
+  {
+    "code": "BD70",
+    "name": "Superficial thrombophlebitis"
+  },
+  {
+    "code": "BD71",
+    "name": "Deep vein thrombosis"
+  },
+  {
+    "code": "BD72",
+    "name": "Venous thromboembolism"
+  },
+  {
+    "code": "BD73.20",
+    "name": "Obstruction of peripheral vein"
+  },
+  {
+    "code": "BD74.1",
+    "name": "Lower limb varicose veins"
+  },
+  {
+    "code": "BD74.30",
+    "name": "Primary venous leg ulcer"
+  },
+  {
+    "code": "BD74.31",
+    "name": "Recurrent venous leg ulcer"
+  },
+  {
+    "code": "BD7Y",
+    "name": "Other specified diseases of veins"
+  },
+  {
+    "code": "BD90",
+    "name": "Lymphadenitis"
+  },
+  {
+    "code": "BD90.0",
+    "name": "Acute lymphadenitis"
+  },
+  {
+    "code": "BD90.2",
+    "name": "Chronic lymphadenitis"
+  },
+  {
+    "code": "BD93",
+    "name": "Lymphoedema"
+  },
+  {
+    "code": "BD93.0",
+    "name": "Primary lymphoedema"
+  },
+  {
+    "code": "BD93.1",
+    "name": "Secondary lymphoedema"
+  },
+  {
+    "code": "BD9Y",
+    "name": "Other specified disorders of lymphatic vessels or lymph nodes"
+  },
+  {
+    "code": "BE12",
+    "name": "Postprocedural valve disorders"
+  },
+  {
+    "code": "BE13",
+    "name": "Postprocedural true or false aortic aneurysm"
+  },
+  {
+    "code": "BE19",
+    "name": "Postprocedural ventricular abnormality"
+  },
+  {
+    "code": "BE1B",
+    "name": "Lymphoedema due to surgery or radiotherapy"
+  },
+  {
+    "code": "BE2Y",
+    "name": "Other specified diseases of the circulatory system"
+  },
+  {
+    "code": "CA00",
+    "name": "Acute nasopharyngitis"
+  },
+  {
+    "code": "CA01",
+    "name": "Acute sinusitis"
+  },
+  {
+    "code": "CA02.1",
+    "name": "Acute viral pharyngitis"
+  },
+  {
+    "code": "CA02.Z",
+    "name": "Acute pharyngitis, unspecified"
+  },
+  {
+    "code": "CA03.Z",
+    "name": "Acute tonsillitis, unspecified"
+  },
+  {
+    "code": "CA04",
+    "name": "Acute laryngopharyngitis"
+  },
+  {
+    "code": "CA05.0",
+    "name": "Acute laryngitis"
+  },
+  {
+    "code": "CA06",
+    "name": "Acute obstructive laryngitis or epiglottitis"
+  },
+  {
+    "code": "CA06.0",
+    "name": "Acute obstructive laryngitis"
+  },
+  {
+    "code": "CA06.1",
+    "name": "Acute epiglottitis"
+  },
+  {
+    "code": "CA08.0",
+    "name": "Allergic rhinitis"
+  },
+  {
+    "code": "CA09.0",
+    "name": "Chronic rhinitis"
+  },
+  {
+    "code": "CA09.1",
+    "name": "Chronic nasopharyngitis"
+  },
+  {
+    "code": "CA09.2",
+    "name": "Chronic pharyngitis"
+  },
+  {
+    "code": "CA0A",
+    "name": "Chronic rhinosinusitis"
+  },
+  {
+    "code": "CA0C",
+    "name": "Cyst or mucocele of nose or nasal sinus"
+  },
+  {
+    "code": "CA0D",
+    "name": "Deviated nasal septum"
+  },
+  {
+    "code": "CA0E",
+    "name": "Hypertrophy of nasal turbinates"
+  },
+  {
+    "code": "CA0F.0",
+    "name": "Hypertrophy of tonsils"
+  },
+  {
+    "code": "CA0F.1",
+    "name": "Hypertrophy of adenoids"
+  },
+  {
+    "code": "CA0G",
+    "name": "Chronic laryngitis or laryngotracheitis"
+  },
+  {
+    "code": "CA0H.3",
+    "name": "Oedema of larynx"
+  },
+  {
+    "code": "CA0H.4",
+    "name": "Laryngeal spasm"
+  },
+  {
+    "code": "CA0H.5",
+    "name": "Stenosis of larynx"
+  },
+  {
+    "code": "CA0J",
+    "name": "Nasal polyp"
+  },
+  {
+    "code": "CA0K.0",
+    "name": "Retropharyngeal or parapharyngeal abscess"
+  },
+  {
+    "code": "CA0K.1",
+    "name": "Peritonsillar abscess"
+  },
+  {
+    "code": "CA0Z",
+    "name": "Upper respiratory tract disorders, unspecified"
+  },
+  {
+    "code": "CA20.1",
+    "name": "Chronic bronchitis"
+  },
+  {
+    "code": "CA21",
+    "name": "Emphysema"
+  },
+  {
+    "code": "CA22",
+    "name": "Chronic obstructive pulmonary disease"
+  },
+  {
+    "code": "CA23",
+    "name": "Asthma"
+  },
+  {
+    "code": "CA23.30",
+    "name": "Unspecified asthma with exacerbation"
+  },
+  {
+    "code": "CA23.31",
+    "name": "Unspecified asthma with status asthmaticus"
+  },
+  {
+    "code": "CA24",
+    "name": "Bronchiectasis"
+  },
+  {
+    "code": "CA25",
+    "name": "Cystic fibrosis"
+  },
+  {
+    "code": "CA26",
+    "name": "Chronic bronchiolitis"
+  },
+  {
+    "code": "CA27",
+    "name": "Tracheobronchitis"
+  },
+  {
+    "code": "CA2Z",
+    "name": "Lower respiratory tract disease, unspecified"
+  },
+  {
+    "code": "CA40",
+    "name": "Pneumonia"
+  },
+  {
+    "code": "CA40.0",
+    "name": "Bacterial pneumonia"
+  },
+  {
+    "code": "CA40.1",
+    "name": "Viral pneumonia"
+  },
+  {
+    "code": "CA40.2",
+    "name": "Fungal pneumonia"
+  },
+  {
+    "code": "CA40.20",
+    "name": "Pneumonia due to pneumocystis"
+  },
+  {
+    "code": "CA41",
+    "name": "Acute bronchiolitis"
+  },
+  {
+    "code": "CA42",
+    "name": "Acute bronchitis"
+  },
+  {
+    "code": "CA43",
+    "name": "Abscess of lung or mediastinum"
+  },
+  {
+    "code": "CA44",
+    "name": "Pyothorax"
+  },
+  {
+    "code": "CA4Z",
+    "name": "Lung infections, unspecified"
+  },
+  {
+    "code": "CA60",
+    "name": "Pneumoconiosis"
+  },
+  {
+    "code": "CA7Z",
+    "name": "Pneumonitis, unspecified"
+  },
+  {
+    "code": "CA80",
+    "name": "Airway disease due to specific organic dust"
+  },
+  {
+    "code": "CA81",
+    "name": "Respiratory conditions due to inhalation of chemicals, gases, fumes or vapours"
+  },
+  {
+    "code": "CA82",
+    "name": "Respiratory conditions due to other external agents"
+  },
+  {
+    "code": "CA8Z",
+    "name": "Lung diseases due to external agents, unspecified"
+  },
+  {
+    "code": "CB00",
+    "name": "Acute respiratory distress syndrome"
+  },
+  {
+    "code": "CB01",
+    "name": "Pulmonary oedema"
+  },
+  {
+    "code": "CB02",
+    "name": "Pulmonary eosinophilia"
+  },
+  {
+    "code": "CB04",
+    "name": "Primary interstitial lung diseases specific to infancy or childhood"
+  },
+  {
+    "code": "CB05",
+    "name": "Interstitial lung diseases associated with systemic diseases"
+  },
+  {
+    "code": "CB06",
+    "name": "Pulmonary alveolar microlithiasis"
+  },
+  {
+    "code": "CB21",
+    "name": "Pneumothorax"
+  },
+  {
+    "code": "CB22",
+    "name": "Diseases of mediastinum, not elsewhere classified"
+  },
+  {
+    "code": "CB23",
+    "name": "Disorders of diaphragm"
+  },
+  {
+    "code": "CB24",
+    "name": "Chylous effusion"
+  },
+  {
+    "code": "CB25",
+    "name": "Fibrothorax"
+  },
+  {
+    "code": "CB26",
+    "name": "Haemothorax"
+  },
+  {
+    "code": "CB27",
+    "name": "Pleural effusion"
+  },
+  {
+    "code": "CB40.Y",
+    "name": "Other specified diseases of the respiratory system"
+  },
+  {
+    "code": "CB41.0",
+    "name": "Acute respiratory failure"
+  },
+  {
+    "code": "CB41.1",
+    "name": "Chronic respiratory failure"
+  },
+  {
+    "code": "CB60",
+    "name": "Tracheostomy malfunction"
+  },
+  {
+    "code": "CB61",
+    "name": "Chronic pulmonary insufficiency following surgery"
+  },
+  {
+    "code": "CB62",
+    "name": "Postprocedural subglottic stenosis"
+  },
+  {
+    "code": "CB63",
+    "name": "Postprocedural stenosis of the trachea"
+  },
+  {
+    "code": "CB64",
+    "name": "Transfusion related acute lung injury"
+  },
+  {
+    "code": "DA00.0",
+    "name": "Cheilitis"
+  },
+  {
+    "code": "DA01.00",
+    "name": "Leukoplakia"
+  },
+  {
+    "code": "DA01.10",
+    "name": "Oral aphthae or aphtha-like ulceration"
+  },
+  {
+    "code": "DA01.11",
+    "name": "Oral mucositis"
+  },
+  {
+    "code": "DA01.15",
+    "name": "Mouth ulcers"
+  },
+  {
+    "code": "DA01.20",
+    "name": "Giant cell granuloma, central"
+  },
+  {
+    "code": "DA01.30",
+    "name": "Cellulitis or abscess of soft tissues of the mouth"
+  },
+  {
+    "code": "DA01.41",
+    "name": "Denture hyperplasia"
+  },
+  {
+    "code": "DA02.1",
+    "name": "Xerostomia"
+  },
+  {
+    "code": "DA03.0",
+    "name": "Glossitis"
+  },
+  {
+    "code": "DA03.1",
+    "name": "Geographic tongue"
+  },
+  {
+    "code": "DA03.5",
+    "name": "Macroglossia"
+  },
+  {
+    "code": "DA04.2",
+    "name": "Sialoadenitis"
+  },
+  {
+    "code": "DA04.3",
+    "name": "Abscess of salivary gland"
+  },
+  {
+    "code": "DA04.4",
+    "name": "Sialolithiasis"
+  },
+  {
+    "code": "DA04.5",
+    "name": "Mucocele of salivary gland"
+  },
+  {
+    "code": "DA05",
+    "name": "Cysts of oral or facial-neck region"
+  },
+  {
+    "code": "DA05.0",
+    "name": "Developmental odontogenic cysts"
+  },
+  {
+    "code": "DA05.1",
+    "name": "Developmental nonodontogenic cysts of oral region"
+  },
+  {
+    "code": "DA06.0",
+    "name": "Inflammatory conditions of jaws"
+  },
+  {
+    "code": "DA07.8",
+    "name": "Impacted teeth"
+  },
+  {
+    "code": "DA08.0",
+    "name": "Dental caries"
+  },
+  {
+    "code": "DA09.0",
+    "name": "Pulpitis"
+  },
+  {
+    "code": "DA09.6",
+    "name": "Periapical abscess"
+  },
+  {
+    "code": "DA09.60",
+    "name": "Periapical abscess with facial involvement"
+  },
+  {
+    "code": "DA0A",
+    "name": "Certain specified disorders of teeth or supporting structures"
+  },
+  {
+    "code": "DA0B",
+    "name": "Gingival diseases"
+  },
+  {
+    "code": "DA0C",
+    "name": "Periodontal disease"
+  },
+  {
+    "code": "DA0C.0",
+    "name": "Acute periodontitis"
+  },
+  {
+    "code": "DA0C.31",
+    "name": "Noma"
+  },
+  {
+    "code": "DA0C.4",
+    "name": "Abscess of periodontium"
+  },
+  {
+    "code": "DA0D.1",
+    "name": "Gingival enlargement"
+  },
+  {
+    "code": "DA0E",
+    "name": "Dentofacial anomalies"
+  },
+  {
+    "code": "DA0E.0",
+    "name": "Major anomalies of jaw size"
+  },
+  {
+    "code": "DA0E.5",
+    "name": "Malocclusion"
+  },
+  {
+    "code": "DA0E.8",
+    "name": "Temporomandibular joint disorders"
+  },
+  {
+    "code": "DA0F",
+    "name": "Sensory disturbances affecting orofacial complex"
+  },
+  {
+    "code": "DA0Y",
+    "name": "Other specified diseases or disorders of orofacial complex"
+  },
+  {
+    "code": "DA20.0",
+    "name": "Oesophageal obstruction"
+  },
+  {
+    "code": "DA20.3",
+    "name": "Perforation of oesophagus"
+  },
+  {
+    "code": "DA21",
+    "name": "Motility disorders of oesophagus"
+  },
+  {
+    "code": "DA21.0",
+    "name": "Achalasia"
+  },
+  {
+    "code": "DA21.2",
+    "name": "Disorder of oesophageal peristalsis"
+  },
+  {
+    "code": "DA22",
+    "name": "Gastro-oesophageal reflux disease"
+  },
+  {
+    "code": "DA24",
+    "name": "Oesophagitis"
+  },
+  {
+    "code": "DA25",
+    "name": "Oesophageal ulcer"
+  },
+  {
+    "code": "DA26",
+    "name": "Vascular disorders of the oesophagus"
+  },
+  {
+    "code": "DA26.0",
+    "name": "Oesophageal varices"
+  },
+  {
+    "code": "DA2Y",
+    "name": "Other specified diseases of oesophagus"
+  },
+  {
+    "code": "DA40.0",
+    "name": "Gastric outlet obstruction"
+  },
+  {
+    "code": "DA41",
+    "name": "Gastroduodenal motor or secretory disorders"
+  },
+  {
+    "code": "DA42",
+    "name": "Gastritis"
+  },
+  {
+    "code": "DA42.1",
+    "name": "Helicobacter pylori induced gastritis"
+  },
+  {
+    "code": "DA42.8",
+    "name": "Gastritis due to external causes"
+  },
+  {
+    "code": "DA42.Y",
+    "name": "Other specified gastritis"
+  },
+  {
+    "code": "DA43",
+    "name": "Vascular disorders of the stomach"
+  },
+  {
+    "code": "DA51",
+    "name": "Duodenitis"
+  },
+  {
+    "code": "DA51.0",
+    "name": "Helicobacter-pylori associated duodenitis"
+  },
+  {
+    "code": "DA60",
+    "name": "Gastric ulcer"
+  },
+  {
+    "code": "DA60.3",
+    "name": "Stress ulcer of stomach"
+  },
+  {
+    "code": "DA61",
+    "name": "Peptic ulcer, site unspecified"
+  },
+  {
+    "code": "DA63",
+    "name": "Duodenal ulcer"
+  },
+  {
+    "code": "DA91",
+    "name": "Obstruction of small intestine"
+  },
+  {
+    "code": "DA91.0",
+    "name": "Intussusception of small intestine"
+  },
+  {
+    "code": "DA91.1",
+    "name": "Volvulus of small intestine"
+  },
+  {
+    "code": "DA91.2",
+    "name": "Intestinal adhesions or bands of small intestine with obstruction"
+  },
+  {
+    "code": "DA93.0",
+    "name": "Paralytic ileus"
+  },
+  {
+    "code": "DA96",
+    "name": "Intestinal malabsorption or protein-losing enteropathy"
+  },
+  {
+    "code": "DB10",
+    "name": "Appendicitis"
+  },
+  {
+    "code": "DB30",
+    "name": "Obstruction of large intestine"
+  },
+  {
+    "code": "DB30.1",
+    "name": "Volvulus of large intestine"
+  },
+  {
+    "code": "DB30.2",
+    "name": "Adhesions of large intestine with obstruction"
+  },
+  {
+    "code": "DB30.3",
+    "name": "Impaction of large intestine"
+  },
+  {
+    "code": "DB31.2",
+    "name": "Rectal prolapse"
+  },
+  {
+    "code": "DB32.0",
+    "name": "Pseudo-obstruction of colon"
+  },
+  {
+    "code": "DB32.2",
+    "name": "Megacolon"
+  },
+  {
+    "code": "DB32.20",
+    "name": "Toxic megacolon"
+  },
+  {
+    "code": "DB35",
+    "name": "Polyp of large intestine"
+  },
+  {
+    "code": "DB36",
+    "name": "Certain infections of the large intestine"
+  },
+  {
+    "code": "DB36.10",
+    "name": "Perirectal abscess"
+  },
+  {
+    "code": "DB36.11",
+    "name": "Ischiorectal abscess"
+  },
+  {
+    "code": "DB50.0",
+    "name": "Anal fissure"
+  },
+  {
+    "code": "DB50.1",
+    "name": "Anal fistula"
+  },
+  {
+    "code": "DB51",
+    "name": "Stenosis of anal canal"
+  },
+  {
+    "code": "DB52",
+    "name": "Ulcer of anus"
+  },
+  {
+    "code": "DB53",
+    "name": "Anal prolapse"
+  },
+  {
+    "code": "DB60",
+    "name": "Haemorrhoids"
+  },
+  {
+    "code": "DB61",
+    "name": "Perianal venous thrombosis"
+  },
+  {
+    "code": "DB62",
+    "name": "Residual haemorrhoidal skin tags"
+  },
+  {
+    "code": "DB70",
+    "name": "Infections of the anal region"
+  },
+  {
+    "code": "DB70.00",
+    "name": "Anal abscess"
+  },
+  {
+    "code": "DB70.01",
+    "name": "Anorectal abscess"
+  },
+  {
+    "code": "DB70.02",
+    "name": "Intrasphincteric abscess"
+  },
+  {
+    "code": "DB71",
+    "name": "Anal polyp"
+  },
+  {
+    "code": "DB7Z",
+    "name": "Diseases of anal canal, unspecified"
+  },
+  {
+    "code": "DB90.0",
+    "name": "Abscess of liver"
+  },
+  {
+    "code": "DB91",
+    "name": "Acute or subacute hepatic failure"
+  },
+  {
+    "code": "DB92",
+    "name": "Non-alcoholic fatty liver disease"
+  },
+  {
+    "code": "DB93.0",
+    "name": "Hepatic fibrosis"
+  },
+  {
+    "code": "DB93.1",
+    "name": "Hepatic cirrhosis"
+  },
+  {
+    "code": "DB94",
+    "name": "Alcoholic liver disease"
+  },
+  {
+    "code": "DB95",
+    "name": "Drug-induced or toxic liver disease"
+  },
+  {
+    "code": "DB98",
+    "name": "Vascular disorders of the liver"
+  },
+  {
+    "code": "DB98.7",
+    "name": "Portal hypertension"
+  },
+  {
+    "code": "DB99.0",
+    "name": "Chronic liver disease"
+  },
+  {
+    "code": "DB99.1",
+    "name": "Hepatic cyst"
+  },
+  {
+    "code": "DB99.5",
+    "name": "Hepatic encephalopathy"
+  },
+  {
+    "code": "DC10.0",
+    "name": "Obstruction of gallbladder or bile ducts"
+  },
+  {
+    "code": "DC10.3",
+    "name": "Polyp of gallbladder"
+  },
+  {
+    "code": "DC11",
+    "name": "Cholelithiasis"
+  },
+  {
+    "code": "DC12",
+    "name": "Cholecystitis"
+  },
+  {
+    "code": "DC13",
+    "name": "Cholangitis"
+  },
+  {
+    "code": "DC14.1",
+    "name": "Postcholecystectomy syndrome"
+  },
+  {
+    "code": "DC1Y",
+    "name": "Other specified diseases of gallbladder or biliary tract"
+  },
+  {
+    "code": "DC31",
+    "name": "Acute pancreatitis"
+  },
+  {
+    "code": "DC32",
+    "name": "Chronic pancreatitis"
+  },
+  {
+    "code": "DC34",
+    "name": "Obstructive pancreatitis"
+  },
+  {
+    "code": "DC50",
+    "name": "Peritonitis"
+  },
+  {
+    "code": "DC50.2",
+    "name": "Peritoneal abscess"
+  },
+  {
+    "code": "DC51.2",
+    "name": "Haemoperitoneum"
+  },
+  {
+    "code": "DC70",
+    "name": "Diverticulitis of small intestine"
+  },
+  {
+    "code": "DC71",
+    "name": "Diverticulosis of small intestine"
+  },
+  {
+    "code": "DC72",
+    "name": "Diverticulum of small intestine"
+  },
+  {
+    "code": "DC80",
+    "name": "Diverticulitis of large intestine"
+  },
+  {
+    "code": "DC81",
+    "name": "Diverticulosis of large intestine"
+  },
+  {
+    "code": "DC82",
+    "name": "Diverticulum of large intestine"
+  },
+  {
+    "code": "DD31.00",
+    "name": "Ischaemic colitis"
+  },
+  {
+    "code": "DD50",
+    "name": "Non-abdominal wall hernia"
+  },
+  {
+    "code": "DD50.0",
+    "name": "Diaphragmatic hernia"
+  },
+  {
+    "code": "DD51",
+    "name": "Inguinal hernia"
+  },
+  {
+    "code": "DD52",
+    "name": "Femoral hernia"
+  },
+  {
+    "code": "DD53",
+    "name": "Umbilical hernia"
+  },
+  {
+    "code": "DD54",
+    "name": "Paraumbilical hernia"
+  },
+  {
+    "code": "DD55",
+    "name": "Epigastric hernia"
+  },
+  {
+    "code": "DD56",
+    "name": "Incisional hernia"
+  },
+  {
+    "code": "DD57",
+    "name": "Parastomal hernia"
+  },
+  {
+    "code": "DD5Z",
+    "name": "Hernias, unspecified"
+  },
+  {
+    "code": "DD70",
+    "name": "Crohn disease"
+  },
+  {
+    "code": "DD71",
+    "name": "Ulcerative colitis"
+  },
+  {
+    "code": "DD72",
+    "name": "Indeterminate colitis"
+  },
+  {
+    "code": "DD7Z",
+    "name": "Inflammatory bowel diseases, unspecified"
+  },
+  {
+    "code": "DD91.0",
+    "name": "Irritable bowel syndrome"
+  },
+  {
+    "code": "DD91.1",
+    "name": "Functional constipation"
+  },
+  {
+    "code": "DD91.2",
+    "name": "Functional diarrhoea"
+  },
+  {
+    "code": "DD93.1",
+    "name": "Infantile colic"
+  },
+  {
+    "code": "DE10",
+    "name": "Vomiting following gastrointestinal surgery"
+  },
+  {
+    "code": "DE12.0",
+    "name": "Colostomy or enterostomy malfunction or complication"
+  },
+  {
+    "code": "DE12.1",
+    "name": "Gastrostomy malfunction"
+  },
+  {
+    "code": "DE2Y",
+    "name": "Other specified diseases of the digestive system"
+  },
+  {
+    "code": "EA00",
+    "name": "Viral exanthem due to unknown or unspecified agent"
+  },
+  {
+    "code": "EA10",
+    "name": "Pityriasis rosea"
+  },
+  {
+    "code": "EA51",
+    "name": "Skin complications of BCG immunisation"
+  },
+  {
+    "code": "EA60.0",
+    "name": "Subcutaneous mycoses"
+  },
+  {
+    "code": "EA60.1",
+    "name": "Systemic mycoses affecting skin"
+  },
+  {
+    "code": "EA80",
+    "name": "Atopic eczema"
+  },
+  {
+    "code": "EA80.0",
+    "name": "Infantile atopic eczema"
+  },
+  {
+    "code": "EA80.1",
+    "name": "Childhood atopic eczema"
+  },
+  {
+    "code": "EA80.2",
+    "name": "Adult atopic eczema"
+  },
+  {
+    "code": "EA81.0",
+    "name": "Seborrhoeic dermatitis of face"
+  },
+  {
+    "code": "EA81.1",
+    "name": "Seborrhoeic dermatitis of the scalp"
+  },
+  {
+    "code": "EA81.Z",
+    "name": "Seborrhoeic dermatitis, unspecified"
+  },
+  {
+    "code": "EA82",
+    "name": "Nummular dermatitis"
+  },
+  {
+    "code": "EA83",
+    "name": "Lichen simplex or lichenification"
+  },
+  {
+    "code": "EA84",
+    "name": "Asteatotic eczema"
+  },
+  {
+    "code": "EA88.3",
+    "name": "Secondary eczema"
+  },
+  {
+    "code": "EA88.4",
+    "name": "Pityriasis alba"
+  },
+  {
+    "code": "EA8Z",
+    "name": "Dermatitis or eczema, unspecified"
+  },
+  {
+    "code": "EA90",
+    "name": "Psoriasis"
+  },
+  {
+    "code": "EA90.0",
+    "name": "Plaque psoriasis"
+  },
+  {
+    "code": "EA90.1",
+    "name": "Guttate psoriasis"
+  },
+  {
+    "code": "EA90.3",
+    "name": "Erythrodermic psoriasis"
+  },
+  {
+    "code": "EA90.4",
+    "name": "Pustular psoriasis"
+  },
+  {
+    "code": "EA90.50",
+    "name": "Scalp psoriasis"
+  },
+  {
+    "code": "EA90.51",
+    "name": "Nail psoriasis"
+  },
+  {
+    "code": "EA90.52",
+    "name": "Flexural and intertriginous psoriasis"
+  },
+  {
+    "code": "EA90.53",
+    "name": "Anogenital psoriasis"
+  },
+  {
+    "code": "EA90.Z",
+    "name": "Psoriasis of unspecified type"
+  },
+  {
+    "code": "EA91",
+    "name": "Lichen planus"
+  },
+  {
+    "code": "EA92",
+    "name": "Lichenoid dermatoses"
+  },
+  {
+    "code": "EA93",
+    "name": "Pityriasis lichenoides"
+  },
+  {
+    "code": "EA94",
+    "name": "Pityriasis rubra pilaris"
+  },
+  {
+    "code": "EA95",
+    "name": "Small plaque parapsoriasis"
+  },
+  {
+    "code": "EB00.0",
+    "name": "Acute urticaria"
+  },
+  {
+    "code": "EB00.1",
+    "name": "Chronic urticaria"
+  },
+  {
+    "code": "EB01.0",
+    "name": "Dermographism"
+  },
+  {
+    "code": "EB04",
+    "name": "Idiopathic angioedema"
+  },
+  {
+    "code": "EB05",
+    "name": "Urticaria of unspecified type"
+  },
+  {
+    "code": "EB10",
+    "name": "Diffuse inflammatory erythemas"
+  },
+  {
+    "code": "EB11",
+    "name": "Annular erythema"
+  },
+  {
+    "code": "EB12",
+    "name": "Erythema multiforme"
+  },
+  {
+    "code": "EB13.0",
+    "name": "Stevens-Johnson syndrome"
+  },
+  {
+    "code": "EB21",
+    "name": "Pyoderma gangrenosum"
+  },
+  {
+    "code": "EB31",
+    "name": "Erythema nodosum"
+  },
+  {
+    "code": "EB40.Z",
+    "name": "Pemphigus, unspecified"
+  },
+  {
+    "code": "EB42",
+    "name": "Linear IgA bullous dermatosis"
+  },
+  {
+    "code": "EB43",
+    "name": "Epidermolysis bullosa acquisita"
+  },
+  {
+    "code": "EB44",
+    "name": "Dermatitis herpetiformis"
+  },
+  {
+    "code": "EB50",
+    "name": "Subacute cutaneous lupus erythematosus"
+  },
+  {
+    "code": "EB51",
+    "name": "Chronic cutaneous lupus erythematosus"
+  },
+  {
+    "code": "EB51.0",
+    "name": "Discoid lupus erythematosus"
+  },
+  {
+    "code": "EB60",
+    "name": "Lichen sclerosus"
+  },
+  {
+    "code": "EB61",
+    "name": "Morphoea"
+  },
+  {
+    "code": "EB7Y",
+    "name": "Other specified inflammatory dermatoses"
+  },
+  {
+    "code": "EB90",
+    "name": "Dermatoses resulting from disturbed metabolic processes"
+  },
+  {
+    "code": "EB90.0",
+    "name": "Diabetic skin lesions"
+  },
+  {
+    "code": "EB90.1",
+    "name": "Cutaneous mucinosis"
+  },
+  {
+    "code": "EB90.10",
+    "name": "Pretibial myxoedema"
+  },
+  {
+    "code": "EB90.3",
+    "name": "Porphyria or pseudoporphyria affecting the skin"
+  },
+  {
+    "code": "EB90.4",
+    "name": "Calcification of skin or subcutaneous tissue"
+  },
+  {
+    "code": "EC23.0",
+    "name": "Non-syndromic genetically-determined hypermelanosis or lentiginosis"
+  },
+  {
+    "code": "EC23.20",
+    "name": "Oculocutaneous albinism"
+  },
+  {
+    "code": "EC90",
+    "name": "Pruritus"
+  },
+  {
+    "code": "EC90.1",
+    "name": "Pruritus due to systemic disorder"
+  },
+  {
+    "code": "EC90.3",
+    "name": "Pruritus due to neurological disorder"
+  },
+  {
+    "code": "EC90.4",
+    "name": "Psychogenic pruritus"
+  },
+  {
+    "code": "EC90.5",
+    "name": "Anogenital pruritus"
+  },
+  {
+    "code": "EC91",
+    "name": "Prurigo"
+  },
+  {
+    "code": "EC92",
+    "name": "Mucocutaneous or cutaneous pain syndromes"
+  },
+  {
+    "code": "ED30",
+    "name": "Neuropathic skin damage"
+  },
+  {
+    "code": "ED30.0",
+    "name": "Neuropathic skin ulceration"
+  },
+  {
+    "code": "ED31",
+    "name": "Burning feet syndrome"
+  },
+  {
+    "code": "ED50",
+    "name": "Ichthyoses"
+  },
+  {
+    "code": "ED51",
+    "name": "Diffuse epidermal hyperkeratosis and acanthosis"
+  },
+  {
+    "code": "ED52",
+    "name": "Porokeratoses"
+  },
+  {
+    "code": "ED53",
+    "name": "Skin peeling"
+  },
+  {
+    "code": "ED54",
+    "name": "Xerosis cutis or asteatosis"
+  },
+  {
+    "code": "ED55",
+    "name": "Palmoplantar keratodermas"
+  },
+  {
+    "code": "ED56",
+    "name": "Keratosis pilaris"
+  },
+  {
+    "code": "ED60",
+    "name": "Acquired hypermelanosis"
+  },
+  {
+    "code": "ED60.1",
+    "name": "Melasma"
+  },
+  {
+    "code": "ED60.2",
+    "name": "Postinflammatory hypermelanosis"
+  },
+  {
+    "code": "ED61",
+    "name": "Acquired melanotic macules or lentigines"
+  },
+  {
+    "code": "ED61.0",
+    "name": "Freckles"
+  },
+  {
+    "code": "ED63",
+    "name": "Acquired hypomelanotic disorders"
+  },
+  {
+    "code": "ED63.0",
+    "name": "Vitiligo"
+  },
+  {
+    "code": "ED63.2",
+    "name": "Postinflammatory hypomelanosis"
+  },
+  {
+    "code": "ED6Y",
+    "name": "Other specified disorders of skin pigmentation"
+  },
+  {
+    "code": "ED70.2",
+    "name": "Alopecia areata"
+  },
+  {
+    "code": "ED70.5",
+    "name": "Scarring alopecia"
+  },
+  {
+    "code": "ED71",
+    "name": "Hypertrichosis"
+  },
+  {
+    "code": "ED72",
+    "name": "Hirsutism and syndromes with hirsutism"
+  },
+  {
+    "code": "ED80.Z",
+    "name": "Acne, unspecified"
+  },
+  {
+    "code": "ED90.0",
+    "name": "Rosacea"
+  },
+  {
+    "code": "ED90.1",
+    "name": "Periorificial dermatitis"
+  },
+  {
+    "code": "ED91.2",
+    "name": "Seborrhoea"
+  },
+  {
+    "code": "ED92.0",
+    "name": "Hidradenitis suppurativa"
+  },
+  {
+    "code": "ED92.1",
+    "name": "Apocrine sweat disorders"
+  },
+  {
+    "code": "EE00.Z",
+    "name": "Hyperhidrosis, unspecified"
+  },
+  {
+    "code": "EE02",
+    "name": "Miliaria"
+  },
+  {
+    "code": "EE11.0",
+    "name": "Melanonychia"
+  },
+  {
+    "code": "EE11.1",
+    "name": "Yellow nail syndrome"
+  },
+  {
+    "code": "EE12.0",
+    "name": "Acute bacterial paronychia"
+  },
+  {
+    "code": "EE12.1",
+    "name": "Onychomycosis"
+  },
+  {
+    "code": "EE13.1",
+    "name": "Ingrowing nail"
+  },
+  {
+    "code": "EE13.2",
+    "name": "Chronic paronychia"
+  },
+  {
+    "code": "EE40.0",
+    "name": "Corticosteroid-induced skin atrophy"
+  },
+  {
+    "code": "EE40.1",
+    "name": "Stretch marks"
+  },
+  {
+    "code": "EE41",
+    "name": "Abnormalities of dermal elastin"
+  },
+  {
+    "code": "EE60",
+    "name": "Keloid or hypertrophic scars"
+  },
+  {
+    "code": "EE70",
+    "name": "Perforating dermatoses"
+  },
+  {
+    "code": "EE91",
+    "name": "Lymphocytoma cutis"
+  },
+  {
+    "code": "EF00",
+    "name": "Panniculitis"
+  },
+  {
+    "code": "EF01",
+    "name": "Lipoatrophy or lipodystrophy"
+  },
+  {
+    "code": "EF02.2",
+    "name": "Lipoedema"
+  },
+  {
+    "code": "EF02.3",
+    "name": "Cellulite"
+  },
+  {
+    "code": "EF20",
+    "name": "Acquired malformations of cutaneous blood vessels"
+  },
+  {
+    "code": "EF30",
+    "name": "Purpura or bruising due to disorders of coagulation"
+  },
+  {
+    "code": "EF31",
+    "name": "Traumatic purpura"
+  },
+  {
+    "code": "EF60",
+    "name": "Ischaemic ulceration of skin"
+  },
+  {
+    "code": "EF70",
+    "name": "Lower limb venous eczema"
+  },
+  {
+    "code": "EG30.0",
+    "name": "Scalp folliculitis"
+  },
+  {
+    "code": "EG60",
+    "name": "Anal pruritus"
+  },
+  {
+    "code": "EG62",
+    "name": "Inflammatory dermatoses of the perianal area"
+  },
+  {
+    "code": "EH10",
+    "name": "Neonatal viral infections involving the skin"
+  },
+  {
+    "code": "EH11",
+    "name": "Neonatal pyogenic skin infections"
+  },
+  {
+    "code": "EH12",
+    "name": "Neonatal fungal infections involving the skin"
+  },
+  {
+    "code": "EH40.0",
+    "name": "Infantile seborrhoeic dermatitis"
+  },
+  {
+    "code": "EH40.1",
+    "name": "Infantile napkin dermatoses"
+  },
+  {
+    "code": "EH40.2",
+    "name": "Erythrodermas of infancy"
+  },
+  {
+    "code": "EH60",
+    "name": "Exanthematic drug eruption"
+  },
+  {
+    "code": "EH64",
+    "name": "Drug-induced erythroderma"
+  },
+  {
+    "code": "EH65",
+    "name": "DRESS syndrome"
+  },
+  {
+    "code": "EH66",
+    "name": "Fixed drug eruption"
+  },
+  {
+    "code": "EH70",
+    "name": "Pigmentary abnormalities of skin due to drug"
+  },
+  {
+    "code": "EH75",
+    "name": "Photosensitivity due to drug"
+  },
+  {
+    "code": "EH78",
+    "name": "Adverse cutaneous reactions to herbal, homoeopathic or other alternative therapies"
+  },
+  {
+    "code": "EH90",
+    "name": "Pressure ulceration"
+  },
+  {
+    "code": "EH92",
+    "name": "Dermatoses provoked by friction or mechanical stress"
+  },
+  {
+    "code": "EH92.0",
+    "name": "Corns or callosities"
+  },
+  {
+    "code": "EH92.1",
+    "name": "Friction blister"
+  },
+  {
+    "code": "EH93.0",
+    "name": "Tattoos or tattoo reactions"
+  },
+  {
+    "code": "EJ10",
+    "name": "Erythema ab igne"
+  },
+  {
+    "code": "EJ30",
+    "name": "Autoimmune or other photodermatoses"
+  },
+  {
+    "code": "EJ40",
+    "name": "Sunburn"
+  },
+  {
+    "code": "EJ41",
+    "name": "Burn from exposure to artificial source of ultraviolet radiation"
+  },
+  {
+    "code": "EJ71",
+    "name": "Chronic effects of ionizing radiation on the skin"
+  },
+  {
+    "code": "EK00",
+    "name": "Allergic contact dermatitis"
+  },
+  {
+    "code": "EK01",
+    "name": "Photo-allergic contact dermatitis"
+  },
+  {
+    "code": "EK02",
+    "name": "Irritant contact dermatitis"
+  },
+  {
+    "code": "EK10",
+    "name": "Allergic contact urticaria"
+  },
+  {
+    "code": "EK50",
+    "name": "Cutaneous reactions to venomous or noxious animals"
+  },
+  {
+    "code": "EK50.00",
+    "name": "Papular urticaria"
+  },
+  {
+    "code": "EK70.0",
+    "name": "Epidermoid cyst"
+  },
+  {
+    "code": "EK70.1",
+    "name": "Trichilemmal cyst"
+  },
+  {
+    "code": "EK70.2",
+    "name": "Digital myxoid pseudocyst"
+  },
+  {
+    "code": "EK70.3",
+    "name": "Hidrocystoma"
+  },
+  {
+    "code": "EK70.Z",
+    "name": "Cutaneous cysts, unspecified"
+  },
+  {
+    "code": "EK71",
+    "name": "Skin tags or polyps"
+  },
+  {
+    "code": "EK90",
+    "name": "Actinic keratosis and other discrete epidermal dysplasias"
+  },
+  {
+    "code": "EK91.0",
+    "name": "Large plaque parapsoriasis"
+  },
+  {
+    "code": "EK91.1",
+    "name": "Poikiloderma vasculare atrophicans"
+  },
+  {
+    "code": "EL10",
+    "name": "Paraneoplastic syndromes involving skin"
+  },
+  {
+    "code": "EL60",
+    "name": "Acute radiodermatitis following radiotherapy"
+  },
+  {
+    "code": "EL61",
+    "name": "Chronic radiodermatitis following radiotherapy"
+  },
+  {
+    "code": "EM0Y",
+    "name": "Other specified diseases of the skin"
+  },
+  {
+    "code": "FA00",
+    "name": "Osteoarthritis of hip"
+  },
+  {
+    "code": "FA01",
+    "name": "Osteoarthritis of knee"
+  },
+  {
+    "code": "FA02",
+    "name": "Osteoarthritis of wrist and hand"
+  },
+  {
+    "code": "FA03",
+    "name": "Osteoarthritis of other specified joint"
+  },
+  {
+    "code": "FA04",
+    "name": "Oligoosteoarthritis"
+  },
+  {
+    "code": "FA05",
+    "name": "Polyosteoarthritis"
+  },
+  {
+    "code": "FA11",
+    "name": "Reactive arthropathies"
+  },
+  {
+    "code": "FA12",
+    "name": "Postinfectious arthropathies"
+  },
+  {
+    "code": "FA13",
+    "name": "Infectious spondyloarthritis"
+  },
+  {
+    "code": "FA1Y",
+    "name": "Other specified infection related arthropathies"
+  },
+  {
+    "code": "FA20",
+    "name": "Rheumatoid arthritis"
+  },
+  {
+    "code": "FA20.0",
+    "name": "Seropositive rheumatoid arthritis"
+  },
+  {
+    "code": "FA21",
+    "name": "Psoriatic arthritis"
+  },
+  {
+    "code": "FA22",
+    "name": "Polymyalgia rheumatica"
+  },
+  {
+    "code": "FA23",
+    "name": "Adult-onset Still disease"
+  },
+  {
+    "code": "FA24",
+    "name": "Juvenile idiopathic arthritis"
+  },
+  {
+    "code": "FA25",
+    "name": "Gout"
+  },
+  {
+    "code": "FA30",
+    "name": "Acquired deformities of fingers or toes"
+  },
+  {
+    "code": "FA30.0",
+    "name": "Acquired hallux valgus"
+  },
+  {
+    "code": "FA31",
+    "name": "Other acquired deformities of limbs"
+  },
+  {
+    "code": "FA32",
+    "name": "Disorders of patella"
+  },
+  {
+    "code": "FA33",
+    "name": "Internal derangement of knee"
+  },
+  {
+    "code": "FA35",
+    "name": "Wear of articular bearing surface of joint prosthesis"
+  },
+  {
+    "code": "FA36",
+    "name": "Effusion of joint"
+  },
+  {
+    "code": "FA38.0",
+    "name": "Diabetic arthropathy"
+  },
+  {
+    "code": "FA5Y",
+    "name": "Other specified arthropathies"
+  },
+  {
+    "code": "FA70",
+    "name": "Spinal deformities"
+  },
+  {
+    "code": "FA70.0",
+    "name": "Kyphosis"
+  },
+  {
+    "code": "FA70.1",
+    "name": "Scoliosis"
+  },
+  {
+    "code": "FA70.2",
+    "name": "Lordosis"
+  },
+  {
+    "code": "FA71",
+    "name": "Torticollis"
+  },
+  {
+    "code": "FA7Y",
+    "name": "Other specified structural disorders of spine"
+  },
+  {
+    "code": "FA80",
+    "name": "Intervertebral disc degeneration"
+  },
+  {
+    "code": "FA81",
+    "name": "Spondylolysis"
+  },
+  {
+    "code": "FA82",
+    "name": "Spinal stenosis"
+  },
+  {
+    "code": "FA83",
+    "name": "Ossification of spinal ligaments"
+  },
+  {
+    "code": "FA84",
+    "name": "Spondylolisthesis"
+  },
+  {
+    "code": "FA85",
+    "name": "Spinal endplate defects"
+  },
+  {
+    "code": "FA90",
+    "name": "Infection of vertebra"
+  },
+  {
+    "code": "FA91",
+    "name": "Infection of intervertebral disc"
+  },
+  {
+    "code": "FA92",
+    "name": "Inflammatory spondyloarthritis"
+  },
+  {
+    "code": "FA92.0",
+    "name": "Axial spondyloarthritis"
+  },
+  {
+    "code": "FA92.1",
+    "name": "Peripheral spondyloarthritis"
+  },
+  {
+    "code": "FB00",
+    "name": "Ankylosis of spinal joint"
+  },
+  {
+    "code": "FB10",
+    "name": "Spinal instabilities"
+  },
+  {
+    "code": "FB1Y",
+    "name": "Other specified conditions associated with the spine"
+  },
+  {
+    "code": "FB30",
+    "name": "Infectious myositis"
+  },
+  {
+    "code": "FB31",
+    "name": "Calcification or ossification of muscle"
+  },
+  {
+    "code": "FB40",
+    "name": "Tenosynovitis"
+  },
+  {
+    "code": "FB40.1",
+    "name": "Plantar fasciitis"
+  },
+  {
+    "code": "FB40.4",
+    "name": "Trigger finger"
+  },
+  {
+    "code": "FB41",
+    "name": "Spontaneous rupture of synovium or tendon"
+  },
+  {
+    "code": "FB42.2",
+    "name": "Ganglion"
+  },
+  {
+    "code": "FB4Y",
+    "name": "Other specified disorders of synovium or tendon"
+  },
+  {
+    "code": "FB50",
+    "name": "Bursitis"
+  },
+  {
+    "code": "FB51",
+    "name": "Fibroblastic disorders"
+  },
+  {
+    "code": "FB53",
+    "name": "Shoulder lesions"
+  },
+  {
+    "code": "FB53.0",
+    "name": "Adhesive capsulitis of shoulder"
+  },
+  {
+    "code": "FB53.1",
+    "name": "Rotator cuff syndrome"
+  },
+  {
+    "code": "FB54",
+    "name": "Enthesopathies of lower limb"
+  },
+  {
+    "code": "FB54.3",
+    "name": "Calcaneal spur"
+  },
+  {
+    "code": "FB54.Y",
+    "name": "Other specified enthesopathies of lower limb"
+  },
+  {
+    "code": "FB55.0",
+    "name": "Medial epicondylitis of elbow"
+  },
+  {
+    "code": "FB55.1",
+    "name": "Lateral epicondylitis of elbow"
+  },
+  {
+    "code": "FB6Z",
+    "name": "Soft tissue disorders, unspecified"
+  },
+  {
+    "code": "FB80.7",
+    "name": "Malunion of fracture"
+  },
+  {
+    "code": "FB80.8",
+    "name": "Nonunion of fracture"
+  },
+  {
+    "code": "FB80.9",
+    "name": "Delayed union of fracture"
+  },
+  {
+    "code": "FB80.A",
+    "name": "Stress fracture, not elsewhere classified"
+  },
+  {
+    "code": "FB80.B",
+    "name": "Pathological fracture, not elsewhere classified"
+  },
+  {
+    "code": "FB81",
+    "name": "Osteonecrosis"
+  },
+  {
+    "code": "FB82",
+    "name": "Chondropathies"
+  },
+  {
+    "code": "FB83",
+    "name": "Low bone mass disorders"
+  },
+  {
+    "code": "FB83.1",
+    "name": "Osteoporosis"
+  },
+  {
+    "code": "FB84",
+    "name": "Osteomyelitis or osteitis"
+  },
+  {
+    "code": "FB85",
+    "name": "Paget disease of bone"
+  },
+  {
+    "code": "FC01",
+    "name": "Postprocedural disorders of the musculoskeletal system"
+  },
+  {
+    "code": "FC0Y",
+    "name": "Other specified diseases of the musculoskeletal system or connective tissue"
+  },
+  {
+    "code": "GA00",
+    "name": "Vulvitis"
+  },
+  {
+    "code": "GA00.0",
+    "name": "Acute vulvitis"
+  },
+  {
+    "code": "GA00.2",
+    "name": "Abscess of vulva"
+  },
+  {
+    "code": "GA00.3",
+    "name": "Genital ulcer of vulva"
+  },
+  {
+    "code": "GA00.40",
+    "name": "Vulvovaginal ulceration"
+  },
+  {
+    "code": "GA01.00",
+    "name": "Acute endometritis"
+  },
+  {
+    "code": "GA01.10",
+    "name": "Chronic endometritis"
+  },
+  {
+    "code": "GA01.11",
+    "name": "Chronic inflammatory disease of uterus with pyometra"
+  },
+  {
+    "code": "GA02",
+    "name": "Vaginitis"
+  },
+  {
+    "code": "GA02.0",
+    "name": "Acute vaginitis"
+  },
+  {
+    "code": "GA02.3",
+    "name": "Genital ulcer disease of vagina"
+  },
+  {
+    "code": "GA03.0",
+    "name": "Abscess of Bartholin gland"
+  },
+  {
+    "code": "GA03.1",
+    "name": "Cyst of Bartholin gland"
+  },
+  {
+    "code": "GA04",
+    "name": "Cervicitis"
+  },
+  {
+    "code": "GA05",
+    "name": "Female pelvic inflammatory diseases"
+  },
+  {
+    "code": "GA05.0",
+    "name": "Acute female pelvic inflammatory disease"
+  },
+  {
+    "code": "GA05.1",
+    "name": "Chronic pelvic inflammatory disease"
+  },
+  {
+    "code": "GA05.3",
+    "name": "Tuboovarian abscess"
+  },
+  {
+    "code": "GA06",
+    "name": "Pelvic peritoneal adhesions of unknown or combined origin"
+  },
+  {
+    "code": "GA07",
+    "name": "Salpingitis and oophoritis"
+  },
+  {
+    "code": "GA10",
+    "name": "Endometriosis"
+  },
+  {
+    "code": "GA11",
+    "name": "Adenomyosis"
+  },
+  {
+    "code": "GA12",
+    "name": "Dyspareunia"
+  },
+  {
+    "code": "GA13.0",
+    "name": "Polyp of vulva"
+  },
+  {
+    "code": "GA13.2",
+    "name": "Hypertrophy of vulva"
+  },
+  {
+    "code": "GA13.3",
+    "name": "Vulvar cyst"
+  },
+  {
+    "code": "GA13.6",
+    "name": "Vulvar laceration"
+  },
+  {
+    "code": "GA13.7",
+    "name": "Vulvar haematoma"
+  },
+  {
+    "code": "GA14.0",
+    "name": "Polyp of vagina"
+  },
+  {
+    "code": "GA14.1",
+    "name": "Haematocolpos"
+  },
+  {
+    "code": "GA14.2",
+    "name": "Vaginal foreign body"
+  },
+  {
+    "code": "GA14.3",
+    "name": "Vaginal haematoma"
+  },
+  {
+    "code": "GA14.5",
+    "name": "Leukoplakia of vagina"
+  },
+  {
+    "code": "GA15.0",
+    "name": "Polyp of cervix uteri"
+  },
+  {
+    "code": "GA15.2",
+    "name": "Nabothian cyst"
+  },
+  {
+    "code": "GA15.4",
+    "name": "Stricture or stenosis of cervix uteri"
+  },
+  {
+    "code": "GA15.5",
+    "name": "Hypertrophic elongation of cervix uteri"
+  },
+  {
+    "code": "GA15.6",
+    "name": "Incompetence of cervix uteri"
+  },
+  {
+    "code": "GA15.7",
+    "name": "Dysplasia of cervix uteri"
+  },
+  {
+    "code": "GA16.0",
+    "name": "Endometrial glandular hyperplasia"
+  },
+  {
+    "code": "GA16.1",
+    "name": "Malposition of uterus"
+  },
+  {
+    "code": "GA16.2",
+    "name": "Intrauterine synechiae"
+  },
+  {
+    "code": "GA16.3",
+    "name": "Haematometra"
+  },
+  {
+    "code": "GA17.2",
+    "name": "Hydrosalpinx"
+  },
+  {
+    "code": "GA17.3",
+    "name": "Haematosalpinx"
+  },
+  {
+    "code": "GA18.0",
+    "name": "Follicular cyst of ovary"
+  },
+  {
+    "code": "GA20.0",
+    "name": "Amenorrhoea"
+  },
+  {
+    "code": "GA20.00",
+    "name": "Primary amenorrhoea"
+  },
+  {
+    "code": "GA20.01",
+    "name": "Secondary amenorrhoea"
+  },
+  {
+    "code": "GA20.02",
+    "name": "Lactational amenorrhoea"
+  },
+  {
+    "code": "GA20.10",
+    "name": "Frequent menstrual bleeding"
+  },
+  {
+    "code": "GA20.11",
+    "name": "Infrequent menstrual bleeding"
+  },
+  {
+    "code": "GA20.20",
+    "name": "Intermenstrual bleeding"
+  },
+  {
+    "code": "GA20.50",
+    "name": "Heavy menstrual bleeding"
+  },
+  {
+    "code": "GA20.51",
+    "name": "Light menstrual bleeding"
+  },
+  {
+    "code": "GA21.0",
+    "name": "Postcoital or contact bleeding"
+  },
+  {
+    "code": "GA22",
+    "name": "Excessive menstruation with irregular cycle"
+  },
+  {
+    "code": "GA23",
+    "name": "Anovulatory bleeding"
+  },
+  {
+    "code": "GA2Z",
+    "name": "Abnormal uterine or vaginal bleeding, unspecified"
+  },
+  {
+    "code": "GA30.0",
+    "name": "Menopause"
+  },
+  {
+    "code": "GA30.1",
+    "name": "Postmenopausal uterine bleeding"
+  },
+  {
+    "code": "GA30.2",
+    "name": "Postmenopausal atrophic vaginitis"
+  },
+  {
+    "code": "GA30.4",
+    "name": "Menopausal hot flush"
+  },
+  {
+    "code": "GA30.5",
+    "name": "Menopausal osteoporosis"
+  },
+  {
+    "code": "GA30.6",
+    "name": "Premature ovarian failure"
+  },
+  {
+    "code": "GA31",
+    "name": "Female infertility"
+  },
+  {
+    "code": "GA31.0",
+    "name": "Primary female infertility"
+  },
+  {
+    "code": "GA31.1",
+    "name": "Secondary female infertility"
+  },
+  {
+    "code": "GA32.0",
+    "name": "Ovarian hyperstimulation syndrome"
+  },
+  {
+    "code": "GA33",
+    "name": "Recurrent pregnancy loss"
+  },
+  {
+    "code": "GA34.02",
+    "name": "Vulvodynia"
+  },
+  {
+    "code": "GA34.3",
+    "name": "Dysmenorrhoea"
+  },
+  {
+    "code": "GA34.4",
+    "name": "Premenstrual disturbances"
+  },
+  {
+    "code": "GA42.0",
+    "name": "Vulval pruritus"
+  },
+  {
+    "code": "GA6Y",
+    "name": "Other specified diseases of the female genital system"
+  },
+  {
+    "code": "GA80",
+    "name": "Ulcerative disorders of the penis or scrotum"
+  },
+  {
+    "code": "GA80.0",
+    "name": "Aphthosis of penis or scrotum"
+  },
+  {
+    "code": "GA81.0",
+    "name": "Penoscrotal pruritus"
+  },
+  {
+    "code": "GA81.Y",
+    "name": "Other specified dermatoses of male genitalia"
+  },
+  {
+    "code": "GA90",
+    "name": "Hyperplasia of prostate"
+  },
+  {
+    "code": "GA91.0",
+    "name": "Chronic prostatitis"
+  },
+  {
+    "code": "GA91.1",
+    "name": "Abscess of prostate"
+  },
+  {
+    "code": "GA91.2",
+    "name": "Prostatocystitis"
+  },
+  {
+    "code": "GA91.5",
+    "name": "Atrophy of prostate"
+  },
+  {
+    "code": "GA91.6",
+    "name": "Dysplasia of prostate"
+  },
+  {
+    "code": "GA91.Y",
+    "name": "Other specified inflammatory and other diseases of prostate"
+  },
+  {
+    "code": "GB00",
+    "name": "Hydrocele or spermatocele"
+  },
+  {
+    "code": "GB01.0",
+    "name": "Torsion of testis"
+  },
+  {
+    "code": "GB02",
+    "name": "Orchitis or epididymitis"
+  },
+  {
+    "code": "GB03",
+    "name": "Atrophy of testis"
+  },
+  {
+    "code": "GB04",
+    "name": "Male infertility"
+  },
+  {
+    "code": "GB04.0",
+    "name": "Azoospermia"
+  },
+  {
+    "code": "GB05.2",
+    "name": "Phimosis"
+  },
+  {
+    "code": "GB05.3",
+    "name": "Paraphimosis"
+  },
+  {
+    "code": "GB06.1",
+    "name": "Priapism"
+  },
+  {
+    "code": "GB0Y",
+    "name": "Other specified diseases of the male genital system"
+  },
+  {
+    "code": "GB20.1",
+    "name": "Fibroadenosis of breast"
+  },
+  {
+    "code": "GB21.0",
+    "name": "Breast abscess"
+  },
+  {
+    "code": "GB21.Z",
+    "name": "Inflammatory disorders of breast, unspecified"
+  },
+  {
+    "code": "GB23.1",
+    "name": "Fissure or fistula of nipple"
+  },
+  {
+    "code": "GB23.2",
+    "name": "Fat necrosis of breast"
+  },
+  {
+    "code": "GB23.3",
+    "name": "Atrophy of breast"
+  },
+  {
+    "code": "GB23.5",
+    "name": "Mastodynia"
+  },
+  {
+    "code": "GB2Z",
+    "name": "Disorders of breast, unspecified"
+  },
+  {
+    "code": "GB40",
+    "name": "Nephritic syndrome"
+  },
+  {
+    "code": "GB41",
+    "name": "Nephrotic syndrome"
+  },
+  {
+    "code": "GB42",
+    "name": "Persistent proteinuria or albuminuria"
+  },
+  {
+    "code": "GB4Y",
+    "name": "Other specified glomerular diseases"
+  },
+  {
+    "code": "GB50",
+    "name": "Acute tubulo-interstitial nephritis"
+  },
+  {
+    "code": "GB51",
+    "name": "Acute pyelonephritis"
+  },
+  {
+    "code": "GB52",
+    "name": "Acute tubular necrosis"
+  },
+  {
+    "code": "GB53",
+    "name": "Acute renal papillary necrosis"
+  },
+  {
+    "code": "GB54",
+    "name": "Tubulo-interstitial nephritis, not specified as acute or chronic"
+  },
+  {
+    "code": "GB55",
+    "name": "Chronic tubulo-interstitial nephritis"
+  },
+  {
+    "code": "GB56",
+    "name": "Obstructive or reflux nephropathy"
+  },
+  {
+    "code": "GB56.0",
+    "name": "Hydronephrosis with ureteropelvic junction obstruction"
+  },
+  {
+    "code": "GB56.1",
+    "name": "Hydronephrosis with ureteral obstruction"
+  },
+  {
+    "code": "GB56.2",
+    "name": "Hydronephrosis with ureteral orifice obstruction"
+  },
+  {
+    "code": "GB56.3",
+    "name": "Hydronephrosis due to bladder obstruction"
+  },
+  {
+    "code": "GB57",
+    "name": "Nephrocalcinosis"
+  },
+  {
+    "code": "GB58",
+    "name": "Pyonephrosis"
+  },
+  {
+    "code": "GB59",
+    "name": "Renal or perinephric abscess"
+  },
+  {
+    "code": "GB60",
+    "name": "Acute kidney failure"
+  },
+  {
+    "code": "GB61",
+    "name": "Chronic kidney disease"
+  },
+  {
+    "code": "GB61.0",
+    "name": "Chronic kidney disease, stage 1"
+  },
+  {
+    "code": "GB61.1",
+    "name": "Chronic kidney disease, stage 2"
+  },
+  {
+    "code": "GB61.2",
+    "name": "Chronic kidney disease, stage 3a"
+  },
+  {
+    "code": "GB61.3",
+    "name": "Chronic kidney disease, stage 3b"
+  },
+  {
+    "code": "GB61.4",
+    "name": "Chronic kidney disease, stage 4"
+  },
+  {
+    "code": "GB61.5",
+    "name": "Chronic kidney disease, stage 5"
+  },
+  {
+    "code": "GB61.Z",
+    "name": "Chronic kidney disease, stage unspecified"
+  },
+  {
+    "code": "GB6Z",
+    "name": "Kidney failure, unspecified"
+  },
+  {
+    "code": "GB70",
+    "name": "Calculus of upper urinary tract"
+  },
+  {
+    "code": "GB70.0",
+    "name": "Calculus of kidney"
+  },
+  {
+    "code": "GB70.1",
+    "name": "Calculus of ureter"
+  },
+  {
+    "code": "GB71.0",
+    "name": "Calculus in bladder"
+  },
+  {
+    "code": "GB7Z",
+    "name": "Urolithiasis, unspecified"
+  },
+  {
+    "code": "GB80",
+    "name": "Nonfamilial nongenetic cystic kidney disease"
+  },
+  {
+    "code": "GB81",
+    "name": "Autosomal dominant polycystic kidney disease"
+  },
+  {
+    "code": "GB8Z",
+    "name": "Cystic or dysplastic kidney disease, unspecified"
+  },
+  {
+    "code": "GB90",
+    "name": "Certain specified disorders of kidney or ureter"
+  },
+  {
+    "code": "GB90.1",
+    "name": "Hydroureter"
+  },
+  {
+    "code": "GB90.44",
+    "name": "Renal tubular acidosis"
+  },
+  {
+    "code": "GB90.4A",
+    "name": "Nephrogenic diabetes insipidus"
+  },
+  {
+    "code": "GC00",
+    "name": "Cystitis"
+  },
+  {
+    "code": "GC01",
+    "name": "Other disorders of bladder"
+  },
+  {
+    "code": "GC01.2",
+    "name": "Diverticulum of bladder"
+  },
+  {
+    "code": "GC02",
+    "name": "Urethritis and urethral syndrome"
+  },
+  {
+    "code": "GC02.0",
+    "name": "Urethral abscess"
+  },
+  {
+    "code": "GC03",
+    "name": "Urethral stricture"
+  },
+  {
+    "code": "GC04.0",
+    "name": "Urethral fistula"
+  },
+  {
+    "code": "GC04.10",
+    "name": "Vesicovaginal fistula"
+  },
+  {
+    "code": "GC04.14",
+    "name": "Urethrovaginal fistula"
+  },
+  {
+    "code": "GC04.16",
+    "name": "Rectovaginal fistula"
+  },
+  {
+    "code": "GC04.Y",
+    "name": "Other specified fistula of the genitourinary tract"
+  },
+  {
+    "code": "GC06",
+    "name": "Urethral diverticulum"
+  },
+  {
+    "code": "GC07",
+    "name": "Urethral caruncle"
+  },
+  {
+    "code": "GC08",
+    "name": "Urinary tract infection, site not specified"
+  },
+  {
+    "code": "GC0Y",
+    "name": "Other diseases of urinary system"
+  },
+  {
+    "code": "GC40.2",
+    "name": "Prolapse of the vaginal apex"
+  },
+  {
+    "code": "GC40.3",
+    "name": "Uterovaginal prolapse"
+  },
+  {
+    "code": "GC51",
+    "name": "Female Genital Mutilation"
+  },
+  {
+    "code": "GC70",
+    "name": "Postoperative adhesions of vagina"
+  },
+  {
+    "code": "GC71",
+    "name": "Prolapse of vaginal vault after hysterectomy"
+  },
+  {
+    "code": "GC72",
+    "name": "Postprocedural urethral stricture"
+  },
+  {
+    "code": "GC73",
+    "name": "Postprocedural pelvic peritoneal adhesions"
+  },
+  {
+    "code": "GC8Y",
+    "name": "Other specified diseases of the genitourinary system"
+  },
+  {
+    "code": "HA00",
+    "name": "Hypoactive sexual desire dysfunction"
+  },
+  {
+    "code": "HA01.1",
+    "name": "Male erectile dysfunction"
+  },
+  {
+    "code": "HA02.02",
+    "name": "Anorgasmia, acquired, generalised"
+  },
+  {
+    "code": "HA03",
+    "name": "Ejaculatory dysfunctions"
+  },
+  {
+    "code": "HA03.1",
+    "name": "Male delayed ejaculation"
+  },
+  {
+    "code": "HA0Z",
+    "name": "Sexual dysfunctions, unspecified"
+  },
+  {
+    "code": "HA20",
+    "name": "Sexual pain-penetration disorder"
+  },
+  {
+    "code": "HA8Y",
+    "name": "Other specified conditions related to sexual health"
+  },
+  {
+    "code": "JA00.0",
+    "name": "Spontaneous abortion"
+  },
+  {
+    "code": "JA00.1",
+    "name": "Induced abortion"
+  },
+  {
+    "code": "JA01.0",
+    "name": "Abdominal pregnancy"
+  },
+  {
+    "code": "JA01.1",
+    "name": "Tubal pregnancy"
+  },
+  {
+    "code": "JA01.Z",
+    "name": "Ectopic pregnancy, unspecified"
+  },
+  {
+    "code": "JA02",
+    "name": "Molar pregnancy"
+  },
+  {
+    "code": "JA03",
+    "name": "Missed abortion"
+  },
+  {
+    "code": "JA05.2",
+    "name": "Embolism following abortion, ectopic or molar pregnancy"
+  },
+  {
+    "code": "JA22",
+    "name": "Gestational oedema or proteinuria without hypertension"
+  },
+  {
+    "code": "JA23",
+    "name": "Gestational hypertension"
+  },
+  {
+    "code": "JA24",
+    "name": "Pre-eclampsia"
+  },
+  {
+    "code": "JA25",
+    "name": "Eclampsia"
+  },
+  {
+    "code": "JA2Z",
+    "name": "Oedema, proteinuria, or hypertensive disorders in pregnancy, childbirth, or the puerperium, unspecified"
+  },
+  {
+    "code": "JA40.0",
+    "name": "Threatened abortion"
+  },
+  {
+    "code": "JA41",
+    "name": "Antepartum haemorrhage"
+  },
+  {
+    "code": "JA42",
+    "name": "Intrapartum haemorrhage"
+  },
+  {
+    "code": "JA43",
+    "name": "Postpartum haemorrhage"
+  },
+  {
+    "code": "JA60",
+    "name": "Excessive vomiting in pregnancy"
+  },
+  {
+    "code": "JA61.0",
+    "name": "Varicose veins of lower extremity in pregnancy"
+  },
+  {
+    "code": "JA61.1",
+    "name": "Genital varices in pregnancy"
+  },
+  {
+    "code": "JA61.2",
+    "name": "Superficial thrombophlebitis in pregnancy"
+  },
+  {
+    "code": "JA61.3",
+    "name": "Deep phlebothrombosis in pregnancy"
+  },
+  {
+    "code": "JA61.4",
+    "name": "Haemorrhoids in pregnancy"
+  },
+  {
+    "code": "JA62",
+    "name": "Infections of genitourinary tract in pregnancy"
+  },
+  {
+    "code": "JA63",
+    "name": "Diabetes mellitus in pregnancy"
+  },
+  {
+    "code": "JA64",
+    "name": "Malnutrition in pregnancy"
+  },
+  {
+    "code": "JA65.2",
+    "name": "Excessive weight gain in pregnancy"
+  },
+  {
+    "code": "JA65.3",
+    "name": "Low weight gain in pregnancy"
+  },
+  {
+    "code": "JA65.6",
+    "name": "Maternal hypotension syndrome"
+  },
+  {
+    "code": "JA65.7",
+    "name": "Subluxation of symphysis pubis in pregnancy, childbirth or the puerperium"
+  },
+  {
+    "code": "JA80.0",
+    "name": "Twin pregnancy"
+  },
+  {
+    "code": "JA80.1",
+    "name": "Triplet pregnancy"
+  },
+  {
+    "code": "JA80.2",
+    "name": "Quadruplet pregnancy"
+  },
+  {
+    "code": "JA87",
+    "name": "Maternal care related to polyhydramnios"
+  },
+  {
+    "code": "JA88.0",
+    "name": "Oligohydramnios"
+  },
+  {
+    "code": "JA89",
+    "name": "Maternal care related to premature rupture of membranes"
+  },
+  {
+    "code": "JA89.3",
+    "name": "Preterm premature rupture of membranes"
+  },
+  {
+    "code": "JB00",
+    "name": "Preterm labour or delivery"
+  },
+  {
+    "code": "JB01",
+    "name": "Failed induction of labour"
+  },
+  {
+    "code": "JB02.3",
+    "name": "Precipitate labour"
+  },
+  {
+    "code": "JB03.0",
+    "name": "Prolonged first stage of labour"
+  },
+  {
+    "code": "JB03.1",
+    "name": "Prolonged second stage of labour"
+  },
+  {
+    "code": "JB04",
+    "name": "Obstructed labour due to malposition or malpresentation of fetus"
+  },
+  {
+    "code": "JB05",
+    "name": "Obstructed labour due to maternal pelvic abnormality"
+  },
+  {
+    "code": "JB06",
+    "name": "Obstructed labour due to other causes"
+  },
+  {
+    "code": "JB07",
+    "name": "Labour or delivery complicated by fetal distress"
+  },
+  {
+    "code": "JB08",
+    "name": "Labour or delivery complicated by umbilical cord complications"
+  },
+  {
+    "code": "JB09",
+    "name": "Perineal laceration during delivery"
+  },
+  {
+    "code": "JB0A",
+    "name": "Certain specified obstetric trauma"
+  },
+  {
+    "code": "JB0A.0",
+    "name": "Rupture of uterus before onset of labour"
+  },
+  {
+    "code": "JB0A.1",
+    "name": "Rupture of uterus during labour"
+  },
+  {
+    "code": "JB0A.2",
+    "name": "Postpartum inversion of uterus"
+  },
+  {
+    "code": "JB0A.7",
+    "name": "Obstetric damage to pelvic joints or ligaments"
+  },
+  {
+    "code": "JB0A.8",
+    "name": "Obstetric haematoma of pelvis"
+  },
+  {
+    "code": "JB0B.0",
+    "name": "Retained placenta without haemorrhage"
+  },
+  {
+    "code": "JB0Y",
+    "name": "Other specified complications of labour or delivery"
+  },
+  {
+    "code": "JB20",
+    "name": "Single spontaneous delivery"
+  },
+  {
+    "code": "JB21",
+    "name": "Single delivery by forceps or vacuum extractor"
+  },
+  {
+    "code": "JB22",
+    "name": "Single delivery by caesarean section"
+  },
+  {
+    "code": "JB23",
+    "name": "Other assisted single delivery"
+  },
+  {
+    "code": "JB23.0",
+    "name": "Breech extraction"
+  },
+  {
+    "code": "JB24.Z",
+    "name": "Multiple delivery, unspecified"
+  },
+  {
+    "code": "JB40.0",
+    "name": "Puerperal sepsis"
+  },
+  {
+    "code": "JB41.1",
+    "name": "Deep phlebothrombosis in the puerperium"
+  },
+  {
+    "code": "JB42.0",
+    "name": "Obstetric air embolism"
+  },
+  {
+    "code": "JB42.1",
+    "name": "Amniotic fluid embolism"
+  },
+  {
+    "code": "JB42.2",
+    "name": "Obstetric blood-clot embolism"
+  },
+  {
+    "code": "JB45",
+    "name": "Infections of breast associated with childbirth"
+  },
+  {
+    "code": "JB46.0",
+    "name": "Retracted nipple associated with childbirth"
+  },
+  {
+    "code": "JB46.1",
+    "name": "Cracked nipple associated with childbirth"
+  },
+  {
+    "code": "KA00",
+    "name": "Fetus or newborn affected by maternal conditions that may be unrelated to present pregnancy"
+  },
+  {
+    "code": "KA01",
+    "name": "Fetus or newborn affected by maternal complications of pregnancy"
+  },
+  {
+    "code": "KA02",
+    "name": "Fetus or newborn affected by complications of placenta"
+  },
+  {
+    "code": "KA03",
+    "name": "Fetus or newborn affected by complications of umbilical cord"
+  },
+  {
+    "code": "KA04.0",
+    "name": "Fetus or newborn affected by chorioamnionitis"
+  },
+  {
+    "code": "KA05",
+    "name": "Fetus or newborn affected by certain complications of labour or delivery"
+  },
+  {
+    "code": "KA06",
+    "name": "Fetus or newborn affected by noxious influences transmitted via placenta or breast milk"
+  },
+  {
+    "code": "KA07",
+    "name": "Neonatal dermatoses due to maternal antibodies"
+  },
+  {
+    "code": "KA20.0",
+    "name": "Small for gestational age"
+  },
+  {
+    "code": "KA21.0",
+    "name": "Extremely low birth weight of newborn"
+  },
+  {
+    "code": "KA21.1",
+    "name": "Very low birth weight of newborn"
+  },
+  {
+    "code": "KA21.2",
+    "name": "Low birth weight of newborn"
+  },
+  {
+    "code": "KA21.4",
+    "name": "Preterm newborn"
+  },
+  {
+    "code": "KA22.1",
+    "name": "Large newborn for gestational age"
+  },
+  {
+    "code": "KA22.2",
+    "name": "Post-term newborn"
+  },
+  {
+    "code": "KA22.3",
+    "name": "Postmaturity syndrome"
+  },
+  {
+    "code": "KA40.00",
+    "name": "Subdural haemorrhage due to birth injury"
+  },
+  {
+    "code": "KA40.01",
+    "name": "Cerebral haemorrhage due to birth injury"
+  },
+  {
+    "code": "KA40.02",
+    "name": "Cerebellar haemorrhage due to birth injury"
+  },
+  {
+    "code": "KA40.03",
+    "name": "Intraventricular haemorrhage due to birth injury"
+  },
+  {
+    "code": "KA40.04",
+    "name": "Subarachnoid haemorrhage due to birth injury"
+  },
+  {
+    "code": "KA40.05",
+    "name": "Tentorial tear due to birth injury"
+  },
+  {
+    "code": "KA40.06",
+    "name": "Cerebellar contusion due to birth injury"
+  },
+  {
+    "code": "KA40.07",
+    "name": "Cerebral contusion due to birth injury"
+  },
+  {
+    "code": "KA40.08",
+    "name": "Extradural or epidural haemorrhage due to birth injury"
+  },
+  {
+    "code": "KA41",
+    "name": "Birth injury to eye"
+  },
+  {
+    "code": "KA42",
+    "name": "Birth injury to scalp"
+  },
+  {
+    "code": "KA42.1",
+    "name": "Cephalohaematoma due to birth injury"
+  },
+  {
+    "code": "KA42.4",
+    "name": "Subgaleal epicranial subaponeurotic haemorrhage due to birth injury"
+  },
+  {
+    "code": "KA43",
+    "name": "Birth injury to skin or soft tissues"
+  },
+  {
+    "code": "KA44",
+    "name": "Birth injury to peripheral nervous system"
+  },
+  {
+    "code": "KA44.00",
+    "name": "Birth injury to facial nerve"
+  },
+  {
+    "code": "KA44.10",
+    "name": "Erb paralysis"
+  },
+  {
+    "code": "KA45.0",
+    "name": "Fracture of skull due to birth injury"
+  },
+  {
+    "code": "KA45.5",
+    "name": "Fracture of clavicle due to birth injury"
+  },
+  {
+    "code": "KA46",
+    "name": "Birth injury to other organs"
+  },
+  {
+    "code": "KA60",
+    "name": "Sepsis of fetus or newborn"
+  },
+  {
+    "code": "KA61.0",
+    "name": "Congenital tuberculosis"
+  },
+  {
+    "code": "KA62",
+    "name": "Viral infection in the fetus or newborn"
+  },
+  {
+    "code": "KA63",
+    "name": "Fungal infection of fetus or newborn"
+  },
+  {
+    "code": "KA65.0",
+    "name": "Neonatal conjunctivitis or dacryocystitis"
+  },
+  {
+    "code": "KA65.1",
+    "name": "Omphalitis of newborn"
+  },
+  {
+    "code": "KA65.2",
+    "name": "Neonatal urinary tract infection"
+  },
+  {
+    "code": "KA80",
+    "name": "Fetal blood loss"
+  },
+  {
+    "code": "KA81",
+    "name": "Umbilical haemorrhage of newborn"
+  },
+  {
+    "code": "KA84",
+    "name": "Haemolytic disease of fetus or newborn"
+  },
+  {
+    "code": "KA85",
+    "name": "Hydrops fetalis due to haemolytic disease"
+  },
+  {
+    "code": "KA86",
+    "name": "Neonatal kernicterus"
+  },
+  {
+    "code": "KA87",
+    "name": "Neonatal hyperbilirubinaemia"
+  },
+  {
+    "code": "KA88",
+    "name": "Disseminated intravascular coagulation of fetus or newborn"
+  },
+  {
+    "code": "KA89",
+    "name": "Transient neonatal thrombocytopaenia"
+  },
+  {
+    "code": "KA8A",
+    "name": "Polycythaemia neonatorum"
+  },
+  {
+    "code": "KA8B",
+    "name": "Anaemia of prematurity"
+  },
+  {
+    "code": "KA8F",
+    "name": "Neonatal vitamin K deficiency"
+  },
+  {
+    "code": "KB00",
+    "name": "Neonatal cerebral ischaemia"
+  },
+  {
+    "code": "KB01",
+    "name": "Periventricular cysts of newborn"
+  },
+  {
+    "code": "KB02",
+    "name": "Neonatal cerebral leukomalacia"
+  },
+  {
+    "code": "KB03",
+    "name": "Neonatal encephalopathy"
+  },
+  {
+    "code": "KB04",
+    "name": "Hypoxic ischaemic encephalopathy of newborn"
+  },
+  {
+    "code": "KB05",
+    "name": "Neonatal hydrocephalus"
+  },
+  {
+    "code": "KB06",
+    "name": "Neonatal seizures"
+  },
+  {
+    "code": "KB08",
+    "name": "Disorders of muscle tone of newborn"
+  },
+  {
+    "code": "KB20",
+    "name": "Intrauterine hypoxia"
+  },
+  {
+    "code": "KB21",
+    "name": "Birth asphyxia"
+  },
+  {
+    "code": "KB23.0",
+    "name": "Respiratory distress syndrome of newborn"
+  },
+  {
+    "code": "KB23.1",
+    "name": "Transient tachypnoea of newborn"
+  },
+  {
+    "code": "KB25",
+    "name": "Neonatal tracheitis"
+  },
+  {
+    "code": "KB26.0",
+    "name": "Neonatal aspiration of meconium"
+  },
+  {
+    "code": "KB26.3",
+    "name": "Neonatal aspiration of milk or regurgitated food"
+  },
+  {
+    "code": "KB27.0",
+    "name": "Interstitial emphysema originating in the perinatal period"
+  },
+  {
+    "code": "KB27.1",
+    "name": "Pneumothorax originating in the perinatal period"
+  },
+  {
+    "code": "KB27.2",
+    "name": "Pneumomediastinum originating in the perinatal period"
+  },
+  {
+    "code": "KB27.3",
+    "name": "Pneumopericardium originating in the perinatal period"
+  },
+  {
+    "code": "KB27.4",
+    "name": "Pneumoperitoneum, originating in the perinatal period, due to primary pulmonary air leak syndromes"
+  },
+  {
+    "code": "KB28",
+    "name": "Pulmonary haemorrhage originating in the perinatal period"
+  },
+  {
+    "code": "KB29.0",
+    "name": "Bronchopulmonary dysplasia originating in the perinatal period"
+  },
+  {
+    "code": "KB2A",
+    "name": "Apnoea of newborn"
+  },
+  {
+    "code": "KB2D",
+    "name": "Respiratory failure of newborn"
+  },
+  {
+    "code": "KB2E",
+    "name": "Respiratory arrest of newborn"
+  },
+  {
+    "code": "KB2F",
+    "name": "Congenital lung or lobar atelectasis"
+  },
+  {
+    "code": "KB2J",
+    "name": "Airway obstruction in the neonate due to airway abnormality"
+  },
+  {
+    "code": "KB2J.2",
+    "name": "Tracheo-bronchial malacia in neonate"
+  },
+  {
+    "code": "KB2K",
+    "name": "Pulmonary cysts in newborn"
+  },
+  {
+    "code": "KB43",
+    "name": "Delayed closure of ductus arteriosus"
+  },
+  {
+    "code": "KB45",
+    "name": "Neonatal hypertension"
+  },
+  {
+    "code": "KB46",
+    "name": "Neonatal hypotension"
+  },
+  {
+    "code": "KB60.3",
+    "name": "Neonatal hyperglycaemia"
+  },
+  {
+    "code": "KB60.4",
+    "name": "Neonatal hypoglycaemia"
+  },
+  {
+    "code": "KB61.0",
+    "name": "Neonatal hypomagnesaemia"
+  },
+  {
+    "code": "KB61.2",
+    "name": "Neonatal hypocalcaemia"
+  },
+  {
+    "code": "KB61.3",
+    "name": "Neonatal osteopenia"
+  },
+  {
+    "code": "KB62.0",
+    "name": "Transitory neonatal hyperthyroidism"
+  },
+  {
+    "code": "KB62.3",
+    "name": "Transient hypothyroxinaemia"
+  },
+  {
+    "code": "KB63.1",
+    "name": "Dehydration of newborn"
+  },
+  {
+    "code": "KB63.20",
+    "name": "Hyponatremia of newborn"
+  },
+  {
+    "code": "KB63.21",
+    "name": "Hypernatremia of newborn"
+  },
+  {
+    "code": "KB63.30",
+    "name": "Hypokalaemia of newborn"
+  },
+  {
+    "code": "KB63.31",
+    "name": "Hyperkalaemia of newborn"
+  },
+  {
+    "code": "KB87",
+    "name": "Intestinal obstruction of newborn"
+  },
+  {
+    "code": "KB87.2",
+    "name": "Meconium ileus without perforation"
+  },
+  {
+    "code": "KB88",
+    "name": "Necrotising enterocolitis of newborn"
+  },
+  {
+    "code": "KB89",
+    "name": "Neonatal malabsorption syndromes"
+  },
+  {
+    "code": "KB89.1",
+    "name": "Short bowel syndrome"
+  },
+  {
+    "code": "KB8B",
+    "name": "Neonatal peritonitis"
+  },
+  {
+    "code": "KC00",
+    "name": "Congenital hydrocele"
+  },
+  {
+    "code": "KC20.0",
+    "name": "Delayed separation of umbilical cord"
+  },
+  {
+    "code": "KC20.2",
+    "name": "Umbilical granuloma of newborn"
+  },
+  {
+    "code": "KC21.1",
+    "name": "Neonatal toxic erythema"
+  },
+  {
+    "code": "KC50",
+    "name": "Neonatal phototherapy burn"
+  },
+  {
+    "code": "KD10",
+    "name": "Environmental hyperthermia of newborn"
+  },
+  {
+    "code": "KD12",
+    "name": "Hypothermia of newborn"
+  },
+  {
+    "code": "KD30",
+    "name": "Birth depression"
+  },
+  {
+    "code": "KD32",
+    "name": "Feeding problems of newborn"
+  },
+  {
+    "code": "KD3Y",
+    "name": "Other specified disorders originating in the perinatal period"
+  },
+  {
+    "code": "LA00",
+    "name": "Anencephaly or similar anomalies"
+  },
+  {
+    "code": "LA01",
+    "name": "Cephalocele"
+  },
+  {
+    "code": "LA02",
+    "name": "Spina bifida"
+  },
+  {
+    "code": "LA02.00",
+    "name": "Myelomeningocele with hydrocephalus"
+  },
+  {
+    "code": "LA02.01",
+    "name": "Myelomeningocele without hydrocephalus"
+  },
+  {
+    "code": "LA02.02",
+    "name": "Myelocystocele"
+  },
+  {
+    "code": "LA03",
+    "name": "Arnold-Chiari malformation type II"
+  },
+  {
+    "code": "LA05.0",
+    "name": "Microcephaly"
+  },
+  {
+    "code": "LA05.2",
+    "name": "Holoprosencephaly"
+  },
+  {
+    "code": "LA05.3",
+    "name": "Corpus callosum agenesis"
+  },
+  {
+    "code": "LA06.0",
+    "name": "Dandy-Walker malformation"
+  },
+  {
+    "code": "LA06.1",
+    "name": "Hypoplasia or agenesis of cerebellar hemispheres"
+  },
+  {
+    "code": "LA10.0",
+    "name": "Microphthalmos"
+  },
+  {
+    "code": "LA11.3",
+    "name": "Aniridia"
+  },
+  {
+    "code": "LA11.4",
+    "name": "Coloboma of iris"
+  },
+  {
+    "code": "LA11.5",
+    "name": "Congenital corneal opacity"
+  },
+  {
+    "code": "LA12.0",
+    "name": "Coloboma of lens"
+  },
+  {
+    "code": "LA12.1",
+    "name": "Congenital cataract"
+  },
+  {
+    "code": "LA14.04",
+    "name": "Congenital ptosis"
+  },
+  {
+    "code": "LA14.05",
+    "name": "Congenital eyelid retraction"
+  },
+  {
+    "code": "LA14.12",
+    "name": "Congenital dacryocele"
+  },
+  {
+    "code": "LA21",
+    "name": "Minor anomalies of pinnae"
+  },
+  {
+    "code": "LA22.0",
+    "name": "Microtia"
+  },
+  {
+    "code": "LA22.1",
+    "name": "Anotia"
+  },
+  {
+    "code": "LA24",
+    "name": "Accessory auricle"
+  },
+  {
+    "code": "LA30.0",
+    "name": "Anodontia"
+  },
+  {
+    "code": "LA30.1",
+    "name": "Hypodontia"
+  },
+  {
+    "code": "LA30.3",
+    "name": "Hyperdontia"
+  },
+  {
+    "code": "LA30.50",
+    "name": "Early exfoliation of teeth"
+  },
+  {
+    "code": "LA30.51",
+    "name": "Late exfoliation of teeth"
+  },
+  {
+    "code": "LA31.0",
+    "name": "Congenital macroglossia"
+  },
+  {
+    "code": "LA31.1",
+    "name": "Hypoglossia or aglossia"
+  },
+  {
+    "code": "LA31.2",
+    "name": "Ankyloglossia"
+  },
+  {
+    "code": "LA40",
+    "name": "Cleft lip"
+  },
+  {
+    "code": "LA42",
+    "name": "Cleft palate"
+  },
+  {
+    "code": "LA52",
+    "name": "Facial asymmetry"
+  },
+  {
+    "code": "LA56",
+    "name": "Pierre Robin syndrome"
+  },
+  {
+    "code": "LA62",
+    "name": "Congenital torticollis"
+  },
+  {
+    "code": "LA70.2",
+    "name": "Choanal atresia"
+  },
+  {
+    "code": "LA71.0",
+    "name": "Congenital laryngomalacia"
+  },
+  {
+    "code": "LA71.2",
+    "name": "Laryngeal hypoplasia"
+  },
+  {
+    "code": "LA71.3",
+    "name": "Congenital subglottic stenosis"
+  },
+  {
+    "code": "LA73.1",
+    "name": "Congenital tracheomalacia"
+  },
+  {
+    "code": "LA75.2",
+    "name": "Congenital hypoplasia of lung"
+  },
+  {
+    "code": "LA75.4",
+    "name": "Congenital pulmonary airway malformations"
+  },
+  {
+    "code": "LA75.5",
+    "name": "Congenital lobar emphysema"
+  },
+  {
+    "code": "LA75.6",
+    "name": "Congenital sequestration of lung"
+  },
+  {
+    "code": "LA77",
+    "name": "Congenital cyst of mediastinum"
+  },
+  {
+    "code": "LA80",
+    "name": "Anomalous position-orientation of heart"
+  },
+  {
+    "code": "LA81",
+    "name": "Abnormal ventricular relationships"
+  },
+  {
+    "code": "LA85.1",
+    "name": "Transposition of the great arteries"
+  },
+  {
+    "code": "LA85.2",
+    "name": "Double outlet right ventricle"
+  },
+  {
+    "code": "LA85.3",
+    "name": "Double outlet left ventricle"
+  },
+  {
+    "code": "LA85.4",
+    "name": "Common arterial trunk"
+  },
+  {
+    "code": "LA86.2",
+    "name": "Anomalous pulmonary venous connection"
+  },
+  {
+    "code": "LA86.3",
+    "name": "Congenital pulmonary venous stenosis or hypoplasia"
+  },
+  {
+    "code": "LA87.00",
+    "name": "Congenital tricuspid regurgitation"
+  },
+  {
+    "code": "LA87.01",
+    "name": "Congenital tricuspid valvar stenosis"
+  },
+  {
+    "code": "LA87.03",
+    "name": "Ebstein malformation of tricuspid valve"
+  },
+  {
+    "code": "LA87.10",
+    "name": "Congenital mitral regurgitation"
+  },
+  {
+    "code": "LA87.11",
+    "name": "Congenital mitral valvar stenosis"
+  },
+  {
+    "code": "LA87.20",
+    "name": "Atrioventricular septal defect"
+  },
+  {
+    "code": "LA88.2",
+    "name": "Tetralogy of Fallot"
+  },
+  {
+    "code": "LA88.3",
+    "name": "Congenital left ventricular outflow tract obstruction"
+  },
+  {
+    "code": "LA88.4",
+    "name": "Ventricular septal defect"
+  },
+  {
+    "code": "LA89.1",
+    "name": "Tricuspid atresia"
+  },
+  {
+    "code": "LA89.3",
+    "name": "Hypoplastic left heart syndrome"
+  },
+  {
+    "code": "LA8A.00",
+    "name": "Congenital pulmonary valvar stenosis"
+  },
+  {
+    "code": "LA8A.20",
+    "name": "Congenital aortic valvar stenosis"
+  },
+  {
+    "code": "LA8A.22",
+    "name": "Bicuspid aortic valve"
+  },
+  {
+    "code": "LA8B.0",
+    "name": "Congenital aortopulmonary window"
+  },
+  {
+    "code": "LA8B.21",
+    "name": "Coarctation of aorta"
+  },
+  {
+    "code": "LA8B.22",
+    "name": "Interrupted aortic arch"
+  },
+  {
+    "code": "LA8B.4",
+    "name": "Patent arterial duct"
+  },
+  {
+    "code": "LA8E.1",
+    "name": "Atrial septal defect within oval fossa"
+  },
+  {
+    "code": "LB00.0",
+    "name": "Congenital diaphragmatic hernia"
+  },
+  {
+    "code": "LB00.1",
+    "name": "Absence of diaphragm"
+  },
+  {
+    "code": "LB01",
+    "name": "Omphalocele"
+  },
+  {
+    "code": "LB02",
+    "name": "Gastroschisis"
+  },
+  {
+    "code": "LB12.0",
+    "name": "Congenital oesophageal web or ring"
+  },
+  {
+    "code": "LB12.1",
+    "name": "Atresia of oesophagus"
+  },
+  {
+    "code": "LB12.10",
+    "name": "Atresia of oesophagus with oesophagobronchial fistula"
+  },
+  {
+    "code": "LB12.2",
+    "name": "Oesophageal fistula without atresia"
+  },
+  {
+    "code": "LB12.3",
+    "name": "Congenital stenosis or stricture of oesophagus"
+  },
+  {
+    "code": "LB12.4",
+    "name": "Congenital diverticulum of oesophagus"
+  },
+  {
+    "code": "LB13.0",
+    "name": "Congenital hypertrophic pyloric stenosis"
+  },
+  {
+    "code": "LB13.1",
+    "name": "Congenital hiatus hernia"
+  },
+  {
+    "code": "LB15.0",
+    "name": "Meckel diverticulum"
+  },
+  {
+    "code": "LB15.1",
+    "name": "Atresia of small intestine"
+  },
+  {
+    "code": "LB15.2",
+    "name": "Congenital short bowel"
+  },
+  {
+    "code": "LB15.5",
+    "name": "Congenital diverticulum of small intestine"
+  },
+  {
+    "code": "LB16.1",
+    "name": "Hirschsprung disease"
+  },
+  {
+    "code": "LB16.2",
+    "name": "Immature ganglionosis of large intestine"
+  },
+  {
+    "code": "LB16.3",
+    "name": "Congenital hypoganglionosis of large intestine"
+  },
+  {
+    "code": "LB17.0",
+    "name": "Anorectal malformations"
+  },
+  {
+    "code": "LB17.1",
+    "name": "Ectopic anus"
+  },
+  {
+    "code": "LB17.2",
+    "name": "Persistent cloaca"
+  },
+  {
+    "code": "LB17.3",
+    "name": "Cloacal exstrophy"
+  },
+  {
+    "code": "LB20.20",
+    "name": "Choledochal cyst"
+  },
+  {
+    "code": "LB20.21",
+    "name": "Biliary atresia"
+  },
+  {
+    "code": "LB21.0",
+    "name": "Annular pancreas"
+  },
+  {
+    "code": "LB22.0",
+    "name": "Congenital asplenia"
+  },
+  {
+    "code": "LB30.00",
+    "name": "Renal agenesis"
+  },
+  {
+    "code": "LB30.62",
+    "name": "Horseshoe kidney"
+  },
+  {
+    "code": "LB30.7",
+    "name": "Ectopic or pelvic kidney"
+  },
+  {
+    "code": "LB30.9",
+    "name": "Multicystic renal dysplasia"
+  },
+  {
+    "code": "LB31.0",
+    "name": "Congenital hydronephrosis"
+  },
+  {
+    "code": "LB31.3",
+    "name": "Exstrophy of urinary bladder"
+  },
+  {
+    "code": "LB31.D",
+    "name": "Congenital vesico-uretero-renal reflux"
+  },
+  {
+    "code": "LB40.2",
+    "name": "Fusion of labia"
+  },
+  {
+    "code": "LB41.2",
+    "name": "Clitoromegaly"
+  },
+  {
+    "code": "LB42.2",
+    "name": "Congenital rectovaginal fistula"
+  },
+  {
+    "code": "LB42.4",
+    "name": "Imperforate hymen"
+  },
+  {
+    "code": "LB50",
+    "name": "Micropenis or penis agenesis"
+  },
+  {
+    "code": "LB52.0",
+    "name": "Ectopic testis"
+  },
+  {
+    "code": "LB52.1",
+    "name": "Undescended testicle, unilateral"
+  },
+  {
+    "code": "LB52.2",
+    "name": "Undescended testicle, bilateral"
+  },
+  {
+    "code": "LB53",
+    "name": "Hypospadias"
+  },
+  {
+    "code": "LB54",
+    "name": "Congenital chordee"
+  },
+  {
+    "code": "LB55",
+    "name": "Epispadias"
+  },
+  {
+    "code": "LB63",
+    "name": "Accessory nipple"
+  },
+  {
+    "code": "LB70.0",
+    "name": "Craniosynostosis"
+  },
+  {
+    "code": "LB70.3",
+    "name": "Macrocephaly"
+  },
+  {
+    "code": "LB74.0",
+    "name": "Developmental dysplasia of hip"
+  },
+  {
+    "code": "LB75",
+    "name": "Brachydactyly"
+  },
+  {
+    "code": "LB78",
+    "name": "Polydactyly"
+  },
+  {
+    "code": "LB79",
+    "name": "Syndactyly"
+  },
+  {
+    "code": "LB80",
+    "name": "Congenital deformities of fingers"
+  },
+  {
+    "code": "LB81",
+    "name": "Congenital deformities of toes"
+  },
+  {
+    "code": "LB90",
+    "name": "Joint formation defects"
+  },
+  {
+    "code": "LB97",
+    "name": "Limb overgrowth"
+  },
+  {
+    "code": "LB98",
+    "name": "Congenital deformities of feet"
+  },
+  {
+    "code": "LB98.00",
+    "name": "Talipes equinovarus"
+  },
+  {
+    "code": "LB98.01",
+    "name": "Talipes calcaneovarus"
+  },
+  {
+    "code": "LC40",
+    "name": "Dermoid cyst"
+  },
+  {
+    "code": "LC80",
+    "name": "Congenital adrenal hypoplasia"
+  },
+  {
+    "code": "LD24.00",
+    "name": "Achondroplasia"
+  },
+  {
+    "code": "LD24.G0",
+    "name": "Pfeiffer syndrome"
+  },
+  {
+    "code": "LD24.G1",
+    "name": "Crouzon disease"
+  },
+  {
+    "code": "LD24.G2",
+    "name": "Apert syndrome"
+  },
+  {
+    "code": "LD24.K0",
+    "name": "Osteogenesis imperfecta"
+  },
+  {
+    "code": "LD2A.1",
+    "name": "46,XY gonadal dysgenesis"
+  },
+  {
+    "code": "LD2D.1",
+    "name": "Neurofibromatoses"
+  },
+  {
+    "code": "LD2D.2",
+    "name": "Tuberous sclerosis"
+  },
+  {
+    "code": "LD2F.10",
+    "name": "Prune belly syndrome"
+  },
+  {
+    "code": "LD2F.11",
+    "name": "VATER association"
+  },
+  {
+    "code": "LD2F.15",
+    "name": "Noonan syndrome"
+  },
+  {
+    "code": "LD40.0",
+    "name": "Complete trisomy 21"
+  },
+  {
+    "code": "LD40.1",
+    "name": "Complete trisomy 13"
+  },
+  {
+    "code": "LD40.2",
+    "name": "Complete trisomy 18"
+  },
+  {
+    "code": "LD50.0",
+    "name": "Turner syndrome"
+  },
+  {
+    "code": "LD50.3",
+    "name": "Klinefelter syndrome"
+  },
+  {
+    "code": "MA01.0",
+    "name": "Localised lymph node enlargement"
+  },
+  {
+    "code": "MA01.1",
+    "name": "Generalised lymph node enlargement"
+  },
+  {
+    "code": "MA14.15",
+    "name": "Elevated C-reactive protein"
+  },
+  {
+    "code": "MA14.1E",
+    "name": "Rheumatoid factor positive"
+  },
+  {
+    "code": "MA15.0",
+    "name": "Bacteraemia"
+  },
+  {
+    "code": "MA16.11",
+    "name": "Elevated white blood cell count"
+  },
+  {
+    "code": "MA18.0",
+    "name": "Elevated blood glucose level"
+  },
+  {
+    "code": "MA18.4",
+    "name": "Low haemoglobin"
+  },
+  {
+    "code": "MA1A",
+    "name": "Elevated erythrocyte sedimentation rate or abnormality of plasma viscosity"
+  },
+  {
+    "code": "MA80",
+    "name": "Speech disturbances"
+  },
+  {
+    "code": "MB20.0",
+    "name": "Stupor"
+  },
+  {
+    "code": "MB20.1",
+    "name": "Coma"
+  },
+  {
+    "code": "MB21.1",
+    "name": "Amnesia"
+  },
+  {
+    "code": "MB23.R",
+    "name": "Suicide attempt"
+  },
+  {
+    "code": "MB40.5",
+    "name": "Hyperaesthesia"
+  },
+  {
+    "code": "MB44.0",
+    "name": "Ataxic gait"
+  },
+  {
+    "code": "MB44.1",
+    "name": "Paralytic gait"
+  },
+  {
+    "code": "MB47.3",
+    "name": "Cramp or spasm"
+  },
+  {
+    "code": "MB47.5",
+    "name": "Fasciculation"
+  },
+  {
+    "code": "MB47.6",
+    "name": "Meningismus"
+  },
+  {
+    "code": "MB47.B",
+    "name": "Opisthotonos"
+  },
+  {
+    "code": "MB48.0",
+    "name": "Vertigo"
+  },
+  {
+    "code": "MB50",
+    "name": "Tetraplegia"
+  },
+  {
+    "code": "MB51",
+    "name": "Diplegia of upper extremities"
+  },
+  {
+    "code": "MB52",
+    "name": "Diplegia of lower extremities"
+  },
+  {
+    "code": "MB53.1",
+    "name": "Flaccid hemiplegia"
+  },
+  {
+    "code": "MB53.2",
+    "name": "Spastic hemiplegia"
+  },
+  {
+    "code": "MB53.Z",
+    "name": "Hemiplegia, unspecified"
+  },
+  {
+    "code": "MB54",
+    "name": "Monoplegia of upper extremity"
+  },
+  {
+    "code": "MB55",
+    "name": "Monoplegia of lower extremity"
+  },
+  {
+    "code": "MB56",
+    "name": "Paraplegia"
+  },
+  {
+    "code": "MC14",
+    "name": "Eye discharge"
+  },
+  {
+    "code": "MC15",
+    "name": "Red eye"
+  },
+  {
+    "code": "MC16",
+    "name": "Pallor conjunctiva"
+  },
+  {
+    "code": "MC17",
+    "name": "Icteric sclera"
+  },
+  {
+    "code": "MC1A",
+    "name": "Visual floaters"
+  },
+  {
+    "code": "MC41",
+    "name": "Tinnitus"
+  },
+  {
+    "code": "MC80.0",
+    "name": "Elevated blood-pressure reading, without diagnosis of hypertension"
+  },
+  {
+    "code": "MC81.0",
+    "name": "Tachycardia, unspecified"
+  },
+  {
+    "code": "MC81.1",
+    "name": "Bradycardia, unspecified"
+  },
+  {
+    "code": "MC81.2",
+    "name": "Palpitations"
+  },
+  {
+    "code": "MC81.3",
+    "name": "Paroxysmal tachycardia"
+  },
+  {
+    "code": "MC82",
+    "name": "Cardiac arrest"
+  },
+  {
+    "code": "MC83",
+    "name": "Cardiac murmurs and other cardiac sounds"
+  },
+  {
+    "code": "MC85",
+    "name": "Gangrene"
+  },
+  {
+    "code": "MD11.0",
+    "name": "Apnoea"
+  },
+  {
+    "code": "MD11.5",
+    "name": "Dyspnoea"
+  },
+  {
+    "code": "MD11.6",
+    "name": "Hiccough"
+  },
+  {
+    "code": "MD11.7",
+    "name": "Hyperventilation"
+  },
+  {
+    "code": "MD11.9",
+    "name": "Nasal congestion"
+  },
+  {
+    "code": "MD11.B",
+    "name": "Stridor"
+  },
+  {
+    "code": "MD11.C",
+    "name": "Wheezing"
+  },
+  {
+    "code": "MD12",
+    "name": "Cough"
+  },
+  {
+    "code": "MD20",
+    "name": "Epistaxis"
+  },
+  {
+    "code": "MD22",
+    "name": "Haemoptysis"
+  },
+  {
+    "code": "MD31",
+    "name": "Pleurisy"
+  },
+  {
+    "code": "MD33",
+    "name": "Respiratory arrest"
+  },
+  {
+    "code": "MD81.3",
+    "name": "Acute abdomen"
+  },
+  {
+    "code": "MD92",
+    "name": "Dyspepsia"
+  },
+  {
+    "code": "MD94",
+    "name": "Halitosis"
+  },
+  {
+    "code": "ME01",
+    "name": "Abdominal distension"
+  },
+  {
+    "code": "ME02",
+    "name": "Abdominal rigidity"
+  },
+  {
+    "code": "ME04",
+    "name": "Ascites"
+  },
+  {
+    "code": "ME05.1",
+    "name": "Diarrhoea"
+  },
+  {
+    "code": "ME07",
+    "name": "Faecal incontinence"
+  },
+  {
+    "code": "ME09",
+    "name": "Rectal tenesmus"
+  },
+  {
+    "code": "ME0A",
+    "name": "Visible peristalsis"
+  },
+  {
+    "code": "ME10.1",
+    "name": "Unspecified jaundice"
+  },
+  {
+    "code": "ME24.A3",
+    "name": "Haematochezia"
+  },
+  {
+    "code": "ME24.A4",
+    "name": "Melaena"
+  },
+  {
+    "code": "ME64.1",
+    "name": "Cyanosis"
+  },
+  {
+    "code": "ME64.2",
+    "name": "Pallor"
+  },
+  {
+    "code": "ME66.6",
+    "name": "Rash"
+  },
+  {
+    "code": "ME83",
+    "name": "Rheumatism, unspecified"
+  },
+  {
+    "code": "ME84.2",
+    "name": "Low back pain"
+  },
+  {
+    "code": "ME84.3",
+    "name": "Sciatica"
+  },
+  {
+    "code": "ME85",
+    "name": "Stiffness of joint"
+  },
+  {
+    "code": "MF30",
+    "name": "Breast lump or mass female"
+  },
+  {
+    "code": "MF3A",
+    "name": "Vaginal discharge"
+  },
+  {
+    "code": "MF50.2",
+    "name": "Urinary incontinence"
+  },
+  {
+    "code": "MF50.3",
+    "name": "Retention of urine"
+  },
+  {
+    "code": "MF50.4",
+    "name": "Haematuria"
+  },
+  {
+    "code": "MF50.7",
+    "name": "Dysuria"
+  },
+  {
+    "code": "MF51",
+    "name": "Anuria or oliguria"
+  },
+  {
+    "code": "MF55",
+    "name": "Polyuria"
+  },
+  {
+    "code": "MF56",
+    "name": "Renal colic"
+  },
+  {
+    "code": "MF58",
+    "name": "Urethral discharge"
+  },
+  {
+    "code": "MF84",
+    "name": "Pauci-immune proliferative glomerulonephritis"
+  },
+  {
+    "code": "MF94",
+    "name": "Haemoglobinuria"
+  },
+  {
+    "code": "MF96",
+    "name": "Proteinuria"
+  },
+  {
+    "code": "MF97",
+    "name": "Pyuria"
+  },
+  {
+    "code": "MG20",
+    "name": "Cachexia"
+  },
+  {
+    "code": "MG22",
+    "name": "Fatigue"
+  },
+  {
+    "code": "MG29",
+    "name": "Oedema"
+  },
+  {
+    "code": "MG29.0",
+    "name": "Localised oedema"
+  },
+  {
+    "code": "MG29.1",
+    "name": "Generalised oedema"
+  },
+  {
+    "code": "MG40",
+    "name": "Shock"
+  },
+  {
+    "code": "MG43.0",
+    "name": "Polydipsia"
+  },
+  {
+    "code": "MG45",
+    "name": "Syncope and collapse"
+  },
+  {
+    "code": "MH11",
+    "name": "Sudden infant death syndrome"
+  },
+  {
+    "code": "MH16",
+    "name": "Multi organ failure"
+  },
+  {
+    "code": "NA00",
+    "name": "Superficial injury of head"
+  },
+  {
+    "code": "NA00.0Y",
+    "name": "Other specified superficial injury of scalp"
+  },
+  {
+    "code": "NA00.1",
+    "name": "Superficial injury of eyelid or periocular area"
+  },
+  {
+    "code": "NA01",
+    "name": "Open wound of head"
+  },
+  {
+    "code": "NA02",
+    "name": "Fracture of skull or facial bones"
+  },
+  {
+    "code": "NA02.1",
+    "name": "Fracture of base of skull"
+  },
+  {
+    "code": "NA02.3",
+    "name": "Fracture of nasal bones"
+  },
+  {
+    "code": "NA02.5",
+    "name": "Fracture of zygoma"
+  },
+  {
+    "code": "NA02.6",
+    "name": "Fracture of tooth"
+  },
+  {
+    "code": "NA02.7",
+    "name": "Fracture of mandible"
+  },
+  {
+    "code": "NA03.0",
+    "name": "Dislocation of jaw"
+  },
+  {
+    "code": "NA04",
+    "name": "Injury of cranial nerves"
+  },
+  {
+    "code": "NA06",
+    "name": "Injury of eye or orbit"
+  },
+  {
+    "code": "NA06.8",
+    "name": "Traumatic injury to eyeball"
+  },
+  {
+    "code": "NA07",
+    "name": "Intracranial injury"
+  },
+  {
+    "code": "NA07.0",
+    "name": "Concussion"
+  },
+  {
+    "code": "NA07.2",
+    "name": "Traumatic cerebral oedema"
+  },
+  {
+    "code": "NA08",
+    "name": "Crushing injury of head"
+  },
+  {
+    "code": "NA09.0",
+    "name": "Avulsion of scalp"
+  },
+  {
+    "code": "NA0A.Y",
+    "name": "Other specified injuries of head"
+  },
+  {
+    "code": "NA20",
+    "name": "Superficial injury of neck"
+  },
+  {
+    "code": "NA21",
+    "name": "Open wound of neck"
+  },
+  {
+    "code": "NA22",
+    "name": "Fracture of neck"
+  },
+  {
+    "code": "NA22.12",
+    "name": "Fracture of odontoid process"
+  },
+  {
+    "code": "NA23.1",
+    "name": "Dislocation of cervical vertebra"
+  },
+  {
+    "code": "NA6Y",
+    "name": "Other specified injuries to the neck"
+  },
+  {
+    "code": "NA80",
+    "name": "Superficial injury of thorax"
+  },
+  {
+    "code": "NA81",
+    "name": "Open wound of thorax"
+  },
+  {
+    "code": "NA82",
+    "name": "Fracture of rib, sternum or thoracic spine"
+  },
+  {
+    "code": "NA82.0",
+    "name": "Fracture of thoracic vertebra"
+  },
+  {
+    "code": "NA82.3",
+    "name": "Fracture of rib"
+  },
+  {
+    "code": "NA82.4",
+    "name": "Multiple fractures of ribs"
+  },
+  {
+    "code": "NA82.5",
+    "name": "Flail chest"
+  },
+  {
+    "code": "NA9Z",
+    "name": "Injury of thoracic spinal cord, unspecified"
+  },
+  {
+    "code": "NB31",
+    "name": "Injury of heart"
+  },
+  {
+    "code": "NB32.0",
+    "name": "Traumatic pneumothorax"
+  },
+  {
+    "code": "NB32.1",
+    "name": "Traumatic haemothorax"
+  },
+  {
+    "code": "NB32.2",
+    "name": "Traumatic haemopneumothorax"
+  },
+  {
+    "code": "NB3Y",
+    "name": "Other specified injuries to the thorax"
+  },
+  {
+    "code": "NB50",
+    "name": "Superficial injury of abdomen, lower back or pelvis"
+  },
+  {
+    "code": "NB51",
+    "name": "Open wound of abdomen, lower back or pelvis"
+  },
+  {
+    "code": "NB52",
+    "name": "Fracture of lumbar spine or pelvis"
+  },
+  {
+    "code": "NB52.0",
+    "name": "Fracture of lumbar vertebra"
+  },
+  {
+    "code": "NB52.11",
+    "name": "Fracture of coccyx"
+  },
+  {
+    "code": "NB91",
+    "name": "Injury of intra-abdominal organs"
+  },
+  {
+    "code": "NB92",
+    "name": "Injury of urinary or pelvic organs"
+  },
+  {
+    "code": "NC10",
+    "name": "Superficial injury of shoulder or upper arm"
+  },
+  {
+    "code": "NC11",
+    "name": "Open wound of shoulder or upper arm"
+  },
+  {
+    "code": "NC12",
+    "name": "Fracture of shoulder or upper arm"
+  },
+  {
+    "code": "NC12.0",
+    "name": "Fracture of clavicle"
+  },
+  {
+    "code": "NC12.1",
+    "name": "Fracture of scapula"
+  },
+  {
+    "code": "NC13.0",
+    "name": "Dislocation of shoulder joint"
+  },
+  {
+    "code": "NC13.Z",
+    "name": "Dislocation or strain or sprain of joints or ligaments of shoulder girdle, unspecified"
+  },
+  {
+    "code": "NC14",
+    "name": "Injury of nerves at shoulder or upper arm level"
+  },
+  {
+    "code": "NC15",
+    "name": "Injury of blood vessels at shoulder or upper arm level"
+  },
+  {
+    "code": "NC16",
+    "name": "Injury of muscle, fascia, tendon or bursa at shoulder or upper arm level"
+  },
+  {
+    "code": "NC17",
+    "name": "Crushing injury of shoulder or upper arm"
+  },
+  {
+    "code": "NC18",
+    "name": "Traumatic amputation of shoulder or upper arm"
+  },
+  {
+    "code": "NC30",
+    "name": "Superficial injury of forearm"
+  },
+  {
+    "code": "NC31",
+    "name": "Open wound of forearm"
+  },
+  {
+    "code": "NC32",
+    "name": "Fracture of forearm"
+  },
+  {
+    "code": "NC33",
+    "name": "Dislocation or strain or sprain of joints or ligaments of elbow"
+  },
+  {
+    "code": "NC34",
+    "name": "Injury of nerves at forearm level"
+  },
+  {
+    "code": "NC35",
+    "name": "Injury of blood vessels at forearm level"
+  },
+  {
+    "code": "NC37",
+    "name": "Crushing injury of forearm"
+  },
+  {
+    "code": "NC38",
+    "name": "Traumatic amputation of forearm"
+  },
+  {
+    "code": "NC50",
+    "name": "Injury to fingernail"
+  },
+  {
+    "code": "NC51",
+    "name": "Superficial injury of wrist or hand"
+  },
+  {
+    "code": "NC52",
+    "name": "Open wound of wrist or hand"
+  },
+  {
+    "code": "NC53",
+    "name": "Fracture at wrist or hand level"
+  },
+  {
+    "code": "NC54.2Y",
+    "name": "Dislocation of other specified part of finger"
+  },
+  {
+    "code": "NC55",
+    "name": "Injury of nerves at wrist or hand level"
+  },
+  {
+    "code": "NC56",
+    "name": "Injury of blood vessels at wrist or hand level"
+  },
+  {
+    "code": "NC59",
+    "name": "Traumatic amputation of wrist or hand"
+  },
+  {
+    "code": "NC70",
+    "name": "Superficial injury of hip or thigh"
+  },
+  {
+    "code": "NC72",
+    "name": "Fracture of femur"
+  },
+  {
+    "code": "NC74",
+    "name": "Injury of nerves at hip or thigh level"
+  },
+  {
+    "code": "NC75",
+    "name": "Injury of blood vessels at hip or thigh level"
+  },
+  {
+    "code": "NC78",
+    "name": "Traumatic amputation of hip or thigh"
+  },
+  {
+    "code": "NC91",
+    "name": "Open wound of knee or lower leg"
+  },
+  {
+    "code": "NC92",
+    "name": "Fracture of lower leg, including ankle"
+  },
+  {
+    "code": "NC93",
+    "name": "Dislocation or strain or sprain of joints or ligaments of knee"
+  },
+  {
+    "code": "NC93.2",
+    "name": "Dislocation of knee"
+  },
+  {
+    "code": "NC94",
+    "name": "Injury of nerves at lower leg level"
+  },
+  {
+    "code": "ND10",
+    "name": "Injury to toenail"
+  },
+  {
+    "code": "ND11",
+    "name": "Superficial injury of ankle or foot"
+  },
+  {
+    "code": "ND19",
+    "name": "Traumatic amputation of ankle or foot"
+  },
+  {
+    "code": "ND1Z",
+    "name": "Injuries to the ankle or foot, unspecified"
+  },
+  {
+    "code": "ND70",
+    "name": "Foreign body on external eye"
+  },
+  {
+    "code": "ND71",
+    "name": "Foreign body in ear"
+  },
+  {
+    "code": "ND72",
+    "name": "Foreign body in respiratory tract"
+  },
+  {
+    "code": "NE01",
+    "name": "Burn of respiratory tract"
+  },
+  {
+    "code": "NE2Z",
+    "name": "Burns, unspecified"
+  },
+  {
+    "code": "NE4Z",
+    "name": "Frostbite, unspecified"
+  },
+  {
+    "code": "NE60&NE60&XM1X11",
+    "name": "Carbon monoxide poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM0TV9",
+    "name": "Formaldehyde poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM0ZH6",
+    "name": "Lead poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM32P2",
+    "name": "Pentachlorophenol poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM3ES1",
+    "name": "Tranquilizers poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM4XU4",
+    "name": "Chlorinated hydrocarbons poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM4YG0",
+    "name": "Barbiturate poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM7154",
+    "name": "Organophosphate insecticide poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM86W0",
+    "name": "Warfarin poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM96H3",
+    "name": "Carbamates poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM9EL1",
+    "name": "DDT (chlorophenothane) poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NE60&XM9JS2",
+    "name": "Strychnine rodenticide poisoning [Harmful effects of substances]"
+  },
+  {
+    "code": "NF05",
+    "name": "Asphyxiation"
+  },
+  {
+    "code": "NF08.0",
+    "name": "Effects of lightning"
+  },
+  {
+    "code": "NF08.1",
+    "name": "Drowning or nonfatal submersion"
+  },
+  {
+    "code": "NF2Y",
+    "name": "Other specified injury, poisoning or certain other consequences of external causes"
+  },
+  {
+    "code": "PA0Z",
+    "name": "Unintentional land transport traffic event injuring a user of unspecified land transport"
+  },
+  {
+    "code": "PA5Z",
+    "name": "Unintentional transport injury event, unspecified"
+  },
+  {
+    "code": "PA60",
+    "name": "Unintentional fall on the same level or from less than 1 metre"
+  },
+  {
+    "code": "PA6Z",
+    "name": "Unintentional fall from unspecified height"
+  },
+  {
+    "code": "PA70",
+    "name": "Unintentionally struck, kicked, or bumped by person"
+  },
+  {
+    "code": "PA72",
+    "name": "Unintentionally stepped on or crushed by person"
+  },
+  {
+    "code": "PA74",
+    "name": "Unintentionally bitten by person"
+  },
+  {
+    "code": "PA75",
+    "name": "Unintentionally bitten by animal"
+  },
+  {
+    "code": "PA76",
+    "name": "Unintentionally scratched or clawed by person"
+  },
+  {
+    "code": "PA78",
+    "name": "Unintentionally stung or envenomated by animal"
+  },
+  {
+    "code": "PA79",
+    "name": "Unintentionally injured by contact with plant"
+  },
+  {
+    "code": "PA80",
+    "name": "Unintentionally struck by projectile from firearm"
+  },
+  {
+    "code": "PA81",
+    "name": "Unintentionally struck by moving object"
+  },
+  {
+    "code": "PA82",
+    "name": "Unintentional striking against stationary object"
+  },
+  {
+    "code": "PA83",
+    "name": "Unintentionally cut or pierced by sharp object"
+  },
+  {
+    "code": "PA84",
+    "name": "Unintentionally struck by blunt object"
+  },
+  {
+    "code": "PA85",
+    "name": "Unintentionally caught, crushed, jammed or pinched between objects"
+  },
+  {
+    "code": "PA8Y",
+    "name": "Unintentional exposure to other specified object, not elsewhere classified"
+  },
+  {
+    "code": "PA90",
+    "name": "Unintentional drowning or submersion, while in body of water"
+  },
+  {
+    "code": "PA91",
+    "name": "Unintentional drowning or submersion, following fall into body of water"
+  },
+  {
+    "code": "PA92",
+    "name": "Unintentional injury other than drowning following fall into body of water"
+  },
+  {
+    "code": "PB00",
+    "name": "Unintentional threat to breathing by suffocation from object covering mouth or nose"
+  },
+  {
+    "code": "PB01",
+    "name": "Unintentional threat to breathing by hanging"
+  },
+  {
+    "code": "PB02",
+    "name": "Unintentional threat to breathing by strangulation"
+  },
+  {
+    "code": "PB03",
+    "name": "Unintentional threat to breathing by external compression of airways or chest"
+  },
+  {
+    "code": "PB04",
+    "name": "Unintentional threat to breathing by inhalation or ingestion of gastric contents"
+  },
+  {
+    "code": "PB05",
+    "name": "Unintentional threat to breathing by inhalation or ingestion of liquids"
+  },
+  {
+    "code": "PB06",
+    "name": "Unintentional threat to breathing by inhalation or ingestion of food"
+  },
+  {
+    "code": "PB07",
+    "name": "Unintentional threat to breathing by inhalation or ingestion of other objects or materials"
+  },
+  {
+    "code": "PB08",
+    "name": "Unintentional threat to breathing from low oxygen environment"
+  },
+  {
+    "code": "PB0Y",
+    "name": "Unintentional threat to breathing by other specified means"
+  },
+  {
+    "code": "PB10",
+    "name": "Unintentional exposure to uncontrolled fire"
+  },
+  {
+    "code": "PB11",
+    "name": "Unintentional exposure to controlled fire"
+  },
+  {
+    "code": "PB12",
+    "name": "Unintentional exposure to ignition, or melting of material"
+  },
+  {
+    "code": "PB13",
+    "name": "Unintentional contact with hot object or liquid"
+  },
+  {
+    "code": "PB14",
+    "name": "Unintentional exposure to steam, hot vapour, air or gases"
+  },
+  {
+    "code": "PB15",
+    "name": "Unintentional exposure to excessive heat"
+  },
+  {
+    "code": "PB16",
+    "name": "Unintentional exposure to excessive cold"
+  },
+  {
+    "code": "PB1Y",
+    "name": "Unintentional exposure to other specified thermal mechanism"
+  },
+  {
+    "code": "PB20",
+    "name": "Unintentional exposure to or harmful effects of opioids or related analgesics"
+  },
+  {
+    "code": "PB21",
+    "name": "Unintentional exposure to or harmful effects of sedative hypnotic drugs or other CNS depressants"
+  },
+  {
+    "code": "PB22",
+    "name": "Unintentional exposure to or harmful effects of psychostimulants"
+  },
+  {
+    "code": "PB24",
+    "name": "Unintentional exposure to or harmful effects of analgesics, antipyretics or nonsteroidal anti-inflammatory drugs"
+  },
+  {
+    "code": "PB25",
+    "name": "Unintentional exposure to or harmful effects of antidepressants"
+  },
+  {
+    "code": "PB26",
+    "name": "Unintentional exposure to or harmful effects of antipsychotics"
+  },
+  {
+    "code": "PB27",
+    "name": "Unintentional exposure to or harmful effects of antiepileptics or antiparkinsonism drugs"
+  },
+  {
+    "code": "PB29",
+    "name": "Unintentional exposure to or harmful effects of multiple drugs, medicaments or biological substances"
+  },
+  {
+    "code": "PB30",
+    "name": "Unintentional exposure to or harmful effects of alcohols"
+  },
+  {
+    "code": "PB31",
+    "name": "Unintentional exposure to or harmful effects of organic solvents"
+  },
+  {
+    "code": "PB32",
+    "name": "Unintentional exposure to or harmful effects of carbon monoxide"
+  },
+  {
+    "code": "PB33",
+    "name": "Unintentional exposure to or harmful effects of pesticides"
+  },
+  {
+    "code": "PB34",
+    "name": "Unintentional exposure to or harmful effects of corrosive substances"
+  },
+  {
+    "code": "PB50",
+    "name": "Unintentional exposure to foreign body in orifice"
+  },
+  {
+    "code": "PB51",
+    "name": "Unintentional exposure to electric current"
+  },
+  {
+    "code": "PB53",
+    "name": "Unintentional exposure to radiation"
+  },
+  {
+    "code": "PB54",
+    "name": "Unintentional exposure to high or low air pressure or changes in air pressure"
+  },
+  {
+    "code": "PB55",
+    "name": "Unintentional exposure to explosion"
+  },
+  {
+    "code": "PC2Z",
+    "name": "Intentional self-harm by transport injury event, unspecified"
+  },
+  {
+    "code": "PC31",
+    "name": "Intentional self-harm by fall or jump from a height of 1 metre or more"
+  },
+  {
+    "code": "PC3Z",
+    "name": "Intentional self-harm by fall or jump, unspecified"
+  },
+  {
+    "code": "PC4Z",
+    "name": "Intentional self-harm by contact with person, animal or plant, type unspecified"
+  },
+  {
+    "code": "PC50",
+    "name": "Intentional self-harm by being struck by projectile from firearm"
+  },
+  {
+    "code": "PC53",
+    "name": "Intentional self-harm by being cut or pierced by sharp object"
+  },
+  {
+    "code": "PC54",
+    "name": "Intentional self-harm by being struck by blunt object"
+  },
+  {
+    "code": "PC55",
+    "name": "Intentional self-harm by being caught, crushed, jammed or pinched between objects"
+  },
+  {
+    "code": "PC5Z",
+    "name": "Intentional self harm by contact with weapon, type unspecified"
+  },
+  {
+    "code": "PC71",
+    "name": "Intentional self-harm by threat to breathing by hanging"
+  },
+  {
+    "code": "PC77",
+    "name": "Intentional self-harm by threat to breathing by inhalation or ingestion of other objects or materials"
+  },
+  {
+    "code": "PC78",
+    "name": "Intentional self-harm by threat to breathing from low oxygen environment"
+  },
+  {
+    "code": "PC80",
+    "name": "Intentional self-harm by exposure to controlled fire"
+  },
+  {
+    "code": "PC82",
+    "name": "Intentional self-harm by exposure to ignition or melting of material"
+  },
+  {
+    "code": "PC90",
+    "name": "Intentional self-harm by exposure to or harmful effects of opioids or related analgesics"
+  },
+  {
+    "code": "PC91",
+    "name": "Intentional self-harm by exposure to or harmful effects of sedative hypnotic drugs or other CNS depressants"
+  },
+  {
+    "code": "PC92",
+    "name": "Intentional self-harm by exposure to or harmful effects of psychostimulants"
+  },
+  {
+    "code": "PD03",
+    "name": "Intentional self-harm by exposure to or harmful effects of pesticides"
+  },
+  {
+    "code": "PD21",
+    "name": "Intentional self-harm by exposure to electric current"
+  },
+  {
+    "code": "PD3Z",
+    "name": "Intentional self-harm, unspecified"
+  },
+  {
+    "code": "PD50",
+    "name": "Assault by land transport road traffic injury event"
+  },
+  {
+    "code": "PD9Z",
+    "name": "Assault by transport injury event, unspecified"
+  },
+  {
+    "code": "PE01",
+    "name": "Assault by causing a fall or jump from a height of 1 metre or more"
+  },
+  {
+    "code": "PE0Z",
+    "name": "Assault by causing a fall or jump from unspecified height"
+  },
+  {
+    "code": "PE10",
+    "name": "Assault by being struck, kicked or bumped by person"
+  },
+  {
+    "code": "PE11",
+    "name": "Assault by being struck, kicked or bumped by animal"
+  },
+  {
+    "code": "PE13",
+    "name": "Assault by being crushed or stepped on by animal"
+  },
+  {
+    "code": "PE14",
+    "name": "Assault by being bitten by person"
+  },
+  {
+    "code": "PE15",
+    "name": "Assault by being bitten by animal"
+  },
+  {
+    "code": "PE17",
+    "name": "Assault by being scratched or clawed by animal"
+  },
+  {
+    "code": "PE18",
+    "name": "Assault by being stung or envenomated by animal"
+  },
+  {
+    "code": "PE20",
+    "name": "Assault by projectile from firearm"
+  },
+  {
+    "code": "PE21",
+    "name": "Assault by being struck by moving object, not elsewhere classified"
+  },
+  {
+    "code": "PE22",
+    "name": "Assault by striking against stationary object"
+  },
+  {
+    "code": "PE30",
+    "name": "Assault by being cut or pierced by knife, sword, or dagger"
+  },
+  {
+    "code": "PE31",
+    "name": "Assault by being cut or pierced by sharp glass"
+  },
+  {
+    "code": "PE3Z",
+    "name": "Assault by being cut or pierced by other or unspecified sharp object"
+  },
+  {
+    "code": "PE40",
+    "name": "Assault by being struck by blunt object"
+  },
+  {
+    "code": "PE41",
+    "name": "Assault by being caught, crushed, jammed or pinched between objects"
+  },
+  {
+    "code": "PE4Y",
+    "name": "Assault by contact with other specified object, not elsewhere classified"
+  },
+  {
+    "code": "PE50",
+    "name": "Assault by drowning or submersion, while in body of water"
+  },
+  {
+    "code": "PE51",
+    "name": "Assault by drowning or submersion following fall into body of water"
+  },
+  {
+    "code": "PE52",
+    "name": "Assault by injury other than drowning while in body of water"
+  },
+  {
+    "code": "PE53",
+    "name": "Assault by injury other than drowning following fall into body of water"
+  },
+  {
+    "code": "PE60",
+    "name": "Assault by threat to breathing, suffocation from object covering mouth or nose"
+  },
+  {
+    "code": "PE61",
+    "name": "Assault by threat to breathing by hanging"
+  },
+  {
+    "code": "PE62",
+    "name": "Assault by threat to breathing by strangulation"
+  },
+  {
+    "code": "PE63",
+    "name": "Assault by threat to breathing by external compression of airways or chest"
+  },
+  {
+    "code": "PE64",
+    "name": "Assault by threat to breathing by inhalation or ingestion of liquids"
+  },
+  {
+    "code": "PE70",
+    "name": "Assault by exposure to uncontrolled fire"
+  },
+  {
+    "code": "PE74",
+    "name": "Assault by contact with steam, hot vapour, air or gases"
+  },
+  {
+    "code": "PE92",
+    "name": "Assault by exposure to or harmful effects of carbon monoxide"
+  },
+  {
+    "code": "PE93",
+    "name": "Assault by exposure to or harmful effects of pesticides"
+  },
+  {
+    "code": "PF15",
+    "name": "Assault by exposure to explosion"
+  },
+  {
+    "code": "PJ00",
+    "name": "Victim of lightning"
+  },
+  {
+    "code": "PJ01",
+    "name": "Victim of earthquake"
+  },
+  {
+    "code": "QA00.0",
+    "name": "General adult medical examination"
+  },
+  {
+    "code": "QA00.4",
+    "name": "Examination of potential donor of organ or tissue"
+  },
+  {
+    "code": "QA00.6",
+    "name": "Examination of eyes or vision"
+  },
+  {
+    "code": "QA00.7",
+    "name": "Examination of ears and hearing"
+  },
+  {
+    "code": "QA00.8",
+    "name": "Dental examination"
+  },
+  {
+    "code": "QA01.0",
+    "name": "Examination for admission to educational institution"
+  },
+  {
+    "code": "QA01.1",
+    "name": "Pre-employment examination"
+  },
+  {
+    "code": "QA01.3",
+    "name": "Examination for recruitment to armed forces"
+  },
+  {
+    "code": "QA01.4",
+    "name": "Examination for driving license"
+  },
+  {
+    "code": "QA01.5",
+    "name": "Examination for participation in sport"
+  },
+  {
+    "code": "QA01.6",
+    "name": "Examination for insurance purposes"
+  },
+  {
+    "code": "QA01.7",
+    "name": "Issue of medical certificate"
+  },
+  {
+    "code": "QA04.51",
+    "name": "Examination or observation for suspected sexual maltreatment"
+  },
+  {
+    "code": "QA04.7",
+    "name": "Examination for medicolegal reasons"
+  },
+  {
+    "code": "QA09.1",
+    "name": "Special screening examination for neoplasm of intestinal tract"
+  },
+  {
+    "code": "QA09.3",
+    "name": "Special screening examination for neoplasm of breast"
+  },
+  {
+    "code": "QA09.4",
+    "name": "Special screening examination for neoplasm of cervix"
+  },
+  {
+    "code": "QA09.5",
+    "name": "Special screening examination for neoplasm of prostate"
+  },
+  {
+    "code": "QA40",
+    "name": "Pregnancy examination or test"
+  },
+  {
+    "code": "QB6Z",
+    "name": "Surgical or postsurgical states, unspecified"
+  },
+  {
+    "code": "QB82",
+    "name": "Contact with health services for routine or ritual circumcision"
+  },
+  {
+    "code": "QB95",
+    "name": "Care involving use of rehabilitation procedures"
+  },
+  {
+    "code": "QB97",
+    "name": "Chemotherapy session for neoplasm"
+  },
+  {
+    "code": "QB9B",
+    "name": "Palliative care"
+  },
+  {
+    "code": "RA01.0",
+    "name": "COVID-19, virus identified"
+  },
+  {
+    "code": "RA01.1",
+    "name": "COVID-19, virus not identified"
+  },
+  {
+    "code": "RA02",
+    "name": "Post COVID-19 condition"
+  }
+]
