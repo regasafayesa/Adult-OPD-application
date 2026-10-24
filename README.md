@@ -137,6 +137,9 @@ migration file, and select **Run** once. Confirm the query succeeds, then verify
 automatically, and the live Supabase schema must be checked after it is run.
 Facility owners, administrators, and data-entry users can write these
 summaries; viewers can only read them.
+Clearing encounters does not delete registration-book summaries. Facility
+owners and administrators can clear saved aggregate summaries for a selected
+reporting period separately from the Aggregate Entry page.
 
 The ESV-1 catalog is shared through `public.official_diagnoses`; facility
 custom diagnoses remain isolated in `public.diagnoses`. Authorized facility

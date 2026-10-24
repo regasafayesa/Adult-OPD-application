@@ -98,6 +98,28 @@ export async function loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses =
   return rows.map((row) => mapMonthlyDiagnosisCountRow(row, diagnoses));
 }
 
+export async function deleteFacilityMonthlyDiagnosisCounts(facilityId, reportingYear, reportingMonth) {
+  assertSupabase();
+  if (!Number.isInteger(Number(reportingYear)) || Number(reportingYear) < 1 || Number(reportingYear) > 9999
+      || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 12) {
+    throw new Error('Select a valid reporting year and month before clearing aggregate summaries.');
+  }
+  const periodFilter = (query) => query
+    .eq('facility_id', facilityId)
+    .eq('reporting_year', Number(reportingYear))
+    .eq('reporting_month', Number(reportingMonth));
+  const deleted = unwrap(await periodFilter(
+    supabase.from('monthly_diagnosis_counts').delete().select('id')
+  ));
+  const remaining = unwrap(await periodFilter(
+    supabase.from('monthly_diagnosis_counts').select('id').limit(1)
+  ));
+  if (remaining.length > 0) {
+    throw new Error('The cloud service did not confirm deletion of all aggregate summaries for this reporting period.');
+  }
+  return deleted.length;
+}
+
 export async function saveFacilityMonthlyDiagnosisCounts(
   facilityId,
   entries,

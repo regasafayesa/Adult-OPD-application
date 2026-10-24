@@ -3983,6 +3983,14 @@ button:disabled,
   margin: 0;
 }
 
+.aopd-aggregate-page .aopd-aggregate-period-note {
+  align-self: flex-end;
+  margin: 0.65rem 0 0;
+  color: #60786e;
+  font-size: 0.84rem;
+  text-align: right;
+}
+
 .aopd-aggregate-page .aopd-aggregate-period label,
 .aopd-aggregate-page .aopd-aggregate-meta label,
 .aopd-aggregate-diagnosis-field {

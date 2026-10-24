@@ -206,6 +206,10 @@ export default function Settings() {
           Demo encounters are labelled <strong>DEMO DATA — NOT REAL PATIENT DATA</strong> and can be removed before
           official use.
         </p>
+        <p>
+          Clearing encounters does not clear registration-book summaries. Clear those separately from Aggregate Entry,
+          where you can remove summaries for one reporting month.
+        </p>
         <div className="aopd-actions">
           <button
             type="button"

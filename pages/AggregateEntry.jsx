@@ -30,8 +30,10 @@ export default function AggregateEntry() {
     monthlyDiagnosisCounts,
     monthlyDiagnosisCountsStatus,
     monthlyDiagnosisCountsError,
+    canManageFacility,
     canWriteMonthlyDiagnosisCounts,
     saveMonthlyDiagnosisCounts,
+    clearMonthlyDiagnosisCounts,
   } = useAdultOpd();
   const now = new Date();
   const [year, setYear] = useState(Number(settings.reportingYear) || now.getFullYear());
@@ -43,6 +45,7 @@ export default function AggregateEntry() {
   const [saveError, setSaveError] = useState('');
   const [success, setSuccess] = useState('');
   const [saving, setSaving] = useState(false);
+  const [clearing, setClearing] = useState(false);
   const [progress, setProgress] = useState(null);
   const [uncertainIds, setUncertainIds] = useState([]);
   const savingRef = useRef(false);
@@ -57,6 +60,7 @@ export default function AggregateEntry() {
     && Number(item.reportingMonth) === Number(month)
   );
   const selectedDiagnosis = diagnoses.find((item) => item.id === entry.diagnosisId);
+  const periodLocked = queued.length > 0 || Boolean(editingId);
 
   function changeCount(field, value) {
     setEntry((previous) => ({
@@ -188,6 +192,23 @@ export default function AggregateEntry() {
     }
   }
 
+  async function clearPeriod() {
+    const periodLabel = `${MONTH_NAMES[Number(month) - 1]} ${year}`;
+    if (!window.confirm(
+      `Permanently delete all ${savedForPeriod.length} saved registration-book summaries for ${periodLabel}? Individual patient encounters will not be changed.`
+    )) return;
+    setClearing(true);
+    setSaveError('');
+    setSuccess('');
+    const result = await clearMonthlyDiagnosisCounts(year, month);
+    setClearing(false);
+    if (!result.ok) {
+      setSaveError(result.error);
+      return;
+    }
+    setSuccess(`Saved aggregate summaries for ${periodLabel} were cleared. Individual encounters were not changed.`);
+  }
+
   const discrepancy = entry.registrationBookTotal !== ''
     && /^\d+$/.test(String(entry.registrationBookTotal))
     && Number(entry.registrationBookTotal) !== totals.total;
@@ -212,7 +233,7 @@ export default function AggregateEntry() {
               step="1"
               value={year}
               onChange={(event) => setYear(event.target.value)}
-              disabled={saving || queued.length > 0}
+              disabled={saving || periodLocked}
             />
           </label>
           <label>
@@ -220,12 +241,17 @@ export default function AggregateEntry() {
             <select
               value={month}
               onChange={(event) => setMonth(Number(event.target.value))}
-              disabled={saving || queued.length > 0}
+              disabled={saving || periodLocked}
             >
               {MONTH_NAMES.map((name, index) => <option key={name} value={index + 1}>{name}</option>)}
             </select>
           </label>
         </div>
+        {periodLocked && (
+          <p className="aopd-aggregate-period-note">
+            Finish or cancel the current queued/editing summaries before changing the reporting period.
+          </p>
+        )}
       </header>
 
       {monthlyDiagnosisCountsStatus === 'error' && (
@@ -356,7 +382,22 @@ export default function AggregateEntry() {
       </section>
 
       <section className="aopd-pending aopd-aggregate-list" aria-labelledby="aggregate-saved-heading">
-        <h3 id="aggregate-saved-heading">Saved summaries — {MONTH_NAMES[Number(month) - 1]} {year}</h3>
+        <div className="aopd-pending-heading">
+          <div>
+            <h3 id="aggregate-saved-heading">Saved summaries — {MONTH_NAMES[Number(month) - 1]} {year}</h3>
+            <p>These registration-book counts are separate from individual encounter records.</p>
+          </div>
+          {canManageFacility && (
+            <button
+              className="aopd-btn danger"
+              type="button"
+              onClick={clearPeriod}
+              disabled={clearing || saving || queued.length > 0 || Boolean(editingId) || savedForPeriod.length === 0}
+            >
+              {clearing ? 'Clearing…' : `Clear saved summaries (${savedForPeriod.length})`}
+            </button>
+          )}
+        </div>
         <div className="aopd-table-wrap">
           <table className="aopd-pending-table">
             <thead><tr><th>Diagnosis</th><th>Female</th><th>Male</th><th>Total</th><th>Action</th></tr></thead>

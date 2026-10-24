@@ -8,6 +8,7 @@ import {
   addFacilityDiagnosis,
   deleteEncounter,
   deleteFacilityEncounters,
+  deleteFacilityMonthlyDiagnosisCounts,
   insertEncounters,
   insertEncounter,
   importLegacyFacilityData,
@@ -131,6 +132,17 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     }
     if (!Array.isArray(entries) || entries.length === 0) {
       return { ok: false, error: 'Add at least one diagnosis summary before saving.' };
+    }
+    const batchYear = Number(entries[0]?.reportingYear);
+    const batchMonth = Number(entries[0]?.reportingMonth);
+    if (entries.some((entry) =>
+      Number(entry.reportingYear) !== batchYear
+      || Number(entry.reportingMonth) !== batchMonth
+    )) {
+      return {
+        ok: false,
+        error: 'Save aggregate summaries for one reporting month at a time.',
+      };
     }
     if (remote && syncStatus !== 'ready') {
       return {
@@ -554,6 +566,32 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     return { ok: true };
   }, [facilityId, refreshFacilityData, remote, reportSyncError, syncStatus]);
 
+  const clearMonthlyDiagnosisCounts = useCallback(async (reportingYear, reportingMonth) => {
+    if (!canManageFacility) {
+      return { ok: false, error: 'Only facility owners and administrators can clear aggregate summaries.' };
+    }
+    if (!Number.isInteger(Number(reportingYear)) || Number(reportingYear) < 1 || Number(reportingYear) > 9999
+        || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 12) {
+      return { ok: false, error: 'Select a valid reporting year and month before clearing aggregate summaries.' };
+    }
+    try {
+      if (remote) {
+        await deleteFacilityMonthlyDiagnosisCounts(facilityId, reportingYear, reportingMonth);
+      }
+      setMonthlyDiagnosisCounts((current) => current.filter((item) =>
+        Number(item.reportingYear) !== Number(reportingYear)
+        || Number(item.reportingMonth) !== Number(reportingMonth)
+      ));
+      setMonthlyDiagnosisCountsError('');
+      setMonthlyDiagnosisCountsStatus('ready');
+      return { ok: true };
+    } catch (error) {
+      const message = error.message || 'Could not clear aggregate summaries for this reporting period.';
+      setMonthlyDiagnosisCountsError(message);
+      return { ok: false, error: message };
+    }
+  }, [canManageFacility, facilityId, remote]);
+
   const demoLoaded = hasDemoRecords;
 
   const value = useMemo(
@@ -588,6 +626,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       loadDemoData,
       clearDemoData,
       clearAllRecords,
+      clearMonthlyDiagnosisCounts,
       generateMonthlyReport: (year, month) => generateMonthlyReport(records, year, month, monthlyDiagnosisCounts, diagnoses),
       generateYearlyReport: (year) => generateYearlyReport(records, year, monthlyDiagnosisCounts, diagnoses),
       generateDashboardStats: (year, month) => generateDashboardStats(records, year, month, monthlyDiagnosisCounts, diagnoses),
@@ -623,6 +662,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       loadDemoData,
       clearDemoData,
       clearAllRecords,
+      clearMonthlyDiagnosisCounts,
     ]
   );
 
