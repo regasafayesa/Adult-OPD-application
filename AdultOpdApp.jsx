@@ -112,6 +112,7 @@ function AuthGate() {
   const [retryCount, setRetryCount] = useState(0);
   const [selectedFacilityId, setSelectedFacilityId] = useState('');
   const authEventReceived = useRef(false);
+  const sessionUserId = session?.user?.id;
 
   useEffect(() => {
     if (!supabase) {
@@ -154,7 +155,7 @@ function AuthGate() {
 
   useEffect(() => {
     let cancelled = false;
-    if (!supabase || !session?.user?.id) {
+    if (!supabase || !sessionUserId) {
       setAccess({ status: 'signed_out' });
       return () => {
         cancelled = true;
@@ -265,7 +266,7 @@ function AuthGate() {
     return () => {
       cancelled = true;
     };
-  }, [session, retryCount, selectedFacilityId]);
+  }, [sessionUserId, retryCount, selectedFacilityId]);
 
   if (import.meta.env.DEV && (!supabase || import.meta.env.VITE_LOCAL_DEMO_MODE === 'true')) {
     return (
