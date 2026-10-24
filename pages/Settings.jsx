@@ -45,7 +45,7 @@ export default function Settings() {
 
   async function handleImportLegacyData() {
     if (!window.confirm(
-      'Copy this browser’s existing encounters, diagnoses, and blank cloud settings into the signed-in facility? Existing browser data will not be erased. Patient data will be sent to Supabase.'
+      'Copy this browser’s existing encounters, diagnoses, and blank cloud settings into the signed-in facility? Existing browser data will not be erased. Patient data will be sent to the cloud.'
     )) return;
 
     setImportBusy(true);
@@ -134,8 +134,8 @@ export default function Settings() {
       {!canManageFacility && <p className="aopd-save-status">Facility settings are read-only for your role.</p>}
       {isCloud && canManageFacility && (
         <p className={`aopd-save-status${settingsSyncStatus === 'error' ? ' aopd-error' : ''}`} role="status">
-          {settingsSyncStatus === 'saving' && 'Saving facility settings to Supabase…'}
-          {settingsSyncStatus === 'saved' && 'Facility settings saved to Supabase.'}
+          {settingsSyncStatus === 'saving' && 'Saving facility settings to the cloud…'}
+          {settingsSyncStatus === 'saved' && 'Facility settings saved to the cloud.'}
           {settingsSyncStatus === 'error' && 'Facility settings could not be saved. Your unsaved edits are still here; correct the issue or retry.'}
         </p>
       )}
@@ -161,7 +161,7 @@ export default function Settings() {
             onClick={handleImportLegacyData}
             disabled={importBusy || Boolean(legacyError) || !legacyData || legacyItemCount === 0}
           >
-            {importBusy ? 'Importing…' : 'Import browser data to Supabase'}
+            {importBusy ? 'Importing…' : 'Import browser data to the cloud'}
           </button>
           {importError && <p className="aopd-error" role="alert">{importError}</p>}
           {importResult && (
@@ -210,7 +210,7 @@ export default function Settings() {
           <button
             type="button"
             className="aopd-btn secondary"
-            onClick={() => handleRecordAction(loadDemoData, 'Demo encounters saved to Supabase.')}
+            onClick={() => handleRecordAction(loadDemoData, 'Demo encounters saved to the cloud.')}
             disabled={recordActionBusy}
           >
             {recordActionBusy ? 'Saving…' : hasDemoRecords ? 'Reload demo data' : 'Load demo data'}
@@ -219,7 +219,7 @@ export default function Settings() {
             <button
               type="button"
               className="aopd-btn danger"
-              onClick={() => handleRecordAction(clearDemoData, 'Demo encounters deleted from Supabase.')}
+              onClick={() => handleRecordAction(clearDemoData, 'Demo encounters deleted from the cloud.')}
               disabled={recordActionBusy}
             >
               {recordActionBusy ? 'Saving…' : 'Clear demo data'}
@@ -230,7 +230,7 @@ export default function Settings() {
             className="aopd-btn danger"
             onClick={() => {
               if (window.confirm('Delete all OPD encounters for this facility? This affects every authorized device.')) {
-                handleRecordAction(clearAllRecords, 'All facility encounters deleted from Supabase.');
+                handleRecordAction(clearAllRecords, 'All facility encounters deleted from the cloud.');
               }
             }}
             disabled={recordActionBusy}
@@ -248,8 +248,8 @@ export default function Settings() {
       <section className="aopd-panel">
         <h3>Privacy and future upgrades</h3>
         <p>
-          Signed-in encounters and diagnoses are stored in the facility Supabase project and shared with authorized
-          facility members. Facility settings are saved to Supabase. This app does not collect patient names, phone
+          Signed-in encounters and diagnoses are stored in the facility cloud project and shared with authorized
+          facility members. Facility settings are saved to the cloud. This app does not collect patient names, phone
           numbers, addresses, or national IDs; use only after your organization reviews its privacy, security, and
           backup requirements.
         </p>

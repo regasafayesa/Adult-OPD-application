@@ -21,12 +21,12 @@ if (missingVariables.length > 0) {
       (parsedUrl.hostname === 'localhost' || parsedUrl.hostname === '127.0.0.1');
 
     if (parsedUrl.protocol !== 'https:' && !isLocalDevelopment) {
-      throw new Error('The Supabase URL must use HTTPS.');
+      throw new Error('The cloud service URL must use HTTPS.');
     }
 
     supabase = createClient(supabaseUrl, supabasePublishableKey);
   } catch {
-    supabaseConfigError = 'The Supabase environment configuration is invalid.';
+    supabaseConfigError = 'The cloud service configuration is invalid.';
   }
 }
 

@@ -12,7 +12,12 @@ const EMPTY = { date: todayISO(), age: '', sex: SEX.FEMALE, diagnosis: '' };
 const BATCH_SIZE = 100;
 
 export default function PatientEntry({ editingRecord, onDone }) {
-  const { diagnoses, addRecords, addRecord, updateRecord } = useAdultOpd();
+  const {
+    diagnoses,
+    addRecords,
+    addRecord,
+    updateRecord,
+  } = useAdultOpd();
   const [form, setForm] = useState(
     editingRecord
       ? {
@@ -44,7 +49,6 @@ export default function PatientEntry({ editingRecord, onDone }) {
     id: record.id,
     errors: validateEncounter(record, { diagnoses }).errors,
   })), [diagnoses, pendingRecords]);
-
   function handleChange(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
     setSuccess('');
@@ -72,6 +76,8 @@ export default function PatientEntry({ editingRecord, onDone }) {
       age: Number(form.age),
       sex: form.sex,
       diagnosis: form.diagnosis.trim(),
+      diagnosisId: diagnoses.find((item) => item.name === form.diagnosis)?.id || '',
+      diagnosisCode: diagnoses.find((item) => item.name === form.diagnosis)?.code || '',
     };
 
     if (!editingRecord) {
@@ -92,7 +98,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
       return;
     }
     setSuccess(saveResult.refreshError
-      ? 'Encounter updated in Supabase, but the latest facility records could not be reloaded.'
+      ? 'Encounter updated in the cloud, but the latest facility records could not be reloaded.'
       : 'Encounter updated and synced to this facility.');
     onDone?.();
   }
@@ -162,7 +168,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
   }
 
   return (
-    <div className="aopd-page">
+    <div className="aopd-page aopd-entry-page">
       <h2>{editingRecord ? 'Edit encounter' : 'Patient entry'}</h2>
       <p className="aopd-lede">
         Record each OPD encounter once. Age group and OPD category are calculated automatically. Do not enter
@@ -289,7 +295,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
           <div className="aopd-pending-heading">
             <div>
               <h3 id="aopd-pending-heading">Pending encounters ({pendingRecords.length})</h3>
-              <p>Entries remain here until Supabase confirms they were saved.</p>
+              <p>Entries remain here until the cloud confirms they were saved.</p>
             </div>
             <button
               type="button"
@@ -297,7 +303,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
               onClick={handleSaveAll}
               disabled={saving || pendingRecords.length === 0}
             >
-              {saving ? 'Saving batch…' : 'Save All to Supabase'}
+              {saving ? 'Saving batch…' : 'Save All to the cloud'}
             </button>
           </div>
 

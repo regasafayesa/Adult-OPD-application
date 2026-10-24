@@ -11,7 +11,12 @@ import {
 } from '../services/export';
 
 export default function MonthlyReport() {
-  const { settings, generateMonthlyReport } = useAdultOpd();
+  const {
+    settings,
+    generateMonthlyReport,
+    monthlyDiagnosisCountsStatus,
+    monthlyDiagnosisCountsError,
+  } = useAdultOpd();
   const now = new Date();
   const [year, setYear] = useState(Number(settings.reportingYear) || now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -72,6 +77,12 @@ export default function MonthlyReport() {
       </div>
 
       {exportError && <p className="aopd-error no-print">{exportError}</p>}
+      {monthlyDiagnosisCountsStatus === 'error' && (
+        <p className="aopd-error no-print" role="alert">
+          The patient report is available, but registration-book counts could not load: {monthlyDiagnosisCountsError}
+          {' '}Review and apply <code>supabase/migrations/20261024_monthly_diagnosis_counts.sql</code> in Supabase SQL Editor, then reload.
+        </p>
+      )}
       {!report.validation.valid && (
         <div className="aopd-alert no-print">
           Calculation warning: {report.validation.warnings.join(' ')}
@@ -132,16 +143,21 @@ export default function MonthlyReport() {
               </tr>
             </thead>
             <tbody>
-              {tallyRows.map(({ code, name, counts }) => (
+              {tallyRows.map(({ code, name, counts, hasAggregate }) => (
                 <tr key={`${code}-${name}`}>
-                  <td className="aopd-ict-diagnosis">
+                  <td
+                    className="aopd-ict-diagnosis"
+                    title={hasAggregate
+                      ? 'This row includes monthly registration-book aggregate counts.'
+                      : undefined}
+                  >
                     {code ? (
                       <>
                         <strong>{code}</strong>
                         <br />
-                        {name}
+                        {name}{hasAggregate && <sup aria-label="Includes aggregate counts">*</sup>}
                       </>
-                    ) : name}
+                    ) : <>{name}{hasAggregate && <sup aria-label="Includes aggregate counts">*</sup>}</>}
                   </td>
                   {counts.map(({ male }, index) => (
                     <React.Fragment key={index}>
@@ -166,6 +182,11 @@ export default function MonthlyReport() {
               )}
             </tbody>
           </table>
+          {tallyRows.some((row) => row.hasAggregate) && (
+            <p className="aopd-aggregate-source-note">
+              * Includes registration-book aggregate counts combined with individual encounters.
+            </p>
+          )}
         </section>
 
         {(settings.responsiblePersonName || settings.position) && (
@@ -175,6 +196,7 @@ export default function MonthlyReport() {
           </footer>
         )}
       </article>
+
     </div>
   );
 }

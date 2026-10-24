@@ -4,7 +4,12 @@ import { useAdultOpd } from '../context/AdultOpdContext';
 import { exportYearlyReportExcel } from '../services/export';
 
 export default function YearlyReport() {
-  const { settings, generateYearlyReport } = useAdultOpd();
+  const {
+    settings,
+    generateYearlyReport,
+    monthlyDiagnosisCountsStatus,
+    monthlyDiagnosisCountsError,
+  } = useAdultOpd();
   const [year, setYear] = useState(Number(settings.reportingYear) || new Date().getFullYear());
   const [showTrends, setShowTrends] = useState(true);
   const [exportError, setExportError] = useState('');
@@ -24,7 +29,7 @@ export default function YearlyReport() {
       <div className="aopd-toolbar no-print">
         <div>
           <h2>Yearly report</h2>
-          <p>Age groups: 5–14, 15–29, 30–64, and ≥65.</p>
+          <p>Year totals combine individual encounters and monthly registration-book counts across six age groups.</p>
         </div>
         <div className="aopd-filters">
           <label>
@@ -41,6 +46,13 @@ export default function YearlyReport() {
       </div>
 
       {exportError && <p className="aopd-error no-print">{exportError}</p>}
+      {monthlyDiagnosisCountsStatus === 'error' && (
+        <p className="aopd-alert no-print" role="alert">
+          Yearly totals include individual encounters only because registration-book summaries could not load:
+          {' '}{monthlyDiagnosisCountsError} Review and apply
+          {' '}<code>supabase/migrations/20261024_monthly_diagnosis_counts.sql</code> in Supabase SQL Editor.
+        </p>
+      )}
       {!report.validation.valid && (
         <div className="aopd-alert no-print">{report.validation.warnings.join(' ')}</div>
       )}
@@ -50,10 +62,11 @@ export default function YearlyReport() {
           <h2>{settings.healthCenterName || 'Health Center Name not set'}</h2>
           <h3>OPD YEARLY REPORT</h3>
           <p>Reporting Year: {report.year}</p>
+          <p>Totals include individual encounters and registration-book aggregates. Individual encounter records are unchanged.</p>
         </header>
 
         <section className="aopd-table-card">
-          <h3>Monthly OPD totals</h3>
+          <h3>Monthly combined totals</h3>
           <div className="aopd-table-wrap">
             <table>
               <thead>
@@ -87,7 +100,33 @@ export default function YearlyReport() {
         </section>
 
         <section className="aopd-table-card">
-          <h3>Yearly diagnosis statistics</h3>
+          <h3>Combined cases by age group</h3>
+          <div className="aopd-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Age group</th>
+                  <th className="num">Male</th>
+                  <th className="num">Female</th>
+                  <th className="num">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(report.ageGroups).map(([key, group]) => (
+                  <tr key={key}>
+                    <td>{group.label}</td>
+                    <td className="num">{group.male}</td>
+                    <td className="num">{group.female}</td>
+                    <td className="num">{group.total}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="aopd-table-card">
+          <h3>Combined yearly diagnosis statistics</h3>
           <div className="aopd-table-wrap">
             <table>
               <thead>
@@ -119,7 +158,7 @@ export default function YearlyReport() {
 
         <label className="aopd-inline no-print">
           <input type="checkbox" checked={showTrends} onChange={(e) => setShowTrends(e.target.checked)} />
-          Show diagnosis trends by month
+          Show combined diagnosis trends by month
         </label>
 
         {showTrends && Object.keys(report.diagnosisByMonth).length > 0 && (

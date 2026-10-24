@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ADULT_AGE_GROUPS, MONTH_NAMES } from '../constants';
+import { MONTH_NAMES } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 
 export default function Dashboard() {
@@ -12,23 +12,25 @@ export default function Dashboard() {
     clearDemoData,
     canManageFacility,
     canWriteEncounters,
+    monthlyDiagnosisCountsStatus,
+    monthlyDiagnosisCountsError,
   } = useAdultOpd();
   const now = new Date();
   const [year, setYear] = useState(Number(settings.reportingYear) || now.getFullYear());
   const [month, setMonth] = useState(now.getMonth() + 1);
   const stats = useMemo(() => generateDashboardStats(year, month), [generateDashboardStats, year, month]);
   const { monthly } = stats;
-  const ageMax = Math.max(...ADULT_AGE_GROUPS.map((group) => monthly.ageGroups[group].total), 1);
+  const ageMax = Math.max(...Object.values(monthly.combined.ageGroups).map((group) => group.total), 1);
   const diagnosisMax = Math.max(...stats.diagnosisBars.map((item) => item.total), 1);
   const trendMax = Math.max(...stats.trend.map((item) => item.total), 1);
-  const sexTotal = monthly.overall.male + monthly.overall.female || 1;
+  const sexTotal = monthly.combined.overall.male + monthly.combined.overall.female || 1;
 
   return (
     <div className="aopd-page">
       <div className="aopd-toolbar">
         <div>
           <h2>Dashboard</h2>
-          <p>Live totals calculated from stored patient encounters.</p>
+          <p>Monthly totals combine individual encounters with registration-book summaries.</p>
         </div>
         <div className="aopd-filters">
           <label>
@@ -54,35 +56,42 @@ export default function Dashboard() {
       </div>
 
       <div className="aopd-card-grid">
-        <StatCard label="OPD patients" value={monthly.overall.total} />
-        <StatCard label="Male" value={monthly.overall.male} />
-        <StatCard label="Female" value={monthly.overall.female} />
-        {ADULT_AGE_GROUPS.map((group) => (
-          <StatCard key={group} label={group} value={monthly.ageGroups[group].total} />
+        <StatCard label="Total cases" value={monthly.combined.overall.total} />
+        <StatCard label="Male cases" value={monthly.combined.overall.male} />
+        <StatCard label="Female cases" value={monthly.combined.overall.female} />
+        {Object.entries(monthly.combined.ageGroups).map(([key, group]) => (
+          <StatCard key={key} label={group.label} value={group.total} />
         ))}
       </div>
+      {monthlyDiagnosisCountsStatus === 'error' && (
+        <p className="aopd-alert" role="alert">
+          Dashboard totals include individual encounters only because aggregate counts could not load:
+          {' '}{monthlyDiagnosisCountsError} Review and apply
+          {' '}<code>supabase/migrations/20261024_monthly_diagnosis_counts.sql</code> in Supabase SQL Editor.
+        </p>
+      )}
 
       <div className="aopd-grid-2">
         {canManageFacility && <section className="aopd-panel">
-          <h3>Patients by age group</h3>
-          {ADULT_AGE_GROUPS.map((group) => (
-            <BarRow key={group} label={group} value={monthly.ageGroups[group].total} max={ageMax} />
+          <h3>Cases by age group</h3>
+          {Object.entries(monthly.combined.ageGroups).map(([key, group]) => (
+            <BarRow key={key} label={group.label} value={group.total} max={ageMax} />
           ))}
         </section>}
         <section className="aopd-panel">
-          <h3>Male vs Female</h3>
+          <h3>Male vs Female cases</h3>
           <div className="aopd-stacked">
-            <span className="male" style={{ width: `${(monthly.overall.male / sexTotal) * 100}%` }}>
-              M {monthly.overall.male}
+            <span className="male" style={{ width: `${(monthly.combined.overall.male / sexTotal) * 100}%` }}>
+              M {monthly.combined.overall.male}
             </span>
-            <span className="female" style={{ width: `${(monthly.overall.female / sexTotal) * 100}%` }}>
-              F {monthly.overall.female}
+            <span className="female" style={{ width: `${(monthly.combined.overall.female / sexTotal) * 100}%` }}>
+              F {monthly.combined.overall.female}
             </span>
           </div>
         </section>
         <section className="aopd-panel">
-          <h3>Patients by diagnosis</h3>
-          {stats.diagnosisBars.length === 0 && <p>No OPD diagnoses this month.</p>}
+          <h3>Cases by diagnosis</h3>
+          {stats.diagnosisBars.length === 0 && <p>No diagnoses this month.</p>}
           {stats.diagnosisBars.slice(0, 8).map((item) => (
             <BarRow key={item.name} label={item.name} value={item.total} max={diagnosisMax} />
           ))}

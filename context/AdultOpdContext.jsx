@@ -3,6 +3,7 @@ import { DEFAULT_SETTINGS } from '../constants';
 import { enrichEncounter, createId, readLegacyLocalData } from '../services/storage';
 import { buildDemoRecords } from '../services/demoData';
 import { generateDashboardStats, generateMonthlyReport, generateYearlyReport } from '../services/reporting';
+import { validateMonthlyDiagnosisCount } from '../services/monthlyDiagnosisCounts.mjs';
 import {
   addFacilityDiagnosis,
   deleteEncounter,
@@ -11,6 +12,8 @@ import {
   insertEncounter,
   importLegacyFacilityData,
   loadFacilityData,
+  loadFacilityMonthlyDiagnosisCounts,
+  saveFacilityMonthlyDiagnosisCounts,
   updateEncounter as updateRemoteEncounter,
   updateFacilityDiagnosis,
   updateFacilitySettings,
@@ -22,8 +25,13 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
   const remote = Boolean(facilityId);
   const canManageFacility = !remote || role === 'owner' || role === 'admin';
   const canWriteEncounters = !remote || canManageFacility || role === 'data_entry';
+  const canWriteMonthlyDiagnosisCounts = !remote
+    || ['owner', 'admin', 'data_entry'].includes(role);
   const [records, setRecords] = useState([]);
   const [diagnoses, setDiagnoses] = useState([]);
+  const [monthlyDiagnosisCounts, setMonthlyDiagnosisCounts] = useState([]);
+  const [monthlyDiagnosisCountsStatus, setMonthlyDiagnosisCountsStatus] = useState(remote ? 'loading' : 'ready');
+  const [monthlyDiagnosisCountsError, setMonthlyDiagnosisCountsError] = useState('');
   const [settings, setSettingsState] = useState(() => ({ ...DEFAULT_SETTINGS, ...initialSettings }));
   const [syncStatus, setSyncStatus] = useState(remote ? 'loading' : 'ready');
   const [syncError, setSyncError] = useState('');
@@ -62,6 +70,46 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     };
   }, [facilityId, remote]);
 
+  useEffect(() => {
+    if (!remote) {
+      setMonthlyDiagnosisCounts([]);
+      setMonthlyDiagnosisCountsStatus('ready');
+      setMonthlyDiagnosisCountsError('');
+      return undefined;
+    }
+    if (syncStatus !== 'ready') {
+      setMonthlyDiagnosisCountsStatus(syncStatus === 'error' ? 'error' : 'loading');
+      return undefined;
+    }
+
+    let active = true;
+    async function refreshMonthlyDiagnosisCounts() {
+      setMonthlyDiagnosisCountsStatus('loading');
+      try {
+        const summaries = await loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses);
+        if (!active) return;
+        setMonthlyDiagnosisCounts(summaries);
+        setMonthlyDiagnosisCountsError('');
+        setMonthlyDiagnosisCountsStatus('ready');
+      } catch (error) {
+        if (!active) return;
+        setMonthlyDiagnosisCountsError(error.message || 'Could not load monthly aggregate summaries.');
+        setMonthlyDiagnosisCountsStatus('error');
+      }
+    }
+    function refreshWhenVisible() {
+      if (document.visibilityState === 'visible') refreshMonthlyDiagnosisCounts();
+    }
+    refreshMonthlyDiagnosisCounts();
+    window.addEventListener('focus', refreshWhenVisible);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+    return () => {
+      active = false;
+      window.removeEventListener('focus', refreshWhenVisible);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+    };
+  }, [diagnoses, facilityId, remote, syncStatus]);
+
   const reportSyncError = useCallback((error) => {
     setSyncError(error.message || 'Could not sync facility data.');
     return { ok: false, error: error.message || 'Could not sync facility data.' };
@@ -76,6 +124,120 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
   }, [facilityId]);
 
   const hasDemoRecords = records.some((record) => record.isDemo);
+
+  const saveMonthlyDiagnosisCounts = useCallback(async (entries, options = {}) => {
+    if (!canWriteMonthlyDiagnosisCounts) {
+      return { ok: false, error: 'Only facility owners, administrators, and data-entry users can save aggregate summaries.' };
+    }
+    if (!Array.isArray(entries) || entries.length === 0) {
+      return { ok: false, error: 'Add at least one diagnosis summary before saving.' };
+    }
+    if (remote && syncStatus !== 'ready') {
+      return {
+        ok: false,
+        error: 'Facility access is not ready. No aggregate summaries were saved; retry after access is restored.',
+      };
+    }
+
+    const seenDiagnosisIds = new Set();
+    const validationErrors = [];
+    entries.forEach((entry) => {
+      const validation = validateMonthlyDiagnosisCount(entry, {
+        diagnoses,
+      });
+      if (!validation.valid) {
+        validationErrors.push({
+          diagnosis: entry.diagnosisName || entry.diagnosisId,
+          errors: validation.errors,
+        });
+      }
+      if (seenDiagnosisIds.has(entry.diagnosisId)) {
+        validationErrors.push({
+          diagnosis: entry.diagnosisName || entry.diagnosisId,
+          errors: { diagnosisId: 'This diagnosis is duplicated in the pending batch.' },
+        });
+      }
+      seenDiagnosisIds.add(entry.diagnosisId);
+    });
+    if (validationErrors.length > 0) {
+      return {
+        ok: false,
+        error: `${validationErrors.length} aggregate entr${validationErrors.length === 1 ? 'y needs' : 'ies need'} correction.`,
+        validationErrors,
+      };
+    }
+
+    if (!remote) {
+      const savedRecords = entries.map((entry) => {
+        const savedAt = new Date().toISOString();
+        return {
+          ...entry,
+          facilityId: '',
+          createdAt: entry.createdAt || savedAt,
+          updatedAt: savedAt,
+        };
+      });
+      setMonthlyDiagnosisCounts((current) => {
+        const next = [...current];
+        savedRecords.forEach((saved) => {
+          const index = next.findIndex((item) => item.id === saved.id);
+          if (index < 0) next.push(saved);
+          else next[index] = saved;
+        });
+        return next;
+      });
+      return { ok: true, savedRecords, errors: [], uncertainDiagnosisIds: [] };
+    }
+
+    try {
+      const result = await saveFacilityMonthlyDiagnosisCounts(
+        facilityId,
+        entries,
+        diagnoses,
+        options
+      );
+      if (result.savedRecords.length > 0) {
+        setMonthlyDiagnosisCounts((current) => {
+          const next = [...current];
+          result.savedRecords.forEach((saved) => {
+            const index = next.findIndex((item) =>
+              item.facilityId === saved.facilityId
+              && item.reportingYear === saved.reportingYear
+              && item.reportingMonth === saved.reportingMonth
+              && item.diagnosisId === saved.diagnosisId
+            );
+            if (index < 0) next.push(saved);
+            else next[index] = saved;
+          });
+          return next;
+        });
+        setMonthlyDiagnosisCountsError('');
+        setMonthlyDiagnosisCountsStatus('ready');
+      }
+      if (result.errors.length > 0) {
+        setMonthlyDiagnosisCountsError(result.errors.map((item) => item.message).join(' '));
+        try {
+          const latest = await loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses);
+          setMonthlyDiagnosisCounts(latest);
+        } catch (refreshError) {
+          setMonthlyDiagnosisCountsError(
+            `${result.errors.map((item) => item.message).join(' ')} Could not refresh saved summaries: ${refreshError.message}`
+          );
+        }
+      }
+      return { ok: true, ...result };
+    } catch (error) {
+      setMonthlyDiagnosisCountsError(error.message || 'Could not save monthly aggregate summaries.');
+      return { ok: false, error: error.message || 'Could not save monthly aggregate summaries.' };
+    }
+  }, [
+    canWriteMonthlyDiagnosisCounts,
+    diagnoses,
+    facilityId,
+    remote,
+    settings.reportingYear,
+    syncStatus,
+  ]);
 
   const addRecord = useCallback(async (input) => {
     const record = enrichEncounter(input);
@@ -283,7 +445,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
   }, [facilityId, remote, settings, syncStatus]);
 
   const migrateLegacyData = useCallback(async () => {
-    if (!remote) return { ok: false, error: 'Legacy import requires a signed-in Supabase facility.' };
+    if (!remote) return { ok: false, error: 'Legacy import requires a signed-in facility.' };
     if (syncStatus !== 'ready') {
       return { ok: false, error: 'Cloud data is not loaded. Retry after connection is restored.' };
     }
@@ -398,6 +560,9 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     () => ({
       records,
       diagnoses,
+      monthlyDiagnosisCounts,
+      monthlyDiagnosisCountsStatus,
+      monthlyDiagnosisCountsError,
       settings,
       demoLoaded,
       settingsSyncStatus,
@@ -406,11 +571,13 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       role,
       canManageFacility,
       canWriteEncounters,
+      canWriteMonthlyDiagnosisCounts,
       hasDemoRecords,
       syncStatus,
       syncError,
       addRecord,
       addRecords,
+      saveMonthlyDiagnosisCounts,
       updateRecord,
       deleteRecord,
       addDiagnosis,
@@ -421,13 +588,16 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       loadDemoData,
       clearDemoData,
       clearAllRecords,
-      generateMonthlyReport: (year, month) => generateMonthlyReport(records, year, month),
-      generateYearlyReport: (year) => generateYearlyReport(records, year),
-      generateDashboardStats: (year, month) => generateDashboardStats(records, year, month),
+      generateMonthlyReport: (year, month) => generateMonthlyReport(records, year, month, monthlyDiagnosisCounts, diagnoses),
+      generateYearlyReport: (year) => generateYearlyReport(records, year, monthlyDiagnosisCounts, diagnoses),
+      generateDashboardStats: (year, month) => generateDashboardStats(records, year, month, monthlyDiagnosisCounts, diagnoses),
     }),
     [
       records,
       diagnoses,
+      monthlyDiagnosisCounts,
+      monthlyDiagnosisCountsStatus,
+      monthlyDiagnosisCountsError,
       settings,
       demoLoaded,
       settingsSyncStatus,
@@ -436,11 +606,13 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       role,
       canManageFacility,
       canWriteEncounters,
+      canWriteMonthlyDiagnosisCounts,
       hasDemoRecords,
       syncStatus,
       syncError,
       addRecord,
       addRecords,
+      saveMonthlyDiagnosisCounts,
       updateRecord,
       deleteRecord,
       addDiagnosis,

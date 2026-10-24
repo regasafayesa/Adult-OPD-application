@@ -1,6 +1,6 @@
-import { SEX } from '../constants';
-import { parseISODate } from './dates';
-import { classifyAge } from './ageClassification';
+import { SEX } from '../constants.js';
+import { parseISODate } from './dates.js';
+import { classifyAge } from './ageClassification.js';
 
 export function validateEncounter({ date, age, sex, diagnosis }, { diagnoses = [] } = {}) {
   const errors = {};

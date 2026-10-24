@@ -1,4 +1,4 @@
-import { OPD_CATEGORY } from '../constants';
+import { OPD_CATEGORY } from '../constants.js';
 
 /**
  * Single source of truth for OPD age classification.

@@ -1,5 +1,6 @@
-import { ADULT_AGE_GROUPS } from '../constants';
+import { ADULT_AGE_GROUPS } from '../constants.js';
 import { getTallyGroupSizes, tallyMarks } from '../utils/tallyMarks.mjs';
+import { MONTHLY_DIAGNOSIS_AGE_GROUPS } from './monthlyDiagnosisCounts.mjs';
 
 export { tallyMarks };
 
@@ -41,48 +42,117 @@ function matchesIctDiagnosis(name, definition) {
   return definition.aliases.some((alias) => normalizedDiagnosisName(alias) === normalizedName);
 }
 
-function diagnosisAgeCounts(entries) {
-  return ICT_TALLY_AGE_GROUPS.map(({ reportKey }) =>
-    ADULT_AGE_GROUPS.includes(reportKey)
-      ? entries.reduce(
-          (counts, [, block]) => ({
-            male: counts.male + block[reportKey].male,
-            female: counts.female + block[reportKey].female,
-          }),
-          { male: 0, female: 0 }
-        )
-      : { male: 0, female: 0 }
-  );
-}
-
 function diagnosisRowTotal({ counts }) {
   return counts.reduce((total, { male, female }) => total + male + female, 0);
 }
 
+function diagnosisIdentity({ diagnosisId, code, name }) {
+  if (code) return `code:${String(code).trim().toLocaleUpperCase()}`;
+  if (diagnosisId) return `id:${String(diagnosisId).replace(/^official:/, '')}`;
+  return `legacy:${normalizedDiagnosisName(name)}`;
+}
+
+function emptyTallyCounts() {
+  return ICT_TALLY_AGE_GROUPS.map(() => ({ male: 0, female: 0 }));
+}
+
+function addEncounterCounts(row, block) {
+  ICT_TALLY_AGE_GROUPS.forEach(({ reportKey }, index) => {
+    if (!ADULT_AGE_GROUPS.includes(reportKey)) return;
+    row.counts[index].male += block[reportKey]?.male || 0;
+    row.counts[index].female += block[reportKey]?.female || 0;
+  });
+}
+
+function addAggregateCounts(row, summary) {
+  MONTHLY_DIAGNOSIS_AGE_GROUPS.forEach(({ key }, index) => {
+    row.counts[index].male += summary.totals.ageGroups[key].male;
+    row.counts[index].female += summary.totals.ageGroups[key].female;
+  });
+  row.hasAggregate = true;
+  row.aggregateSummaries.push(summary);
+}
+
 export function buildMonthlyIctTallyRows(report) {
-  const diagnoses = Object.entries(report.diagnoses);
-  const mappedNames = new Set();
-  const rows = ICT_TALLY_DIAGNOSES.map((definition) => {
-    const matchingEntries = diagnoses.filter(([name]) => matchesIctDiagnosis(name, definition));
-    matchingEntries.forEach(([name]) => mappedNames.add(name));
-    return {
-      code: definition.code,
-      name: definition.name,
-      counts: diagnosisAgeCounts(matchingEntries),
+  const rowsByIdentity = new Map();
+  const rowsByLegacyAlias = new Map();
+  const rows = [];
+  const rowFor = (metadata) => {
+    const key = diagnosisIdentity(metadata);
+    if (!rowsByIdentity.has(key)) {
+      const row = {
+        diagnosisId: metadata.diagnosisId || '',
+        code: metadata.code || '',
+        name: metadata.canonicalDiagnosisName || metadata.name || 'Unspecified',
+        counts: emptyTallyCounts(),
+        hasAggregate: false,
+        aggregateSummaries: [],
+      };
+      rowsByIdentity.set(key, row);
+      rows.push(row);
+    }
+    return rowsByIdentity.get(key);
+  };
+
+  Object.entries(report.diagnoses).forEach(([name, block]) => {
+    const metadata = {
+      diagnosisId: block.diagnosisId,
+      code: block.diagnosisCode,
+      name: block.canonicalDiagnosisName || name,
+      canonicalDiagnosisName: block.canonicalDiagnosisName || name,
     };
-  }); 
+    const row = rowFor(metadata);
+    addEncounterCounts(row, block);
+    if (!metadata.diagnosisId && !metadata.code) {
+      const definition = ICT_TALLY_DIAGNOSES.find((item) => matchesIctDiagnosis(name, item));
+      if (definition) rowsByLegacyAlias.set(`legacy:${normalizedDiagnosisName(name)}`, definition);
+    }
+  });
 
-  const otherRows = diagnoses
-    .filter(([name]) => !mappedNames.has(name))
-    .map(([name, block]) => ({
-      code: '',
-      name,
-      counts: diagnosisAgeCounts([[name, block]]),
-    }));
+  const seenAggregateSummaries = new Set();
+  (report.aggregate?.diagnoses || []).forEach((summary) => {
+    const dedupeKey = [
+      summary.facilityId || '',
+      summary.reportingYear,
+      summary.reportingMonth,
+      summary.diagnosisId,
+    ].join('|');
+    if (seenAggregateSummaries.has(dedupeKey)) return;
+    seenAggregateSummaries.add(dedupeKey);
+    const aliasDefinition = !summary.diagnosisId && !summary.diagnosisCode
+      ? ICT_TALLY_DIAGNOSES.find((item) => matchesIctDiagnosis(summary.diagnosisName, item))
+      : null;
+    const row = aliasDefinition
+      ? rows.find((item) => item.code === aliasDefinition.code)
+        || rowFor({
+          code: aliasDefinition.code,
+          name: aliasDefinition.name,
+          canonicalDiagnosisName: aliasDefinition.name,
+        })
+      : rowFor({
+        diagnosisId: summary.diagnosisId,
+        code: summary.diagnosisCode,
+        name: summary.diagnosisName,
+        canonicalDiagnosisName: summary.diagnosisName,
+      });
+    addAggregateCounts(row, summary);
+  });
 
-  return [...rows, ...otherRows]
+  rows.forEach((row) => {
+    if (!row.code) {
+      const definition = ICT_TALLY_DIAGNOSES.find((item) => matchesIctDiagnosis(row.name, item));
+      if (definition) {
+        row.code = definition.code;
+        if (row.name.toLocaleLowerCase() === 'uti') row.name = definition.name;
+      }
+    }
+  });
+  return rows
     .filter((row) => diagnosisRowTotal(row) > 0)
-    .sort((a, b) => diagnosisRowTotal(b) - diagnosisRowTotal(a));
+    .sort((left, right) =>
+      diagnosisRowTotal(right) - diagnosisRowTotal(left)
+      || left.name.localeCompare(right.name)
+    );
 }
 
 export function buildMonthlyIctPdfRows(report) {
@@ -153,7 +223,6 @@ function monthlyHtml(report, settings) {
     { length: ICT_TALLY_AGE_GROUPS.length * 2 },
     () => '<th>Tally</th><th>Count</th>'
   ).join('');
-
   return `
     <html><head><meta charset="utf-8" /></head><body>
       <h1>OPD – ICT TALLY SHEET</h1>
@@ -228,7 +297,6 @@ export async function exportMonthlyReportPdf(report, settings) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4', orientation: 'landscape' });
   const margin = 20;
   const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
   const rows = buildMonthlyIctPdfRows(report);
   const monthYear = `${String(report.month).toUpperCase()} ${report.year}`;
 
@@ -390,6 +458,14 @@ export async function exportYearlyReportExcel(report, settings) {
       ...report.months.map((row) => [row.month, row.male, row.female, row.total]),
       ['YEAR TOTAL', report.yearTotal.male, report.yearTotal.female, report.yearTotal.total],
       [],
+      ['Age group', 'Male', 'Female', 'Total'],
+      ...Object.values(report.ageGroups).map((group) => [
+        group.label,
+        group.male,
+        group.female,
+        group.total,
+      ]),
+      [],
       ['Diagnosis', 'Male', 'Female', 'Total'],
       ...Object.entries(report.diagnoses).map(([name, counts]) => [name, counts.male, counts.female, counts.total]),
     ];
@@ -401,11 +477,21 @@ export async function exportYearlyReportExcel(report, settings) {
     const monthRows = report.months
       .map((row) => `<tr><td>${row.month}</td>${cell(row.male)}${cell(row.female)}${cell(row.total)}</tr>`)
       .join('');
+    const ageRows = Object.values(report.ageGroups)
+      .map((group) => `<tr><td>${escapeHtml(group.label)}</td>${cell(group.male)}${cell(group.female)}${cell(group.total)}</tr>`)
+      .join('');
+    const diagnosisRows = Object.entries(report.diagnoses)
+      .map(([name, counts]) => `<tr><td>${escapeHtml(name)}</td>${cell(counts.male)}${cell(counts.female)}${cell(counts.total)}</tr>`)
+      .join('');
     const html = `<html><body>
       <h1>OPD YEARLY REPORT</h1>
       <p>${settings.healthCenterName || 'Health Center Name not set'}</p>
       <p>Year: ${report.year}</p>
       <table border="1">${monthRows}<tr><th>YEAR TOTAL</th><th>${report.yearTotal.male}</th><th>${report.yearTotal.female}</th><th>${report.yearTotal.total}</th></tr></table>
+      <h2>Combined cases by age group</h2>
+      <table border="1"><thead><tr><th>Age group</th><th>Male</th><th>Female</th><th>Total</th></tr></thead><tbody>${ageRows}</tbody></table>
+      <h2>Combined yearly diagnosis statistics</h2>
+      <table border="1"><thead><tr><th>Diagnosis</th><th>Male</th><th>Female</th><th>Total</th></tr></thead><tbody>${diagnosisRows}</tbody></table>
     </body></html>`;
     downloadBlob(`OPD-Yearly-${report.year}.xls`, 'application/vnd.ms-excel', html);
   }

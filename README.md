@@ -36,6 +36,13 @@ sensitive health information even when names are not collected.
    Then apply `supabase/migrations/20261022_secure_multifacility_onboarding.sql`
    to add facility registration, invitations, and platform administration. For
    a new project, apply that 20261022 migration after `supabase/schema.sql`.
+   Review and then apply
+   `supabase/migrations/20261024_monthly_diagnosis_counts.sql` to create the
+   monthly aggregate-count table and its RLS policies. This is an additive
+   migration: it does not change or backfill individual encounter rows. The
+   migration requires the facility, diagnosis, and authorization helpers from
+   the schema and 20261022 migration; inspect the deployed schema before
+   applying it to an existing project. It has not been run against Supabase.
    Do not rerun the initial schema migration. Every provisioned facility member
    can manage that facility's records, settings, and unofficial diagnosis
    entries; approved diagnosis catalog entries and membership administration
@@ -112,6 +119,24 @@ edit, or remove entries there, then use **Save All to Supabase** to submit
 batches of up to 100 encounters per request. Entries remain pending until their
 IDs and values are confirmed; an interrupted save is checked against those IDs
 before a retry so already-saved encounters are not submitted again.
+
+The separate **Aggregate Entry** page records monthly registration-book
+counts without adding a section to Patient Entry. Select a diagnosis using the
+existing catalog search, choose the reporting year and month, and enter Female
+and Male values for the six age groups. Under-five totals are allowed here but
+are never saved as individual encounters. Multiple diagnoses can be queued,
+reviewed, edited, removed, and batch-saved. On the Monthly Report, aggregate counts are added to
+the same diagnosis and sex/age tally cells as individual encounters; Excel,
+PDF, and Print use that same merged tally. The database migration is
+`supabase/migrations/20261024_monthly_diagnosis_counts.sql`; review it and apply
+it in Supabase SQL Editor before saving aggregate counts: open the intended
+Supabase project, select **SQL Editor → New query**, paste the entire reviewed
+migration file, and select **Run** once. Confirm the query succeeds, then verify
+`select to_regclass('public.monthly_diagnosis_counts');` returns
+`monthly_diagnosis_counts`. The application does not apply the migration
+automatically, and the live Supabase schema must be checked after it is run.
+Facility owners, administrators, and data-entry users can write these
+summaries; viewers can only read them.
 
 The ESV-1 catalog is shared through `public.official_diagnoses`; facility
 custom diagnoses remain isolated in `public.diagnoses`. Authorized facility

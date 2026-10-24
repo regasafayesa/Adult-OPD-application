@@ -1,4 +1,4 @@
-import { ADULT_AGE_GROUPS, SEX } from '../constants';
+import { ADULT_AGE_GROUPS, SEX } from '../constants.js';
 
 export function emptySexCounts() {
   return { male: 0, female: 0, total: 0 };

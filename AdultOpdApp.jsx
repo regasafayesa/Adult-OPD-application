@@ -5,6 +5,7 @@ import { AdultOpdProvider, useAdultOpd } from './context/AdultOpdContext';
 import Diagnoses from './pages/Diagnoses';
 import Dashboard from './pages/Dashboard';
 import MonthlyReport from './pages/MonthlyReport';
+import AggregateEntry from './pages/AggregateEntry';
 import PatientEntry from './pages/PatientEntry';
 import PatientRecords from './pages/PatientRecords';
 import SignIn from './pages/SignIn';
@@ -45,7 +46,7 @@ function ConfigurationIssue() {
         <span className="aopd-auth-mark" aria-hidden="true">OPD</span>
         <h1 id="aopd-config-heading">App configuration required</h1>
         <p className="aopd-auth-description">
-          {supabaseConfigError || 'The Supabase connection is not configured.'}
+          {supabaseConfigError || 'The cloud connection is not configured.'}
         </p>
         <p className="aopd-auth-description">
           In your Vercel project, add <code>VITE_SUPABASE_URL</code> and{' '}
@@ -460,6 +461,7 @@ function AdultOpdRoutes({
         <Route path="/" element={<Navigate to="/adult-opd" replace />} />
         <Route path="/adult-opd" element={<Dashboard />} />
         <Route path="/adult-opd/entry" element={role === 'viewer' ? <Navigate to="/adult-opd" replace /> : <PatientEntry />} />
+        <Route path="/adult-opd/aggregate-entry" element={role === 'viewer' ? <Navigate to="/adult-opd" replace /> : <AggregateEntry />} />
         <Route path="/adult-opd/records" element={<PatientRecords />} />
         <Route path="/adult-opd/monthly" element={<MonthlyReport />} />
         <Route path="/adult-opd/yearly" element={<YearlyReport />} />

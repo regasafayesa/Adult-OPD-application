@@ -1,7 +1,7 @@
 import { supabase } from './supabase';
 
 function assertSupabase() {
-  if (!supabase) throw new Error('Supabase is not configured.');
+  if (!supabase) throw new Error('The cloud connection is not configured.');
 }
 
 function unwrap(response) {

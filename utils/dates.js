@@ -1,4 +1,4 @@
-import { MONTH_NAMES } from '../constants';
+import { MONTH_NAMES } from '../constants.js';
 
 export function pad2(value) {
   return String(value).padStart(2, '0');

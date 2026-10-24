@@ -2,9 +2,14 @@ import { supabase } from './supabase';
 import { enrichEncounter } from './storage';
 import { insertEncounterBatches } from './batchInsert.mjs';
 import { loadDiagnosisCatalog, mapDiagnosisRow } from './diagnosisCatalog.mjs';
+import {
+  mapMonthlyDiagnosisCountRow,
+  monthlyDiagnosisCountPayload,
+  saveMonthlyDiagnosisCountBatches,
+} from './monthlyDiagnosisCounts.mjs';
 
 function assertSupabase() {
-  if (!supabase) throw new Error('Supabase is not configured.');
+  if (!supabase) throw new Error('The cloud connection is not configured.');
 }
 
 function unwrap(response) {
@@ -12,7 +17,12 @@ function unwrap(response) {
   return response.data;
 }
 
-export function mapEncounterRow(row) {
+export function mapEncounterRow(row, diagnoses = []) {
+  const diagnosisCatalog = Array.isArray(diagnoses) ? diagnoses : [];
+  const diagnosis = diagnosisCatalog.find((item) => item.id === row.diagnosis_id)
+    || diagnosisCatalog.find((item) =>
+      item.name.toLocaleLowerCase() === String(row.diagnosis || '').toLocaleLowerCase()
+    );
   return enrichEncounter(
     {
       id: row.id,
@@ -20,6 +30,8 @@ export function mapEncounterRow(row) {
       age: row.age,
       sex: row.sex,
       diagnosis: row.diagnosis,
+      diagnosisId: diagnosis?.id || '',
+      diagnosisCode: diagnosis?.code || '',
       isDemo: row.is_demo,
     },
     { id: row.id, createdAt: row.created_at, updatedAt: row.updated_at, isDemo: row.is_demo }
@@ -56,10 +68,82 @@ export async function loadFacilityData(facilityId) {
     offset += pageSize;
   }
 
+  const diagnoses = await loadDiagnosisCatalog(supabase, facilityId);
   return {
-    records: records.map(mapEncounterRow),
-    diagnoses: await loadDiagnosisCatalog(supabase, facilityId),
+    records: records.map((row) => mapEncounterRow(row, diagnoses)),
+    diagnoses,
   };
+}
+
+export async function loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses = []) {
+  assertSupabase();
+  const rows = [];
+  const pageSize = 500;
+  let offset = 0;
+
+  while (true) {
+    const page = unwrap(await supabase
+      .from('monthly_diagnosis_counts')
+      .select('*')
+      .eq('facility_id', facilityId)
+      .order('reporting_year', { ascending: false })
+      .order('reporting_month', { ascending: false })
+      .order('diagnosis_id')
+      .range(offset, offset + pageSize - 1));
+    rows.push(...page);
+    if (page.length < pageSize) break;
+    offset += pageSize;
+  }
+
+  return rows.map((row) => mapMonthlyDiagnosisCountRow(row, diagnoses));
+}
+
+export async function saveFacilityMonthlyDiagnosisCounts(
+  facilityId,
+  entries,
+  diagnoses,
+  options = {}
+) {
+  assertSupabase();
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  if (authError) throw new Error(`Could not verify your sign-in session: ${authError.message}`);
+  if (!authData?.user?.id) throw new Error('A signed-in user is required to save aggregate summaries.');
+  if (!facilityId) throw new Error('An authorized facility is required to save aggregate summaries.');
+
+  const first = entries[0];
+  if (entries.some((entry) =>
+    Number(entry.reportingYear) !== Number(first.reportingYear)
+    || Number(entry.reportingMonth) !== Number(first.reportingMonth)
+  )) {
+    throw new Error('A batch can contain summaries for only one reporting month.');
+  }
+
+  const facilityEntries = entries.map((entry) => ({ ...entry, facilityId }));
+  return saveMonthlyDiagnosisCountBatches(facilityEntries, {
+    ...options,
+    saveBatch: async (batch) => {
+      const response = await supabase.rpc('save_monthly_diagnosis_counts', {
+        p_facility_id: facilityId,
+        p_entries: batch.map((entry) => monthlyDiagnosisCountPayload(entry, facilityId)),
+      });
+      if (response.error) throw new Error(response.error.message);
+      if (!Array.isArray(response.data)) {
+        throw new Error('The cloud service did not confirm the aggregate batch save.');
+      }
+      return response.data.map((row) => mapMonthlyDiagnosisCountRow(row, diagnoses));
+    },
+    findByDiagnosisIds: async (diagnosisIds) => {
+      const response = await supabase
+        .from('monthly_diagnosis_counts')
+        .select('*')
+        .eq('facility_id', facilityId)
+        .eq('reporting_year', Number(first.reportingYear))
+        .eq('reporting_month', Number(first.reportingMonth))
+        .in('diagnosis_id', diagnosisIds);
+      if (response.error) throw new Error(response.error.message);
+      return response.data.map((row) => mapMonthlyDiagnosisCountRow(row, diagnoses));
+    },
+  });
 }
 
 function quoteFilterValue(value) {
@@ -108,7 +192,7 @@ export async function searchFacilityEncounters(facilityId, filters) {
     if (page.length < pageSize) break;
     offset += pageSize;
   }
-  return records.map(mapEncounterRow);
+  return records.map((row) => mapEncounterRow(row));
 }
 
 export async function insertEncounter(facilityId, record) {
@@ -141,7 +225,7 @@ export async function insertEncounter(facilityId, record) {
     if (matchesAttempt) return existing;
     throw new Error('This encounter ID already exists with different values; it was not overwritten.');
   }
-  throw new Error(response.error?.message || 'Supabase did not confirm the encounter insert.');
+  throw new Error(response.error?.message || 'The cloud service did not confirm the encounter insert.');
 }
 
 export async function insertEncounters(facilityId, records, options = {}) {
@@ -159,9 +243,9 @@ export async function insertEncounters(facilityId, records, options = {}) {
         .select('*');
       if (response.error) throw new Error(response.error.message);
       if (!Array.isArray(response.data)) {
-        throw new Error('Supabase did not confirm the encounter batch insert.');
+        throw new Error('The cloud service did not confirm the encounter batch insert.');
       }
-      return response.data.map(mapEncounterRow);
+      return response.data.map((row) => mapEncounterRow(row));
     },
     findByIds: async (ids) => {
       const response = await supabase
@@ -170,7 +254,7 @@ export async function insertEncounters(facilityId, records, options = {}) {
         .eq('facility_id', facilityId)
         .in('id', ids);
       if (response.error) throw new Error(response.error.message);
-      return response.data.map(mapEncounterRow);
+      return response.data.map((row) => mapEncounterRow(row));
     },
   });
 }
@@ -206,7 +290,7 @@ export async function updateEncounter(facilityId, record) {
       && current.isDemo === record.isDemo;
     if (matchesAttempt) return current;
   }
-  throw new Error(response.error?.message || 'Supabase did not confirm the encounter update.');
+  throw new Error(response.error?.message || 'The cloud service did not confirm the encounter update.');
 }
 
 export async function deleteEncounter(facilityId, id) {
@@ -232,7 +316,7 @@ export async function deleteEncounter(facilityId, id) {
     );
   }
   if (!remainingResponse.data) return { id };
-  throw new Error(response.error?.message || 'Supabase did not confirm the encounter deletion.');
+  throw new Error(response.error?.message || 'The cloud service did not confirm the encounter deletion.');
 }
 
 export async function addFacilityDiagnosis(facilityId, diagnosis) {
@@ -295,7 +379,7 @@ export async function deleteFacilityEncounters(facilityId, demoOnly = false) {
   if (demoOnly) verificationQuery = verificationQuery.eq('is_demo', true);
   const remaining = unwrap(await verificationQuery);
   if (remaining.length > 0) {
-    throw new Error('Supabase did not confirm deletion of all matching facility encounters.');
+    throw new Error('The cloud service did not confirm deletion of all matching facility encounters.');
   }
 }
 
@@ -466,7 +550,7 @@ export async function importLegacyFacilityData(facilityId, legacyData) {
     if (error) result.settings.failed = error.message;
     else {
       if (!data) {
-        result.settings.failed = 'Supabase did not confirm the facility settings update.';
+        result.settings.failed = 'The cloud service did not confirm the facility settings update.';
       } else {
         result.settings.imported = Object.keys(settingsPatch);
         Object.assign(result.settings.values, settingsPatch);

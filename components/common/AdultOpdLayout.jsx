@@ -4,6 +4,7 @@ import DeveloperCredit from './DeveloperCredit';
 const NAV_ITEMS = [
   { to: '/adult-opd', label: 'Dashboard', end: true },
   { to: '/adult-opd/entry', label: 'Patient Entry', roles: ['owner', 'admin', 'data_entry', 'local demo'] },
+  { to: '/adult-opd/aggregate-entry', label: 'Aggregate Entry', roles: ['owner', 'admin', 'data_entry', 'local demo'] },
   { to: '/adult-opd/records', label: 'Patient Records' },
   { to: '/adult-opd/monthly', label: 'Monthly Report' },
   { to: '/adult-opd/yearly', label: 'Yearly Report' },
@@ -113,8 +114,8 @@ export default function AdultOpdLayout({
         {signOutError && <p className="aopd-auth-error aopd-signout-error" role="alert">{signOutError}</p>}
         <div className="aopd-local-data-notice" role="status">
           {isLocalDemo
-            ? 'LOCAL DEMO MODE — sign-in is bypassed. Changes are temporary, lost on refresh, and not synced to Supabase.'
-            : 'Encounters, diagnoses, and facility settings are shared with authorized members through Supabase.'}
+            ? 'LOCAL DEMO MODE — sign-in is bypassed. Changes are temporary, lost on refresh, and not synced to the cloud.'
+            : 'Encounters, diagnoses, and facility settings are shared with authorized members through the cloud.'}
         </div>
         {syncError && <p className="aopd-auth-error" role="alert">Cloud sync failed: {syncError}</p>}
         {hasDemoRecords && (

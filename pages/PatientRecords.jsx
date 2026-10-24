@@ -65,7 +65,7 @@ export default function PatientRecords() {
       .catch((error) => {
         if (!active) return;
         setCloudFiltered([]);
-        setSearchError(error.message || 'Could not search facility records in Supabase.');
+        setSearchError(error.message || 'Could not search facility records in the cloud.');
       })
       .finally(() => {
         if (active) setSearchLoading(false);
@@ -87,7 +87,7 @@ export default function PatientRecords() {
     setActionMessageIsError(!result.ok);
     setActionMessage(result.ok
       ? result.refreshError
-        ? 'Encounter deleted from Supabase, but the latest facility records could not be reloaded.'
+        ? 'Encounter deleted from the cloud, but the latest facility records could not be reloaded.'
         : 'Encounter deleted from the facility database.'
       : result.error);
   }
@@ -158,7 +158,7 @@ export default function PatientRecords() {
         </select>
       </div>
 
-      {searchLoading && <p role="status">Searching facility records in Supabase…</p>}
+      {searchLoading && <p role="status">Searching facility records in the cloud…</p>}
       {searchError && <p className="aopd-error" role="alert">{searchError}</p>}
       {actionMessage && <p className={actionMessageIsError ? 'aopd-error' : 'aopd-success'} role={actionMessageIsError ? 'alert' : 'status'}>{actionMessage}</p>}
 

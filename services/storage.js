@@ -33,6 +33,8 @@ export function enrichEncounter(input, existing = {}) {
     age,
     sex: input.sex,
     diagnosis: String(input.diagnosis || '').trim(),
+    diagnosisId: existing.diagnosisId || input.diagnosisId || '',
+    diagnosisCode: existing.diagnosisCode || input.diagnosisCode || '',
     ageGroup: classification.ageGroup,
     opdCategory: classification.opdCategory,
     includedInAdultReport: classification.includedInAdultReport,
