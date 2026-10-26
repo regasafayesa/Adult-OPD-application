@@ -410,7 +410,6 @@ export default function SignIn({
                 <path d="m9 12 2 2 4-4" />
               </svg>
             </span>
-            <span>Secure access for authorized facility staff</span>
           </div>
           {!recoveryMode && (
             <p className="aopd-auth-admin-note">
@@ -419,7 +418,6 @@ export default function SignIn({
           )}
         </div>
       </section>
-      <p className="aopd-login-footer">For authorized health facility staff</p>
     </main>
   );
 }
