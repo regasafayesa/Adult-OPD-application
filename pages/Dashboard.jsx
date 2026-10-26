@@ -26,7 +26,7 @@ export default function Dashboard() {
   const sexTotal = monthly.combined.overall.male + monthly.combined.overall.female || 1;
 
   return (
-    <div className="aopd-page">
+    <div className="aopd-page aopd-dashboard">
       <div className="aopd-toolbar">
         <div>
           <h2>Dashboard</h2>

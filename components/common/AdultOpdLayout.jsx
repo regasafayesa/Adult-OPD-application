@@ -112,11 +112,6 @@ export default function AdultOpdLayout({
           </div>
         </header>
         {signOutError && <p className="aopd-auth-error aopd-signout-error" role="alert">{signOutError}</p>}
-        <div className="aopd-local-data-notice" role="status">
-          {isLocalDemo
-            ? 'LOCAL DEMO MODE — sign-in is bypassed. Changes are temporary, lost on refresh, and not synced to the cloud.'
-            : 'Encounters, diagnoses, and facility settings are shared with authorized members through the cloud.'}
-        </div>
         {syncError && <p className="aopd-auth-error" role="alert">Cloud sync failed: {syncError}</p>}
         {hasDemoRecords && (
           <div className="aopd-demo-banner" role="status">

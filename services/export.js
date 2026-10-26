@@ -443,6 +443,20 @@ export async function exportMonthlyReportPdf(report, settings) {
     },
   });
 
+  const signoff = preparedBy(settings);
+  if (signoff.length) {
+    const signoffText = signoff.join('    ');
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const maxTextWidth = pageWidth - margin * 2;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    const textWidth = doc.getTextWidth(signoffText);
+    if (textWidth > maxTextWidth) {
+      doc.setFontSize(7 * maxTextWidth / textWidth);
+    }
+    doc.text(signoffText, pageWidth / 2, pageHeight - 12, { align: 'center' });
+  }
+
   doc.save(`OPD-Monthly-${report.month}-${report.year}.pdf`);
 }
 

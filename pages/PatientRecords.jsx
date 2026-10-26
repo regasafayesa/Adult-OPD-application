@@ -26,6 +26,7 @@ export default function PatientRecords() {
     opdCategory: '',
     status: '',
   });
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
   const [cloudFiltered, setCloudFiltered] = useState([]);
@@ -76,9 +77,24 @@ export default function PatientRecords() {
   }, [facilityId, filters, records]);
 
   const filtered = facilityId ? cloudFiltered : localFiltered;
+  const activeFilterCount = Object.values(filters).filter(Boolean).length;
 
   function updateFilter(field, value) {
     setFilters((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function clearFilters() {
+    setFilters({
+      query: '',
+      date: '',
+      month: '',
+      year: '',
+      sex: '',
+      ageGroup: '',
+      diagnosis: '',
+      opdCategory: '',
+      status: '',
+    });
   }
 
   async function handleDelete(id) {
@@ -97,13 +113,37 @@ export default function PatientRecords() {
   }
 
   return (
-    <div className="aopd-page">
+    <div className="aopd-page aopd-records-page">
       <h2>Patient records</h2>
       <p className="aopd-lede">
         Encounters are stored without names or identifiers and classified into four age groups.
       </p>
 
-      <div className="aopd-filter-grid">
+      <div className="aopd-records-filter-toolbar">
+        <button
+          type="button"
+          className="aopd-records-filter-toggle"
+          aria-expanded={filtersOpen}
+          aria-controls="aopd-records-filter-panel"
+          onClick={() => setFiltersOpen((open) => !open)}
+        >
+          <span className="aopd-records-filter-icon" aria-hidden="true">☷</span>
+          <span>Filters</span>
+          {activeFilterCount > 0 && <span className="aopd-records-filter-count">{activeFilterCount}</span>}
+          <span className={`aopd-records-filter-chevron${filtersOpen ? ' is-open' : ''}`} aria-hidden="true">⌄</span>
+        </button>
+        {activeFilterCount > 0 && (
+          <span className="aopd-records-filter-summary">
+            {activeFilterCount} active {activeFilterCount === 1 ? 'filter' : 'filters'}
+          </span>
+        )}
+      </div>
+
+      <div
+        className="aopd-filter-grid aopd-records-filters"
+        id="aopd-records-filter-panel"
+        hidden={!filtersOpen}
+      >
         <input
           type="search"
           placeholder="Search diagnosis, age, sex..."
@@ -156,14 +196,19 @@ export default function PatientRecords() {
           <option value="adult">Included in OPD report</option>
           <option value="outside">Outside reporting age groups</option>
         </select>
+        {activeFilterCount > 0 && (
+          <button type="button" className="aopd-records-clear-filters" onClick={clearFilters}>
+            Clear all filters
+          </button>
+        )}
       </div>
 
       {searchLoading && <p role="status">Searching facility records in the cloud…</p>}
       {searchError && <p className="aopd-error" role="alert">{searchError}</p>}
       {actionMessage && <p className={actionMessageIsError ? 'aopd-error' : 'aopd-success'} role={actionMessageIsError ? 'alert' : 'status'}>{actionMessage}</p>}
 
-      <div className="aopd-table-wrap">
-        <table>
+      <div className="aopd-table-wrap aopd-records-table-wrap">
+        <table className="aopd-records-table">
           <thead>
             <tr>
               <th>Date</th>
