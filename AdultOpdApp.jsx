@@ -6,6 +6,7 @@ import Diagnoses from './pages/Diagnoses';
 import Dashboard from './pages/Dashboard';
 import MonthlyReport from './pages/MonthlyReport';
 import AggregateEntry from './pages/AggregateEntry';
+import DocumentScanner from './pages/DocumentScanner';
 import PatientEntry from './pages/PatientEntry';
 import PatientRecords from './pages/PatientRecords';
 import SignIn from './pages/SignIn';
@@ -13,6 +14,7 @@ import Settings from './pages/Settings';
 import YearlyReport from './pages/YearlyReport';
 import FacilityAccess, { PlatformAdminRequests } from './pages/FacilityAccess';
 import FacilityMembers from './pages/FacilityMembers';
+import Help from './pages/Help';
 import { isPlatformAdmin } from './services/facilityAccess';
 import { supabase, supabaseConfigError } from './services/supabase';
 import './AdultOpd.css';
@@ -463,11 +465,13 @@ function AdultOpdRoutes({
         <Route path="/adult-opd" element={<Dashboard />} />
         <Route path="/adult-opd/entry" element={role === 'viewer' ? <Navigate to="/adult-opd" replace /> : <PatientEntry />} />
         <Route path="/adult-opd/aggregate-entry" element={role === 'viewer' ? <Navigate to="/adult-opd" replace /> : <AggregateEntry />} />
+        <Route path="/adult-opd/document-scanner" element={['owner', 'admin', 'data_entry'].includes(role) ? <DocumentScanner /> : <Navigate to="/adult-opd" replace />} />
         <Route path="/adult-opd/records" element={<PatientRecords />} />
         <Route path="/adult-opd/monthly" element={<MonthlyReport />} />
         <Route path="/adult-opd/yearly" element={<YearlyReport />} />
         <Route path="/adult-opd/diagnoses" element={<Diagnoses />} />
         <Route path="/adult-opd/settings" element={<Settings />} />
+        <Route path="/adult-opd/help" element={<Help />} />
         <Route path="/adult-opd/members" element={role === 'owner' || role === 'admin' ? <FacilityMembers /> : <Navigate to="/adult-opd" replace />} />
         <Route path="/adult-opd/platform-admin" element={isPlatformAdmin ? <PlatformAdminRequests /> : <Navigate to="/adult-opd" replace />} />
         <Route path="*" element={<Navigate to="/adult-opd" replace />} />

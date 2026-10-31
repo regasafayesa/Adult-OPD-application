@@ -98,6 +98,55 @@ npm run build
 npm run preview
 ```
 
+## AI document scanner
+
+The **AI Document Scanner** is available to facility owners, administrators,
+and data-entry staff in cloud mode. It accepts one JPG, PNG, or PDF at a time
+(up to 10 MB), including multi-page PDFs. Staff select whether the document is
+an individual registration or a monthly tally, then review and correct all
+extracted fields before explicitly importing them through the existing
+encounter or monthly aggregate save flows. The scanner does not create
+diagnoses, bypass validation, or save automatically. A diagnosis/month already
+present in aggregate reporting blocks that tally import for manual
+reconciliation.
+
+The original file is held in browser memory and sent to the
+`opd-document-extract` Supabase Edge Function; this application does not put
+the original in Supabase Storage or the import-history table. The Edge Function
+checks the user's bearer token and facility write permission, validates the
+file, then sends it to OpenAI's vision service using structured JSON output and
+`store: false`. This does not make the provider a local processor: the
+document content is disclosed to OpenAI for recognition. Review OpenAI's
+current data-use terms and the facility's privacy requirements before
+uploading documents. Avoid documents containing names or identifiers. Drafts
+persist extracted structured fields in a facility-scoped table so review can
+resume; after a successful import, those extracted fields are cleared while
+metadata and counts remain in history.
+
+For an existing Supabase project, review and apply
+`supabase/migrations/20261031_document_imports.sql` after the facility schema
+and authorization helpers are installed. Deploy the Edge Function from the
+repository root using the Supabase CLI:
+
+```sh
+supabase functions deploy opd-document-extract
+supabase secrets set AI_VISION_API_KEY=your-server-side-key
+supabase secrets set OPENAI_VISION_MODEL=gpt-4.1-mini
+supabase secrets set ALLOWED_ORIGINS="https://your-production-domain.vercel.app"
+```
+
+`SUPABASE_URL` and `SUPABASE_ANON_KEY` are provided to Supabase Edge Functions
+by the platform. Set `ALLOWED_ORIGINS` to the exact production Vercel origin
+(and any custom domain), without a path. Localhost origins are allowed for
+development. For example, use a comma-separated list when allowing more than
+one production origin. `AI_VISION_API_KEY` is read server-side; the legacy
+`OPENAI_API_KEY` secret is also accepted. Never put either key in a `VITE_`
+variable, source control, or browser code. The function limits
+uploads to 10 MB and supports PDF, JPEG, and PNG signatures. PDF page
+navigation uses the browser's built-in PDF viewer. Handwriting recognition is
+probabilistic; confidence and uncertainty markers do not guarantee accuracy,
+so staff must compare every row to the source before import.
+
 ## Supabase schema and access
 
 The SQL schema creates the facility tables, role policies, and row-level

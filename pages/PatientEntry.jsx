@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import DiagnosisAutocomplete from '../components/common/DiagnosisAutocomplete';
+import HelpHint from '../components/common/HelpHint';
 import { OPD_CATEGORY, SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import { retainPendingRecords } from '../services/batchInsert.mjs';
@@ -49,6 +50,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
     id: record.id,
     errors: validateEncounter(record, { diagnoses }).errors,
   })), [diagnoses, pendingRecords]);
+
   function handleChange(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
     setSuccess('');
@@ -174,6 +176,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
         Record each OPD encounter once. Age group and OPD category are calculated automatically. Do not enter
         patient names or other identifiers.
       </p>
+      <HelpHint label="Age and diagnosis">Enter age as a whole number of years and choose an active diagnosis from the suggestions. Individual encounters under age 5 are outside OPD report categories; use registration-book counts for the under-five report columns.</HelpHint>
 
       <form className="aopd-entry" onSubmit={handleSubmit}>
         <label>

@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import DiagnosisAutocomplete from '../components/common/DiagnosisAutocomplete';
+import HelpHint from '../components/common/HelpHint';
 import { MONTH_NAMES, SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import {
@@ -383,6 +384,7 @@ export default function AggregateEntry() {
             Enter monthly diagnosis totals separately from individual patient records. Counts for children under five are supported.
           </p>
         </div>
+        <HelpHint label="Registration-book counts">Enter monthly counts from the book by diagnosis, age group, and sex. These numbers are added to eligible encounter counts in reports; do not include the same cases in both sources.</HelpHint>
         <div className="aopd-aggregate-period">
           <label>
             Reporting year

@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { MONTH_NAMES } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import TallyMarks from '../components/common/TallyMarks';
+import HelpHint from '../components/common/HelpHint';
 import {
   buildMonthlyIctTallyRows,
   exportMonthlyReportExcel,
@@ -48,6 +49,7 @@ export default function MonthlyReport() {
         <div>
           <h2>Monthly report</h2>
           <p>ICT tally sheet by sex and age group.</p>
+          <HelpHint label="Reporting period">Choose the year and month for this sheet. It combines eligible individual encounters and saved registration-book counts for this period.</HelpHint>
         </div>
         <div className="aopd-filters">
           <label>

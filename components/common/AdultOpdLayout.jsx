@@ -5,6 +5,7 @@ const NAV_ITEMS = [
   { to: '/adult-opd', label: 'Dashboard', end: true },
   { to: '/adult-opd/entry', label: 'Patient Entry', roles: ['owner', 'admin', 'data_entry', 'local demo'] },
   { to: '/adult-opd/aggregate-entry', label: 'Aggregate Entry', roles: ['owner', 'admin', 'data_entry', 'local demo'] },
+  { to: '/adult-opd/document-scanner', label: 'AI Document Scanner', roles: ['owner', 'admin', 'data_entry'] },
   { to: '/adult-opd/records', label: 'Patient Records' },
   { to: '/adult-opd/monthly', label: 'Monthly Report' },
   { to: '/adult-opd/yearly', label: 'Yearly Report' },
@@ -86,6 +87,10 @@ export default function AdultOpdLayout({
             <span className="aopd-topbar-mark" aria-hidden="true">OPD</span>
             <h1>OPD Monthly Reporting System</h1>
           </div>
+          <NavLink to="/adult-opd/help" className="aopd-help-launch" aria-label="Open Help Center">
+            <span aria-hidden="true">?</span>
+            Help
+          </NavLink>
           {facilities.length > 1 && (
             <label className="aopd-active-facility">
               Active facility
