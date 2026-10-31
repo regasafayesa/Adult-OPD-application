@@ -123,7 +123,10 @@ and the facility's privacy requirements before uploading documents. Avoid
 documents containing names or identifiers. Drafts persist extracted
 structured fields in a facility-scoped table so review can resume; after a
 successful import, those extracted fields are cleared while metadata and
-counts remain in history.
+counts remain in history. Individual encounter dates in scanner imports use
+the current local date, not a date extracted from the source; age is editable
+in the scanner review. Authorized facility staff can remove an imported
+document's history entry without deleting the patient or tally records.
 
 For an existing Supabase project, review and apply
 `supabase/migrations/20261031_document_imports.sql` after the facility schema
@@ -135,6 +138,12 @@ supabase functions deploy opd-document-extract
 supabase secrets set GEMINI_API_KEY=your-server-side-key
 supabase secrets set ALLOWED_ORIGINS="https://your-production-domain.vercel.app"
 ```
+
+To enable removal of imported document history in an existing project, review
+and apply `supabase/migrations/20261101_document_import_history_delete.sql`
+after the document imports migration. It only grants deletion of imported
+history rows to staff authorized to write encounters; it does not delete
+encounters or monthly tally data.
 
 `SUPABASE_URL` and `SUPABASE_ANON_KEY` are provided to Supabase Edge Functions
 by the platform. Set `ALLOWED_ORIGINS` to the exact production Vercel origin

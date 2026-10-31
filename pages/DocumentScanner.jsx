@@ -11,6 +11,7 @@ import {
 } from '../services/monthlyDiagnosisCounts.mjs';
 import {
   createDocumentImport,
+  deleteImportedDocumentHistory,
   extractDocument,
   hashDocument,
   loadDocumentImportHistory,
@@ -28,6 +29,13 @@ const EMPTY_EXTRACTION = {
   summaries: [],
   notes: [],
 };
+
+function currentLocalDate() {
+  const now = new Date();
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60_000)
+    .toISOString()
+    .slice(0, 10);
+}
 
 function normalizeName(value) {
   return String(value || '')
@@ -61,7 +69,7 @@ function recognizedExtraction(extraction, diagnoses, documentType) {
         return {
           ...row,
           recordId: row.recordId || createId('enc'),
-          date: row.date || '',
+          date: currentLocalDate(),
           diagnosis: diagnosis?.name || row.diagnosis || '',
           diagnosisId: diagnosis?.id || '',
           age: row.age == null ? '' : String(row.age),
@@ -198,6 +206,8 @@ export default function DocumentScanner() {
   const [progress, setProgress] = useState(0);
   const [reviewConfirmed, setReviewConfirmed] = useState(false);
   const [duplicateConfirmed, setDuplicateConfirmed] = useState(false);
+  const [editingAgeId, setEditingAgeId] = useState('');
+  const [deletingHistoryId, setDeletingHistoryId] = useState('');
   const [dragging, setDragging] = useState(false);
   const [zoom, setZoom] = useState(1);
 
@@ -248,9 +258,11 @@ export default function DocumentScanner() {
   const encounterReview = useMemo(() => {
     if (documentType !== 'individual' || !extraction) return [];
     return extraction.encounters.map((row, index) => {
-      const errors = fieldErrors(row, diagnoses);
-      const duplicate = records.some((record) => isSameEncounter(row, record))
-        || extraction.encounters.slice(0, index).some((previous) => isSameEncounter(row, previous));
+      const savedRecord = records.find((record) => record.id === row.recordId);
+      const encounter = { ...row, date: savedRecord?.date || currentLocalDate() };
+      const errors = fieldErrors(encounter, diagnoses);
+      const duplicate = records.some((record) => isSameEncounter(encounter, record))
+        || extraction.encounters.slice(0, index).some((previous) => isSameEncounter(encounter, previous));
       return { id: index, errors, duplicate };
     });
   }, [diagnoses, documentType, extraction, records]);
@@ -280,6 +292,7 @@ export default function DocumentScanner() {
   function chooseFile(nextFile) {
     setError('');
     setMessage('');
+    setEditingAgeId('');
     if (!nextFile) {
       setFile(null);
       setExtraction(null);
@@ -344,6 +357,22 @@ export default function DocumentScanner() {
     const rows = await loadDocumentImportHistory(facilityId);
     setHistory(rows);
     setHistoryError('');
+  }
+
+  async function removeImportedHistory(item) {
+    if (!window.confirm(
+      'Remove this entry from document import history? Previously imported patient or tally records will not be deleted.'
+    )) return;
+    setHistoryError('');
+    setDeletingHistoryId(item.id);
+    try {
+      await deleteImportedDocumentHistory(facilityId, item.id);
+      setHistory((previous) => previous.filter((entry) => entry.id !== item.id));
+    } catch (deleteError) {
+      setHistoryError(deleteError.message);
+    } finally {
+      setDeletingHistoryId('');
+    }
   }
 
   async function processDocument() {
@@ -425,6 +454,7 @@ export default function DocumentScanner() {
   async function cancelImport() {
     if (!importId) {
       setExtraction(null);
+      setEditingAgeId('');
       setMessage('Review cancelled.');
       return;
     }
@@ -435,6 +465,7 @@ export default function DocumentScanner() {
         extraction_result: null,
       });
       setExtraction(null);
+      setEditingAgeId('');
       setImportId('');
       await refreshHistory();
       setMessage('Import cancelled. The original document was not retained.');
@@ -454,6 +485,7 @@ export default function DocumentScanner() {
       reporting_year: period.year ? Number(period.year) : null,
     });
     setExtraction(null);
+    setEditingAgeId('');
     setMessage(`Import complete: ${importedEntries} ${documentType === 'individual' ? 'encounter(s)' : 'diagnosis summary row(s)'} confirmed saved.`);
     try {
       await refreshHistory();
@@ -468,9 +500,10 @@ export default function DocumentScanner() {
     if (invalidEncounterCount || duplicateRequiresConfirm || !reviewConfirmed) return;
     setProcessing(true);
     try {
+      const importDate = currentLocalDate();
       const entries = extraction.encounters.map((row) => ({
         id: row.recordId || createId('enc'),
-        date: row.date,
+        date: records.find((record) => record.id === row.recordId)?.date || importDate,
         age: Number(row.age),
         sex: row.sex,
         diagnosis: activeDiagnoses.find((item) => item.id === row.diagnosisId)?.name || '',
@@ -532,6 +565,7 @@ export default function DocumentScanner() {
     setFile(null);
     setReviewConfirmed(false);
     setDuplicateConfirmed(false);
+    setEditingAgeId('');
     setError('');
     setMessage('Draft restored. The original document is not stored; review the saved extraction before importing.');
   }
@@ -720,7 +754,7 @@ export default function DocumentScanner() {
                         ...previous,
                         encounters: [...previous.encounters, {
                           recordId: createId('enc'),
-                          date: '', diagnosis: '', diagnosisId: '', age: '', sex: '',
+                          date: currentLocalDate(), diagnosis: '', diagnosisId: '', age: '', sex: '',
                           confidence: 0, issues: ['Manually added; verify against the document.'], page: null,
                         }],
                       }))}
@@ -730,14 +764,16 @@ export default function DocumentScanner() {
                   </div>
                   <div className="aopd-document-table-wrap">
                     <table className="aopd-document-table">
-                      <thead><tr><th>Date</th><th>Diagnosis</th><th>Age</th><th>Sex</th><th>Confidence / review</th><th /></tr></thead>
+                      <thead><tr><th>Date (automatic)</th><th>Diagnosis</th><th>Age</th><th>Sex</th><th>Confidence / review</th><th /></tr></thead>
                       <tbody>
                         {extraction.encounters.map((row, index) => {
                           const review = encounterReview[index];
                           return (
                             <tr key={`encounter-${index}`} className={Object.keys(review.errors).length ? 'has-review-error' : ''}>
                               <td>
-                                <input aria-label={`Encounter ${index + 1} date`} type="date" value={row.date} onChange={(event) => updateEncounter(index, 'date', event.target.value)} />
+                                <time dateTime={records.find((record) => record.id === row.recordId)?.date || currentLocalDate()}>
+                                  {records.find((record) => record.id === row.recordId)?.date || currentLocalDate()}
+                                </time>
                               </td>
                               <td>
                                 <DiagnosisAutocomplete
@@ -747,7 +783,33 @@ export default function DocumentScanner() {
                                 />
                               </td>
                               <td>
-                                <input aria-label={`Encounter ${index + 1} age`} type="number" min="0" max="120" value={row.age} onChange={(event) => updateEncounter(index, 'age', event.target.value)} />
+                                {editingAgeId === row.recordId ? (
+                                  <>
+                                    <input
+                                      aria-label={`Encounter ${index + 1} age`}
+                                      type="number"
+                                      min="0"
+                                      max="120"
+                                      value={row.age}
+                                      onChange={(event) => updateEncounter(index, 'age', event.target.value)}
+                                    />
+                                    <button type="button" className="aopd-btn secondary" onClick={() => setEditingAgeId('')}>
+                                      Done
+                                    </button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span>{row.age || '—'}</span>
+                                    <button
+                                      type="button"
+                                      className="aopd-btn secondary"
+                                      aria-label={`Edit encounter ${index + 1} age`}
+                                      onClick={() => setEditingAgeId(row.recordId)}
+                                    >
+                                      Edit
+                                    </button>
+                                  </>
+                                )}
                               </td>
                               <td>
                                 <select aria-label={`Encounter ${index + 1} sex`} value={row.sex} onChange={(event) => updateEncounter(index, 'sex', event.target.value)}>
@@ -936,6 +998,16 @@ export default function DocumentScanner() {
                     {item.extraction_result && ['draft', 'awaiting_review'].includes(item.status) && (
                       <button type="button" className="aopd-btn secondary" onClick={() => resumeDraft(item)}>
                         Resume review
+                      </button>
+                    )}
+                    {item.status === 'imported' && (
+                      <button
+                        type="button"
+                        className="aopd-btn secondary"
+                        onClick={() => removeImportedHistory(item)}
+                        disabled={Boolean(deletingHistoryId)}
+                      >
+                        {deletingHistoryId === item.id ? 'Removing…' : 'Remove history'}
                       </button>
                     )}
                   </td>
