@@ -171,6 +171,15 @@ function toGeminiSchema(schema: Record<string, unknown>): Record<string, unknown
   return result;
 }
 
+function safeProviderErrorMessage(message: unknown, apiKey: string) {
+  if (typeof message !== 'string') return '';
+  return message
+    .replaceAll(apiKey, '[redacted]')
+    .replace(/AIza[0-9A-Za-z_-]{20,}/g, '[redacted]')
+    .replace(/\s+/g, ' ')
+    .slice(0, 500);
+}
+
 async function verifyFacilityWriteAccess(
   supabaseUrl: string,
   apiKey: string,
@@ -316,23 +325,27 @@ Deno.serve(async (request) => {
     }
     if (!geminiResponse.ok) {
       let providerCode = '';
-      let providerMessage = '';
+      let rawProviderMessage: unknown = '';
       try {
         const providerError = await geminiResponse.clone().json();
-        providerCode = providerError?.error?.status || '';
-        providerMessage = providerError?.error?.message || '';
+        providerCode = typeof providerError?.error?.status === 'string'
+          ? providerError.error.status
+          : '';
+        rawProviderMessage = providerError?.error?.message;
       } catch {
         providerCode = '';
-        providerMessage = '';
+        rawProviderMessage = '';
       }
+      const providerMessage = safeProviderErrorMessage(rawProviderMessage, geminiApiKey);
       const invalidKey = /API_KEY_INVALID|API key not valid|invalid api key/i.test(
         `${providerCode} ${providerMessage}`,
       );
       const quotaExceeded = geminiResponse.status === 429
         || /RESOURCE_EXHAUSTED|quota/i.test(`${providerCode} ${providerMessage}`);
       console.error('[opd-document-extract] Gemini returned an error.', {
-        status: geminiResponse.status,
+        providerStatus: geminiResponse.status,
         code: /^[A-Z0-9_]{1,80}$/.test(providerCode) ? providerCode : undefined,
+        message: providerMessage || undefined,
       });
       if (invalidKey || geminiResponse.status === 403) {
         return jsonResponse(502, { error: 'Gemini rejected the API key or its API access. Verify the GEMINI_API_KEY Edge Function secret and Gemini API access.' }, request);
@@ -342,6 +355,9 @@ Deno.serve(async (request) => {
       }
       if (geminiResponse.status === 400) {
         return jsonResponse(502, { error: 'Gemini could not process this document request. Verify the document and Gemini API configuration.' }, request);
+      }
+      if (geminiResponse.status === 404 || providerCode === 'NOT_FOUND') {
+        return jsonResponse(502, { error: 'Gemini could not find the requested model or API route. Verify that gemini-2.5-flash is enabled for this API key and project.' }, request);
       }
       return jsonResponse(502, { error: 'The Gemini service could not process this document. Retry or enter it manually.' }, request);
     }
