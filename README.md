@@ -114,7 +114,7 @@ The original file is held in browser memory and sent to the
 `opd-document-extract` Supabase Edge Function; this application does not put
 the original in Supabase Storage or the import-history table. The Edge Function
 checks the user's bearer token and facility write permission, validates the
-file, then sends it to Google's Gemini `gemini-2.5-flash` model using inline
+file, then sends it to Google's Gemini `gemini-3.8-flash` model using inline
 PDF/image content and structured JSON output. The API key is read from the
 server-side `GEMINI_API_KEY` Edge Function secret and is never sent to the
 browser. This does not make the provider a local processor: document content

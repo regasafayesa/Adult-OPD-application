@@ -21,6 +21,7 @@ function corsHeaders(request: Request) {
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const GEMINI_REQUEST_TIMEOUT_MS = 120_000;
 const ALLOWED_TYPES = new Map([
   ['application/pdf', '.pdf'],
   ['image/jpeg', '.jpg'],
@@ -118,6 +119,16 @@ function hasExpectedSignature(bytes: Uint8Array, mimeType: string) {
   return bytes.length >= 3 && bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
 }
 
+function bytesToBase64(bytes: Uint8Array) {
+  const chunks: string[] = [];
+  const chunkSize = 0x6000;
+  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+    const chunk = bytes.subarray(offset, Math.min(offset + chunkSize, bytes.length));
+    chunks.push(btoa(String.fromCharCode(...chunk)));
+  }
+  return chunks.join('');
+}
+
 function buildPrompt(documentType: string) {
   const common = [
     'Extract structured information from this OPD healthcare document.',
@@ -178,6 +189,21 @@ function safeProviderErrorMessage(message: unknown, apiKey: string) {
     .replace(/AIza[0-9A-Za-z_-]{20,}/g, '[redacted]')
     .replace(/\s+/g, ' ')
     .slice(0, 500);
+}
+
+interface GeminiResponse {
+  error?: {
+    status?: string;
+    message?: string;
+  };
+  candidates?: Array<{
+    content?: {
+      parts?: Array<{
+        text?: string;
+        thought?: boolean;
+      }>;
+    };
+  }>;
 }
 
 async function verifyFacilityWriteAccess(
@@ -280,23 +306,21 @@ Deno.serve(async (request) => {
       return jsonResponse(415, { error: 'The uploaded file is unreadable or is not the selected file type.' }, request);
     }
 
-    let binary = '';
-    for (let offset = 0; offset < bytes.length; offset += 0x8000) {
-      binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
-    }
-    const base64 = btoa(binary);
+    const base64 = bytesToBase64(bytes);
     stage = 'ai-provider';
     let geminiResponse: Response;
+    let geminiResponseBody: string;
+    const geminiTimeout = AbortSignal.timeout(GEMINI_REQUEST_TIMEOUT_MS);
     try {
       geminiResponse = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'x-goog-api-key': geminiApiKey,
           },
-          signal: AbortSignal.timeout(60000),
+          signal: geminiTimeout,
           body: JSON.stringify({
             contents: [{
               parts: [
@@ -311,31 +335,39 @@ Deno.serve(async (request) => {
           }),
         },
       );
+      geminiResponseBody = await geminiResponse.text();
     } catch (providerError) {
-      const timedOut = providerError instanceof Error && providerError.name === 'TimeoutError';
+      const timedOut = geminiTimeout.aborted
+        || (providerError instanceof Error && providerError.name === 'TimeoutError');
       console.error('[opd-document-extract] Gemini request failed.', {
         timedOut,
         errorName: providerError instanceof Error ? providerError.name : 'UnknownError',
       });
       return jsonResponse(
         timedOut ? 504 : 502,
-        { error: timedOut ? 'The Gemini request timed out.' : 'The Gemini service request failed.' },
+        {
+          error: timedOut
+            ? 'Gemini did not finish processing the document within 120 seconds. Retry, or use a smaller or fewer-page document.'
+            : 'The Gemini service request failed before a response was received. Retry the document.',
+        },
         request,
       );
     }
-    if (!geminiResponse.ok) {
-      let providerCode = '';
-      let rawProviderMessage: unknown = '';
-      try {
-        const providerError = await geminiResponse.clone().json();
-        providerCode = typeof providerError?.error?.status === 'string'
-          ? providerError.error.status
-          : '';
-        rawProviderMessage = providerError?.error?.message;
-      } catch {
-        providerCode = '';
-        rawProviderMessage = '';
+    let result: GeminiResponse | null = null;
+    try {
+      const parsed: unknown = JSON.parse(geminiResponseBody);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        result = parsed as GeminiResponse;
       }
+    } catch {
+      if (geminiResponse.ok) {
+        console.error('[opd-document-extract] Gemini returned invalid JSON.');
+        return jsonResponse(502, { error: 'Gemini returned an invalid response. Retry or enter the information manually.' }, request);
+      }
+    }
+    if (!geminiResponse.ok) {
+      const providerCode = result?.error?.status || '';
+      const rawProviderMessage = result?.error?.message;
       const providerMessage = safeProviderErrorMessage(rawProviderMessage, geminiApiKey);
       const invalidKey = /API_KEY_INVALID|API key not valid|invalid api key/i.test(
         `${providerCode} ${providerMessage}`,
@@ -357,18 +389,21 @@ Deno.serve(async (request) => {
         return jsonResponse(502, { error: 'Gemini could not process this document request. Verify the document and Gemini API configuration.' }, request);
       }
       if (geminiResponse.status === 404 || providerCode === 'NOT_FOUND') {
-        return jsonResponse(502, { error: 'Gemini could not find the requested model or API route. Verify that gemini-2.5-flash is enabled for this API key and project.' }, request);
+        return jsonResponse(502, { error: 'Gemini could not find the requested model or API route. Verify that gemini-3.8-flash is enabled for this API key and project.' }, request);
+      }
+      if (geminiResponse.status === 408 || geminiResponse.status === 504) {
+        return jsonResponse(504, { error: 'Gemini timed out while processing the document. Retry, or use a smaller or fewer-page document.' }, request);
+      }
+      if (geminiResponse.status === 503) {
+        return jsonResponse(503, { error: 'Gemini is temporarily unavailable. Retry the document shortly.' }, request);
       }
       return jsonResponse(502, { error: 'The Gemini service could not process this document. Retry or enter it manually.' }, request);
     }
     stage = 'ai-response';
-    const result = await geminiResponse.json();
-    const outputText = result.candidates?.[0]?.content?.parts
-      ?.filter((part: { text?: string; thought?: boolean }) =>
-        typeof part.text === 'string' && part.thought !== true
-      )
-      .map((part: { text: string; thought?: boolean }) => part.text)
-      .join('');
+    const outputText = result?.candidates?.[0]?.content?.parts
+      ?.reduce((text, part) =>
+        typeof part.text === 'string' && part.thought !== true ? text + part.text : text,
+      '');
     if (!outputText) {
       console.error('[opd-document-extract] Gemini response contained no structured output.');
       return jsonResponse(502, { error: 'Gemini returned no structured extraction. The document may be unsupported or unreadable.' }, request);
