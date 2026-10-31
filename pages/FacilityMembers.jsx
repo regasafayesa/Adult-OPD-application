@@ -7,6 +7,7 @@ import {
   removeFacilityMember,
   revokeFacilityInvitation,
 } from '../services/facilityAccess';
+import { formatDisplayDate } from '../utils/dates';
 
 export default function FacilityMembers() {
   const { facilityId, role } = useAdultOpd();
@@ -133,7 +134,7 @@ export default function FacilityMembers() {
                   <tr key={member.user_id}>
                     <td>{member.email || 'Email unavailable'}</td>
                     <td>{member.role}</td>
-                    <td>{new Date(member.created_at).toLocaleDateString()}</td>
+                    <td>{formatDisplayDate(member.created_at?.slice(0, 10))}</td>
                     <td>
                       {member.role !== 'owner' && (role === 'owner' || member.role !== 'admin') ? (
                         <button type="button" className="danger-text" onClick={() => handleRemove(member)} disabled={busy}>

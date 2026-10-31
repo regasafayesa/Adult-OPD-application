@@ -19,6 +19,7 @@ import {
   validateDocumentFile,
 } from '../services/documentImports';
 import { createId } from '../services/storage';
+import { formatDisplayDate, todayISO } from '../utils/dates';
 import { validateEncounter } from '../utils/validation';
 
 const EMPTY_EXTRACTION = {
@@ -29,13 +30,6 @@ const EMPTY_EXTRACTION = {
   summaries: [],
   notes: [],
 };
-
-function currentLocalDate() {
-  const now = new Date();
-  return new Date(now.getTime() - now.getTimezoneOffset() * 60_000)
-    .toISOString()
-    .slice(0, 10);
-}
 
 function normalizeName(value) {
   return String(value || '')
@@ -69,7 +63,8 @@ function recognizedExtraction(extraction, diagnoses, documentType) {
         return {
           ...row,
           recordId: row.recordId || createId('enc'),
-          date: currentLocalDate(),
+          date: todayISO(),
+          issues: (row.issues || []).filter((issue) => !/missing encounter date/i.test(issue)),
           diagnosis: diagnosis?.name || row.diagnosis || '',
           diagnosisId: diagnosis?.id || '',
           age: row.age == null ? '' : String(row.age),
@@ -259,7 +254,7 @@ export default function DocumentScanner() {
     if (documentType !== 'individual' || !extraction) return [];
     return extraction.encounters.map((row, index) => {
       const savedRecord = records.find((record) => record.id === row.recordId);
-      const encounter = { ...row, date: savedRecord?.date || currentLocalDate() };
+      const encounter = { ...row, date: savedRecord?.date || row.date || todayISO() };
       const errors = fieldErrors(encounter, diagnoses);
       const duplicate = records.some((record) => isSameEncounter(encounter, record))
         || extraction.encounters.slice(0, index).some((previous) => isSameEncounter(encounter, previous));
@@ -500,7 +495,7 @@ export default function DocumentScanner() {
     if (invalidEncounterCount || duplicateRequiresConfirm || !reviewConfirmed) return;
     setProcessing(true);
     try {
-      const importDate = currentLocalDate();
+      const importDate = todayISO();
       const entries = extraction.encounters.map((row) => ({
         id: row.recordId || createId('enc'),
         date: records.find((record) => record.id === row.recordId)?.date || importDate,
@@ -754,7 +749,7 @@ export default function DocumentScanner() {
                         ...previous,
                         encounters: [...previous.encounters, {
                           recordId: createId('enc'),
-                          date: currentLocalDate(), diagnosis: '', diagnosisId: '', age: '', sex: '',
+                          date: todayISO(), diagnosis: '', diagnosisId: '', age: '', sex: '',
                           confidence: 0, issues: ['Manually added; verify against the document.'], page: null,
                         }],
                       }))}
@@ -768,11 +763,14 @@ export default function DocumentScanner() {
                       <tbody>
                         {extraction.encounters.map((row, index) => {
                           const review = encounterReview[index];
+                          const encounterDate = records.find((record) => record.id === row.recordId)?.date
+                            || row.date
+                            || todayISO();
                           return (
                             <tr key={`encounter-${index}`} className={Object.keys(review.errors).length ? 'has-review-error' : ''}>
                               <td>
-                                <time dateTime={records.find((record) => record.id === row.recordId)?.date || currentLocalDate()}>
-                                  {records.find((record) => record.id === row.recordId)?.date || currentLocalDate()}
+                                <time dateTime={encounterDate}>
+                                  {formatDisplayDate(encounterDate)}
                                 </time>
                               </td>
                               <td>
