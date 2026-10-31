@@ -15,6 +15,7 @@ test('describes upload and AI provider failures', () => {
   assert.match(documentRecognitionError(413), /10 MB/i);
   assert.match(documentRecognitionError(415), /Unsupported document/i);
   assert.match(documentRecognitionError(502), /AI provider/i);
+  assert.match(documentRecognitionError(502, { error: 'Gemini rejected the API key.' }), /Gemini rejected/i);
   assert.match(documentRecognitionError(503, { error: 'AI API key is missing.' }), /API key is missing/i);
   assert.match(documentRecognitionError(504), /timed out/i);
   assert.match(documentRecognitionError(500, null), /could not be processed/i);

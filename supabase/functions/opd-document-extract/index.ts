@@ -7,9 +7,10 @@ function corsHeaders(request: Request) {
       .filter(Boolean),
   );
   const isLocalDevelopmentOrigin = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
-  const allowOrigin = origin && (isLocalDevelopmentOrigin || configuredOrigins.has(origin))
-    ? { 'Access-Control-Allow-Origin': origin }
-    : {};
+  const allowOrigin: Record<string, string> = {};
+  if (origin && (isLocalDevelopmentOrigin || configuredOrigins.has(origin))) {
+    allowOrigin['Access-Control-Allow-Origin'] = origin;
+  }
   return {
     ...allowOrigin,
     'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info',
@@ -147,6 +148,29 @@ function buildPrompt(documentType: string) {
   ].join(' ');
 }
 
+function toGeminiSchema(schema: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(schema)) {
+    if (key === 'additionalProperties' || key === 'minimum' || key === 'maximum') continue;
+    if (key === 'type' && Array.isArray(value)) {
+      result.type = value.find((type) => type !== 'null');
+      result.nullable = value.includes('null');
+    } else if (key === 'properties' && value && typeof value === 'object') {
+      result.properties = Object.fromEntries(
+        Object.entries(value).map(([name, property]) => [
+          name,
+          toGeminiSchema(property as Record<string, unknown>),
+        ]),
+      );
+    } else if (key === 'items' && value && typeof value === 'object') {
+      result.items = toGeminiSchema(value as Record<string, unknown>);
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
 async function verifyFacilityWriteAccess(
   supabaseUrl: string,
   apiKey: string,
@@ -179,14 +203,14 @@ Deno.serve(async (request) => {
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const apiKey = Deno.env.get('SUPABASE_ANON_KEY') || Deno.env.get('SUPABASE_PUBLISHABLE_KEY');
-  const visionApiKey = Deno.env.get('AI_VISION_API_KEY') || Deno.env.get('OPENAI_API_KEY');
+  const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
   if (!supabaseUrl || !apiKey) {
     console.error('[opd-document-extract] Missing Supabase function configuration.');
     return jsonResponse(503, { error: 'Document recognition is not configured on the server.' }, request);
   }
-  if (!visionApiKey) {
-    console.error('[opd-document-extract] Missing AI_VISION_API_KEY or OPENAI_API_KEY secret.');
-    return jsonResponse(503, { error: 'The AI vision API key is missing from Edge Function secrets.' }, request);
+  if (!geminiApiKey) {
+    console.error('[opd-document-extract] Missing GEMINI_API_KEY secret.');
+    return jsonResponse(503, { error: 'The Gemini API key is missing from Edge Function secrets.' }, request);
   }
 
   const contentLength = Number(request.headers.get('Content-Length') || 0);
@@ -252,93 +276,101 @@ Deno.serve(async (request) => {
       binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
     }
     const base64 = btoa(binary);
-    const dataUrl = `data:${expectedType};base64,${base64}`;
-    const documentContent = expectedType === 'application/pdf'
-      ? { type: 'input_file', filename: uploadedFile.name, file_data: dataUrl }
-      : { type: 'input_image', image_url: dataUrl, detail: 'high' };
     stage = 'ai-provider';
-    let openAiResponse: Response;
+    let geminiResponse: Response;
     try {
-      openAiResponse = await fetch('https://api.openai.com/v1/responses', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${visionApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        signal: AbortSignal.timeout(60000),
-        body: JSON.stringify({
-          model: Deno.env.get('OPENAI_VISION_MODEL') || 'gpt-4.1-mini',
-          store: false,
-          input: [{
-            role: 'user',
-            content: [
-              { type: 'input_text', text: buildPrompt(documentType) },
-              documentContent,
-            ],
-          }],
-          text: {
-            format: {
-              type: 'json_schema',
-              name: 'opd_document_extraction',
-              strict: true,
-              schema: responseSchema,
-            },
+      geminiResponse = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': geminiApiKey,
           },
-        }),
-      });
+          signal: AbortSignal.timeout(60000),
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                { text: buildPrompt(documentType) },
+                { inline_data: { mime_type: expectedType, data: base64 } },
+              ],
+            }],
+            generationConfig: {
+              responseMimeType: 'application/json',
+              responseSchema: toGeminiSchema(responseSchema),
+            },
+          }),
+        },
+      );
     } catch (providerError) {
       const timedOut = providerError instanceof Error && providerError.name === 'TimeoutError';
-      console.error('[opd-document-extract] AI provider request failed.', {
+      console.error('[opd-document-extract] Gemini request failed.', {
         timedOut,
         errorName: providerError instanceof Error ? providerError.name : 'UnknownError',
       });
       return jsonResponse(
         timedOut ? 504 : 502,
-        { error: timedOut ? 'The AI provider request timed out.' : 'The AI provider request failed.' },
+        { error: timedOut ? 'The Gemini request timed out.' : 'The Gemini service request failed.' },
         request,
       );
     }
-    if (!openAiResponse.ok) {
+    if (!geminiResponse.ok) {
       let providerCode = '';
+      let providerMessage = '';
       try {
-        const providerError = await openAiResponse.clone().json();
-        const candidate = providerError?.error?.code || providerError?.error?.type || '';
-        if (typeof candidate === 'string' && /^[a-zA-Z0-9_.-]{1,80}$/.test(candidate)) {
-          providerCode = candidate;
-        }
+        const providerError = await geminiResponse.clone().json();
+        providerCode = providerError?.error?.status || '';
+        providerMessage = providerError?.error?.message || '';
       } catch {
         providerCode = '';
+        providerMessage = '';
       }
-      console.error('[opd-document-extract] AI provider returned an error.', {
-        status: openAiResponse.status,
-        code: providerCode || undefined,
-        requestId: openAiResponse.headers.get('x-request-id') || undefined,
+      const invalidKey = /API_KEY_INVALID|API key not valid|invalid api key/i.test(
+        `${providerCode} ${providerMessage}`,
+      );
+      const quotaExceeded = geminiResponse.status === 429
+        || /RESOURCE_EXHAUSTED|quota/i.test(`${providerCode} ${providerMessage}`);
+      console.error('[opd-document-extract] Gemini returned an error.', {
+        status: geminiResponse.status,
+        code: /^[A-Z0-9_]{1,80}$/.test(providerCode) ? providerCode : undefined,
       });
-      return jsonResponse(502, { error: 'The AI provider could not process this document. Retry or enter it manually.' }, request);
+      if (invalidKey || geminiResponse.status === 403) {
+        return jsonResponse(502, { error: 'Gemini rejected the API key or its API access. Verify the GEMINI_API_KEY Edge Function secret and Gemini API access.' }, request);
+      }
+      if (quotaExceeded) {
+        return jsonResponse(429, { error: 'The Gemini API quota or rate limit has been reached. Try again later.' }, request);
+      }
+      if (geminiResponse.status === 400) {
+        return jsonResponse(502, { error: 'Gemini could not process this document request. Verify the document and Gemini API configuration.' }, request);
+      }
+      return jsonResponse(502, { error: 'The Gemini service could not process this document. Retry or enter it manually.' }, request);
     }
     stage = 'ai-response';
-    const result = await openAiResponse.json();
-    const outputText = result.output_text
-      || result.output?.flatMap((item: { content?: Array<{ type?: string; text?: string }> }) => item.content || [])
-        .find((item: { type?: string }) => item.type === 'output_text')?.text;
+    const result = await geminiResponse.json();
+    const outputText = result.candidates?.[0]?.content?.parts
+      ?.filter((part: { text?: string; thought?: boolean }) =>
+        typeof part.text === 'string' && part.thought !== true
+      )
+      .map((part: { text: string; thought?: boolean }) => part.text)
+      .join('');
     if (!outputText) {
-      console.error('[opd-document-extract] AI provider response contained no structured output.');
-      return jsonResponse(502, { error: 'The AI provider returned no structured extraction.' }, request);
+      console.error('[opd-document-extract] Gemini response contained no structured output.');
+      return jsonResponse(502, { error: 'Gemini returned no structured extraction. The document may be unsupported or unreadable.' }, request);
     }
 
     let extraction: Record<string, unknown>;
     try {
       extraction = JSON.parse(outputText);
     } catch {
-      console.error('[opd-document-extract] AI provider returned invalid JSON.');
-      return jsonResponse(502, { error: 'The AI provider returned an invalid response. Retry or enter it manually.' }, request);
+      console.error('[opd-document-extract] Gemini returned invalid JSON.');
+      return jsonResponse(502, { error: 'Gemini returned an invalid response. Retry or enter the information manually.' }, request);
     }
     if (extraction.documentType !== documentType
       || !Array.isArray(extraction.encounters)
       || !Array.isArray(extraction.summaries)
       || !Array.isArray(extraction.notes)) {
-      console.error('[opd-document-extract] AI provider response did not match the extraction schema.');
-      return jsonResponse(502, { error: 'The AI provider returned an invalid response for the selected document type.' }, request);
+      console.error('[opd-document-extract] Gemini response did not match the extraction schema.');
+      return jsonResponse(502, { error: 'Gemini returned an invalid response for the selected document type.' }, request);
     }
     return jsonResponse(200, { extraction }, request);
   } catch (error) {

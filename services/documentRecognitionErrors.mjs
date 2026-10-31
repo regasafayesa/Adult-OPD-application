@@ -6,9 +6,11 @@ export function documentRecognitionError(status, body = {}) {
   }
   if (status === 413) return 'The document exceeds the 10 MB upload limit.';
   if (status === 415) return 'Unsupported document. Choose a valid JPG, PNG, or PDF file.';
-  if (status === 502) return 'The AI provider could not process this document. Retry or enter the information manually.';
+  if (status === 502) {
+    return body?.error || 'The AI provider could not process this document. Retry or enter the information manually.';
+  }
   if (status === 503 && /api key|secret/i.test(body?.error || '')) {
-    return 'The AI vision API key is missing from the Supabase Edge Function secrets.';
+    return body.error;
   }
   if (status === 503) return 'The document recognition service is not configured on the server.';
   if (status === 504) return 'The AI provider request timed out. Retry or enter the information manually.';
