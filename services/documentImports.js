@@ -163,18 +163,18 @@ export async function updateDocumentImport(facilityId, importId, patch) {
   if (!data) throw new Error('The import history update was not confirmed.');
 }
 
-export async function deleteImportedDocumentHistory(facilityId, importId) {
+export async function deleteDocumentImportHistory(facilityId, importId) {
   assertCloudFacility(facilityId);
   const { data, error } = await supabase
     .from('document_imports')
     .delete()
     .eq('facility_id', facilityId)
     .eq('id', importId)
-    .eq('status', 'imported')
+    .in('status', ['imported', 'failed'])
     .select('id')
     .single();
-  if (error) throw new Error(`Could not remove imported document history: ${error.message}`);
-  if (!data) throw new Error('The imported document history removal was not confirmed.');
+  if (error) throw new Error(`Could not remove document import history: ${error.message}`);
+  if (!data) throw new Error('The document import history removal was not confirmed.');
 }
 
 export async function loadDocumentImportHistory(facilityId) {

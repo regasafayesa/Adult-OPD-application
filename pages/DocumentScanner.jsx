@@ -11,7 +11,7 @@ import {
 } from '../services/monthlyDiagnosisCounts.mjs';
 import {
   createDocumentImport,
-  deleteImportedDocumentHistory,
+  deleteDocumentImportHistory,
   extractDocument,
   hashDocument,
   loadDocumentImportHistory,
@@ -361,7 +361,7 @@ export default function DocumentScanner() {
     setHistoryError('');
     setDeletingHistoryId(item.id);
     try {
-      await deleteImportedDocumentHistory(facilityId, item.id);
+      await deleteDocumentImportHistory(facilityId, item.id);
       setHistory((previous) => previous.filter((entry) => entry.id !== item.id));
     } catch (deleteError) {
       setHistoryError(deleteError.message);
@@ -998,7 +998,7 @@ export default function DocumentScanner() {
                         Resume review
                       </button>
                     )}
-                    {item.status === 'imported' && (
+                    {['imported', 'failed'].includes(item.status) && (
                       <button
                         type="button"
                         className="aopd-btn secondary"
