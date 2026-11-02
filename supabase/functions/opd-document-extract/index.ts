@@ -1,3 +1,8 @@
+import {
+  generateContentWithFallback,
+  GEMINI_WORKFLOW_TIMEOUT_MS,
+} from './geminiProvider.mjs';
+
 function corsHeaders(request: Request) {
   const origin = request.headers.get('Origin') || '';
   const configuredOrigins = new Set(
@@ -21,7 +26,8 @@ function corsHeaders(request: Request) {
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const GEMINI_REQUEST_TIMEOUT_MS = 120_000;
+const DEFAULT_GEMINI_PRIMARY_MODEL = 'gemini-2.5-flash';
+const DEFAULT_GEMINI_FALLBACK_MODEL = 'gemini-2.5-flash-lite';
 const ALLOWED_TYPES = new Map([
   ['application/pdf', '.pdf'],
   ['image/jpeg', '.jpg'],
@@ -182,20 +188,7 @@ function toGeminiSchema(schema: Record<string, unknown>): Record<string, unknown
   return result;
 }
 
-function safeProviderErrorMessage(message: unknown, apiKey: string) {
-  if (typeof message !== 'string') return '';
-  return message
-    .replaceAll(apiKey, '[redacted]')
-    .replace(/AIza[0-9A-Za-z_-]{20,}/g, '[redacted]')
-    .replace(/\s+/g, ' ')
-    .slice(0, 500);
-}
-
 interface GeminiResponse {
-  error?: {
-    status?: string;
-    message?: string;
-  };
   candidates?: Array<{
     content?: {
       parts?: Array<{
@@ -226,6 +219,7 @@ async function verifyFacilityWriteAccess(
 }
 
 Deno.serve(async (request) => {
+  const handlerStartedAt = Date.now();
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: corsHeaders(request) });
   }
@@ -239,6 +233,8 @@ Deno.serve(async (request) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const apiKey = Deno.env.get('SUPABASE_ANON_KEY') || Deno.env.get('SUPABASE_PUBLISHABLE_KEY');
   const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
+  const primaryModel = (Deno.env.get('GEMINI_PRIMARY_MODEL') || DEFAULT_GEMINI_PRIMARY_MODEL).trim();
+  const fallbackModel = (Deno.env.get('GEMINI_FALLBACK_MODEL') || DEFAULT_GEMINI_FALLBACK_MODEL).trim();
   if (!supabaseUrl || !apiKey) {
     console.error('[opd-document-extract] Missing Supabase function configuration.');
     return jsonResponse(503, { error: 'Document recognition is not configured on the server.' }, request);
@@ -246,6 +242,10 @@ Deno.serve(async (request) => {
   if (!geminiApiKey) {
     console.error('[opd-document-extract] Missing GEMINI_API_KEY secret.');
     return jsonResponse(503, { error: 'The Gemini API key is missing from Edge Function secrets.' }, request);
+  }
+  if (![primaryModel, fallbackModel].every((model) => /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/.test(model))) {
+    console.error('[opd-document-extract] Invalid Gemini model configuration.');
+    return jsonResponse(503, { error: 'Document recognition has an invalid Gemini model configuration.' }, request);
   }
 
   const contentLength = Number(request.headers.get('Content-Length') || 0);
@@ -308,51 +308,82 @@ Deno.serve(async (request) => {
 
     const base64 = bytesToBase64(bytes);
     stage = 'ai-provider';
-    let geminiResponse: Response;
-    let geminiResponseBody: string;
-    const geminiTimeout = AbortSignal.timeout(GEMINI_REQUEST_TIMEOUT_MS);
-    try {
-      geminiResponse = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-goog-api-key': geminiApiKey,
-          },
-          signal: geminiTimeout,
-          body: JSON.stringify({
-            contents: [{
-              parts: [
-                { text: buildPrompt(documentType) },
-                { inline_data: { mime_type: expectedType, data: base64 } },
-              ],
-            }],
-            generationConfig: {
-              responseMimeType: 'application/json',
-              responseSchema: toGeminiSchema(responseSchema),
-            },
-          }),
+    const providerResult = await generateContentWithFallback({
+      apiKey: geminiApiKey,
+      primaryModel,
+      fallbackModel,
+      workflowTimeoutMs: Math.max(
+        0,
+        GEMINI_WORKFLOW_TIMEOUT_MS - (Date.now() - handlerStartedAt),
+      ),
+      requestBody: {
+        contents: [{
+          parts: [
+            { text: buildPrompt(documentType) },
+            { inline_data: { mime_type: expectedType, data: base64 } },
+          ],
+        }],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: toGeminiSchema(responseSchema),
         },
-      );
-      geminiResponseBody = await geminiResponse.text();
-    } catch (providerError) {
-      const timedOut = geminiTimeout.aborted
-        || (providerError instanceof Error && providerError.name === 'TimeoutError');
-      console.error('[opd-document-extract] Gemini request failed.', {
-        timedOut,
-        errorName: providerError instanceof Error ? providerError.name : 'UnknownError',
+      },
+      onAttempt: ({ model, attempt, status, timedOut, phase }) => {
+        console.info('[opd-document-extract] Gemini provider attempt.', {
+          model,
+          attempt,
+          providerStatus: status,
+          timedOut,
+          phase,
+        });
+      },
+    });
+    if (!providerResult.ok) {
+      console.error('[opd-document-extract] Gemini provider failed.', {
+        model: providerResult.model,
+        attempt: providerResult.attempt,
+        providerStatus: providerResult.status,
+        timedOut: providerResult.timedOut,
+        reason: providerResult.reason,
+        code: /^[A-Z0-9_]{1,80}$/.test(providerResult.code || '')
+          ? providerResult.code
+          : undefined,
       });
-      return jsonResponse(
-        timedOut ? 504 : 502,
-        {
-          error: timedOut
-            ? 'Gemini did not finish processing the document within 120 seconds. Retry, or use a smaller or fewer-page document.'
-            : 'The Gemini service request failed before a response was received. Retry the document.',
-        },
-        request,
-      );
+      if (providerResult.status === 400
+        || (providerResult.status === 422 && providerResult.reason !== 'unsupported-generation-method')) {
+        return jsonResponse(422, {
+          error: 'Gemini could not process this document. It may be damaged, encrypted, or unreadable; verify it and try again.',
+        }, request);
+      }
+      if (providerResult.status === 401 || providerResult.status === 403
+        || providerResult.code === 'API_KEY_INVALID'
+        || providerResult.code === 'PERMISSION_DENIED') {
+        return jsonResponse(502, {
+          error: 'Gemini rejected the API key or its API access. Verify the GEMINI_API_KEY Edge Function secret and Gemini API access.',
+        }, request);
+      }
+      if (providerResult.status === 404 || providerResult.code === 'NOT_FOUND'
+        || providerResult.reason === 'unsupported-generation-method') {
+        return jsonResponse(502, {
+          error: 'The configured Gemini fallback model is unavailable or does not support document extraction. Verify GEMINI_FALLBACK_MODEL.',
+        }, request);
+      }
+      if (providerResult.timedOut || providerResult.status === 408 || providerResult.status === 504) {
+        return jsonResponse(504, {
+          error: 'Gemini timed out while processing the document. Retry, or use a smaller or fewer-page document.',
+        }, request);
+      }
+      if (providerResult.status === 429) {
+        return jsonResponse(429, {
+          error: 'Gemini is rate limited or temporarily overloaded. Wait briefly, then retry the document.',
+        }, request);
+      }
+      return jsonResponse(503, {
+        error: 'Gemini is temporarily unavailable after retrying. Wait briefly, then retry the document.',
+      }, request);
     }
+
+    const geminiResponseBody = providerResult.responseBody;
     let result: GeminiResponse | null = null;
     try {
       const parsed: unknown = JSON.parse(geminiResponseBody);
@@ -360,44 +391,8 @@ Deno.serve(async (request) => {
         result = parsed as GeminiResponse;
       }
     } catch {
-      if (geminiResponse.ok) {
-        console.error('[opd-document-extract] Gemini returned invalid JSON.');
-        return jsonResponse(502, { error: 'Gemini returned an invalid response. Retry or enter the information manually.' }, request);
-      }
-    }
-    if (!geminiResponse.ok) {
-      const providerCode = result?.error?.status || '';
-      const rawProviderMessage = result?.error?.message;
-      const providerMessage = safeProviderErrorMessage(rawProviderMessage, geminiApiKey);
-      const invalidKey = /API_KEY_INVALID|API key not valid|invalid api key/i.test(
-        `${providerCode} ${providerMessage}`,
-      );
-      const quotaExceeded = geminiResponse.status === 429
-        || /RESOURCE_EXHAUSTED|quota/i.test(`${providerCode} ${providerMessage}`);
-      console.error('[opd-document-extract] Gemini returned an error.', {
-        providerStatus: geminiResponse.status,
-        code: /^[A-Z0-9_]{1,80}$/.test(providerCode) ? providerCode : undefined,
-        message: providerMessage || undefined,
-      });
-      if (invalidKey || geminiResponse.status === 403) {
-        return jsonResponse(502, { error: 'Gemini rejected the API key or its API access. Verify the GEMINI_API_KEY Edge Function secret and Gemini API access.' }, request);
-      }
-      if (quotaExceeded) {
-        return jsonResponse(429, { error: 'The Gemini API quota or rate limit has been reached. Try again later.' }, request);
-      }
-      if (geminiResponse.status === 400) {
-        return jsonResponse(502, { error: 'Gemini could not process this document request. Verify the document and Gemini API configuration.' }, request);
-      }
-      if (geminiResponse.status === 404 || providerCode === 'NOT_FOUND') {
-        return jsonResponse(502, { error: 'Gemini could not find the requested model or API route. Verify that gemini-3.8-flash is enabled for this API key and project.' }, request);
-      }
-      if (geminiResponse.status === 408 || geminiResponse.status === 504) {
-        return jsonResponse(504, { error: 'Gemini timed out while processing the document. Retry, or use a smaller or fewer-page document.' }, request);
-      }
-      if (geminiResponse.status === 503) {
-        return jsonResponse(503, { error: 'Gemini is temporarily unavailable. Retry the document shortly.' }, request);
-      }
-      return jsonResponse(502, { error: 'The Gemini service could not process this document. Retry or enter it manually.' }, request);
+      console.error('[opd-document-extract] Gemini returned invalid JSON.');
+      return jsonResponse(502, { error: 'Gemini returned an invalid response. Retry or enter the information manually.' }, request);
     }
     stage = 'ai-response';
     const outputText = result?.candidates?.[0]?.content?.parts

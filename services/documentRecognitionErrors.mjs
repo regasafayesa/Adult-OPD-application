@@ -6,14 +6,16 @@ export function documentRecognitionError(status, body = {}) {
   }
   if (status === 413) return 'The document exceeds the 10 MB upload limit.';
   if (status === 415) return 'Unsupported document. Choose a valid JPG, PNG, or PDF file.';
+  if (status === 422) return body?.error || 'The document could not be read. Verify the file and try again.';
+  if (status === 429) return body?.error || 'The AI provider is rate limited. Wait briefly, then retry.';
   if (status === 502) {
     return body?.error || 'The AI provider could not process this document. Retry or enter the information manually.';
   }
   if (status === 503 && /api key|secret/i.test(body?.error || '')) {
     return body.error;
   }
-  if (status === 503) return 'The document recognition service is not configured on the server.';
-  if (status === 504) return 'The AI provider request timed out. Retry or enter the information manually.';
+  if (status === 503) return body?.error || 'The document recognition service is not configured on the server.';
+  if (status === 504) return body?.error || 'The AI provider request timed out. Retry or enter the information manually.';
   return body?.error || 'The document could not be processed.';
 }
 

@@ -114,10 +114,14 @@ The original file is held in browser memory and sent to the
 `opd-document-extract` Supabase Edge Function; this application does not put
 the original in Supabase Storage or the import-history table. The Edge Function
 checks the user's bearer token and facility write permission, validates the
-file, then sends it to Google's Gemini `gemini-3.8-flash` model using inline
-PDF/image content and structured JSON output. The API key is read from the
-server-side `GEMINI_API_KEY` Edge Function secret and is never sent to the
-browser. This does not make the provider a local processor: document content
+file, then sends it to Google's Gemini API using inline PDF/image content and
+structured JSON output. It retries temporary provider/network failures up to
+three times with jittered backoff and switches to a configured fallback only
+after confirming that model supports `generateContent`. Provider requests are
+bounded by per-request timeouts and a 135-second total workflow limit. Failed
+scans can be retried from the same selected file. The API key and model
+configuration are read only from server-side Edge Function secrets and are
+never sent to the browser. This does not make the provider a local processor: document content
 is disclosed to Google for recognition. Review Google's current data-use terms
 and the facility's privacy requirements before uploading documents. Avoid
 documents containing names or identifiers. Drafts persist extracted
@@ -136,6 +140,7 @@ repository root using the Supabase CLI:
 ```sh
 supabase functions deploy opd-document-extract
 supabase secrets set GEMINI_API_KEY=your-server-side-key
+supabase secrets set GEMINI_PRIMARY_MODEL=gemini-2.5-flash GEMINI_FALLBACK_MODEL=gemini-2.5-flash-lite
 supabase secrets set ALLOWED_ORIGINS="https://your-production-domain.vercel.app"
 ```
 
