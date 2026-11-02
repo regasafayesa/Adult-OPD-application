@@ -1,31 +1,51 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StatusBadge } from '../components/common/ReportTables';
 import { ADULT_AGE_GROUPS, MONTH_NAMES, OPD_CATEGORY, SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
-import { formatDisplayDate } from '../utils/dates';
+import { formatDisplayDate, todayISO } from '../utils/dates';
 import { searchFacilityEncounters } from '../services/supabaseData';
+import { MONTHLY_DIAGNOSIS_AGE_GROUPS } from '../services/monthlyDiagnosisCounts.mjs';
 import PatientEntry from './PatientEntry';
 
-export default function PatientRecords() {
-  const {
-    records,
-    diagnoses,
-    deleteRecord,
-    facilityId,
-    canManageFacility,
-    canWriteEncounters,
-  } = useAdultOpd();
-  const [filters, setFilters] = useState({
+function defaultRecordFilters() {
+  const [year, month] = todayISO().split('-');
+  return {
     query: '',
     date: '',
-    month: '',
-    year: '',
+    month: String(Number(month)),
+    year,
     sex: '',
     ageGroup: '',
     diagnosis: '',
     opdCategory: '',
     status: '',
-  });
+  };
+}
+
+export default function PatientRecords() {
+  const navigate = useNavigate();
+  const {
+    records,
+    diagnoses,
+    monthlyDiagnosisCounts,
+    monthlyDiagnosisCountsStatus,
+    monthlyDiagnosisCountsError,
+    deleteRecord,
+    clearMonthlyDiagnosisCounts,
+    facilityId,
+    canManageFacility,
+    canWriteEncounters,
+    canWriteMonthlyDiagnosisCounts,
+  } = useAdultOpd();
+  const now = new Date();
+  const [activeRecordsTab, setActiveRecordsTab] = useState('encounters');
+  const [aggregateMonth, setAggregateMonth] = useState(now.getMonth() + 1);
+  const [aggregateYear, setAggregateYear] = useState(now.getFullYear());
+  const [clearingAggregates, setClearingAggregates] = useState(false);
+  const [aggregateMessage, setAggregateMessage] = useState('');
+  const [aggregateMessageIsError, setAggregateMessageIsError] = useState(false);
+  const [filters, setFilters] = useState(defaultRecordFilters);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
@@ -78,23 +98,30 @@ export default function PatientRecords() {
 
   const filtered = facilityId ? cloudFiltered : localFiltered;
   const activeFilterCount = Object.values(filters).filter(Boolean).length;
+  const savedAggregateRows = useMemo(() => monthlyDiagnosisCounts
+    .filter((item) =>
+      Number(item.reportingYear) === Number(aggregateYear)
+      && Number(item.reportingMonth) === Number(aggregateMonth)
+    )
+    .flatMap((item) => MONTHLY_DIAGNOSIS_AGE_GROUPS.flatMap((group) => [
+      { ...item, ...group, sex: SEX.FEMALE, field: group.femaleField },
+      { ...item, ...group, sex: SEX.MALE, field: group.maleField },
+    ]).filter(({ field }) => Number(item[field]) > 0)), [
+    aggregateMonth,
+    aggregateYear,
+    monthlyDiagnosisCounts,
+  ]);
+  const savedAggregateSummaryCount = monthlyDiagnosisCounts.filter((item) =>
+    Number(item.reportingYear) === Number(aggregateYear)
+    && Number(item.reportingMonth) === Number(aggregateMonth)
+  ).length;
 
   function updateFilter(field, value) {
     setFilters((prev) => ({ ...prev, [field]: value }));
   }
 
   function clearFilters() {
-    setFilters({
-      query: '',
-      date: '',
-      month: '',
-      year: '',
-      sex: '',
-      ageGroup: '',
-      diagnosis: '',
-      opdCategory: '',
-      status: '',
-    });
+    setFilters(defaultRecordFilters());
   }
 
   async function handleDelete(id) {
@@ -108,6 +135,27 @@ export default function PatientRecords() {
       : result.error);
   }
 
+  async function handleClearAggregateSummaries() {
+    const periodLabel = `${MONTH_NAMES[aggregateMonth - 1]} ${aggregateYear}`;
+    if (!window.confirm(
+      `Permanently delete all saved registration-book summaries for ${periodLabel}? Individual patient encounters will not be changed.`
+    )) return;
+    setClearingAggregates(true);
+    setAggregateMessage('');
+    const result = await clearMonthlyDiagnosisCounts(aggregateYear, aggregateMonth);
+    setClearingAggregates(false);
+    setAggregateMessageIsError(!result.ok);
+    setAggregateMessage(result.ok
+      ? `Saved aggregate summaries for ${periodLabel} were cleared. Individual encounters were not changed.`
+      : result.error);
+  }
+
+  function editAggregateCount(item, ageGroupKey, sex) {
+    navigate('/adult-opd/aggregate-entry', {
+      state: { aggregateEdit: { item, ageGroupKey, sex } },
+    });
+  }
+
   if (editing) {
     return <PatientEntry editingRecord={editing} onDone={() => setEditing(null)} />;
   }
@@ -118,7 +166,42 @@ export default function PatientRecords() {
       <p className="aopd-lede">
         Encounters are stored without names or identifiers and classified into four age groups.
       </p>
+      <p className="aopd-lede">
+        Showing this month’s records by default. Use Filters to find older records; they remain saved.
+      </p>
 
+      <nav className="aopd-records-tabs" role="tablist" aria-label="Record type">
+        <button
+          type="button"
+          role="tab"
+          className={activeRecordsTab === 'encounters' ? 'is-active' : ''}
+          id="aopd-records-encounters-tab"
+          aria-controls="aopd-records-encounters-panel"
+          aria-selected={activeRecordsTab === 'encounters'}
+          onClick={() => setActiveRecordsTab('encounters')}
+        >
+          Patient encounters
+        </button>
+        <button
+          type="button"
+          role="tab"
+          className={activeRecordsTab === 'aggregates' ? 'is-active' : ''}
+          id="aopd-records-aggregates-tab"
+          aria-controls="aopd-records-aggregates-panel"
+          aria-selected={activeRecordsTab === 'aggregates'}
+          onClick={() => setActiveRecordsTab('aggregates')}
+        >
+          Saved aggregate summaries
+        </button>
+      </nav>
+
+      <section
+        className="aopd-records-encounters"
+        id="aopd-records-encounters-panel"
+        role="tabpanel"
+        aria-labelledby="aopd-records-encounters-tab"
+        hidden={activeRecordsTab !== 'encounters'}
+      >
       <div className="aopd-records-filter-toolbar">
         <button
           type="button"
@@ -267,6 +350,116 @@ export default function PatientRecords() {
           </tbody>
         </table>
       </div>
+      </section>
+
+      <section
+        className="aopd-records-aggregate"
+        id="aopd-records-aggregates-panel"
+        role="tabpanel"
+        aria-labelledby="aopd-records-aggregates-tab aopd-records-aggregate-heading"
+        hidden={activeRecordsTab !== 'aggregates'}
+      >
+        <header className="aopd-records-aggregate-header">
+          <div>
+            <h3 id="aopd-records-aggregate-heading">Saved aggregate summaries</h3>
+            <p>Registration-book counts saved separately from individual patient encounters.</p>
+          </div>
+          <div className="aopd-records-aggregate-period">
+            <label>
+              Month
+              <select value={aggregateMonth} onChange={(event) => setAggregateMonth(Number(event.target.value))}>
+                {MONTH_NAMES.map((name, index) => (
+                  <option key={name} value={index + 1}>{name}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Year
+              <input
+                type="number"
+                min="1"
+                max="9999"
+                step="1"
+                value={aggregateYear}
+                onChange={(event) => setAggregateYear(event.target.value)}
+              />
+            </label>
+          </div>
+        </header>
+
+        {monthlyDiagnosisCountsStatus === 'loading' && (
+          <p role="status">Loading saved aggregate summaries…</p>
+        )}
+        {monthlyDiagnosisCountsStatus === 'error' && (
+          <p className="aopd-error" role="alert">
+            {monthlyDiagnosisCountsError} Review and apply
+            {' '}<code>supabase/migrations/20261024_monthly_diagnosis_counts.sql</code>
+            {' '}in Supabase SQL Editor to enable saved aggregate summaries.
+          </p>
+        )}
+        {aggregateMessage && (
+          <p className={aggregateMessageIsError ? 'aopd-error' : 'aopd-success'} role={aggregateMessageIsError ? 'alert' : 'status'}>
+            {aggregateMessage}
+          </p>
+        )}
+
+        <div className="aopd-records-aggregate-toolbar">
+          <p>
+            {savedAggregateSummaryCount} {savedAggregateSummaryCount === 1 ? 'diagnosis summary' : 'diagnosis summaries'} · {savedAggregateRows.length} age/sex counts
+          </p>
+          {canManageFacility && (
+            <button
+              type="button"
+              className="aopd-records-aggregate-clear"
+              onClick={handleClearAggregateSummaries}
+              disabled={clearingAggregates || savedAggregateSummaryCount === 0 || monthlyDiagnosisCountsStatus === 'loading'}
+            >
+              {clearingAggregates ? 'Clearing…' : `Clear summaries for ${MONTH_NAMES[aggregateMonth - 1]} ${aggregateYear}`}
+            </button>
+          )}
+        </div>
+
+        <div className="aopd-table-wrap aopd-records-aggregate-table-wrap">
+          <table className="aopd-records-aggregate-table">
+            <thead>
+              <tr>
+                <th>Diagnosis</th>
+                <th>Age group</th>
+                <th>Sex</th>
+                <th className="num">Cases</th>
+                {canWriteMonthlyDiagnosisCounts && <th>Action</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {savedAggregateRows.map((item) => (
+                <tr key={`${item.id}:${item.key}:${item.sex}`}>
+                  <td>{item.diagnosisCode ? `${item.diagnosisCode} — ` : ''}{item.diagnosisName}</td>
+                  <td>{item.label}</td>
+                  <td>{item.sex}</td>
+                  <td className="num">{item[item.field]}</td>
+                  {canWriteMonthlyDiagnosisCounts && (
+                    <td className="aopd-row-actions">
+                      <button
+                        type="button"
+                        onClick={() => editAggregateCount(item, item.key, item.sex)}
+                      >
+                        Edit count
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+              {!savedAggregateRows.length && monthlyDiagnosisCountsStatus !== 'loading' && (
+                <tr>
+                  <td colSpan={canWriteMonthlyDiagnosisCounts ? 5 : 4} className="aopd-empty">
+                    No saved aggregate summaries for this period.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       {viewing && (
         <div className="aopd-modal" onClick={() => setViewing(null)}>

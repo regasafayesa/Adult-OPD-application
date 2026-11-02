@@ -314,6 +314,10 @@ export default function SignIn({
               <>
                 <label htmlFor="aopd-confirm-password">Confirm password</label>
                 <div className="aopd-auth-input-wrap">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="10" width="16" height="11" rx="2" />
+                    <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2" />
+                  </svg>
                   <input
                     id="aopd-confirm-password"
                     type={showPassword ? 'text' : 'password'}
@@ -339,22 +343,25 @@ export default function SignIn({
             {recoveryMode && notice && (
               <p className="aopd-auth-notice" role="status">{notice}</p>
             )}
-            <button className="aopd-auth-button" type="submit" disabled={submitting}>
-              {submitting ? (
-                <>
-                  <span className="aopd-auth-spinner" aria-hidden="true" />
-                  {recoveryMode ? 'Updating password…' : isResetRequest ? 'Sending instructions…' : isCreateAccount ? 'Creating account…' : 'Signing in…'}
-                </>
-              ) : recoveryMode ? (
-                passwordUpdated ? 'Continue to sign in' : 'Update password'
-              ) : isResetRequest ? (
-                'Send reset instructions'
-              ) : isCreateAccount ? (
-                'Create account'
-              ) : (
-                <>Sign in <span aria-hidden="true">→</span></>
-              )}
-            </button>
+            <div className="aopd-auth-submit-wrap">
+              <button className="aopd-auth-button" type="submit" disabled={submitting}>
+                {submitting ? (
+                  <>
+                    <span className="aopd-auth-spinner" aria-hidden="true" />
+                    {recoveryMode ? 'Updating password…' : isResetRequest ? 'Sending instructions…' : isCreateAccount ? 'Creating account…' : 'Signing in…'}
+                  </>
+                ) : recoveryMode ? (
+                  passwordUpdated ? 'Continue to sign in' : 'Update password'
+                ) : isResetRequest ? (
+                  'Send reset instructions'
+                ) : isCreateAccount ? (
+                  'Create account'
+                ) : (
+                  <>Sign in <span aria-hidden="true">→</span></>
+                )}
+              </button>
+              <span className="aopd-auth-button-glow" aria-hidden="true" />
+            </div>
           </form>
 
           {!recoveryMode && (

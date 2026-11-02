@@ -1,4 +1,5 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import DiagnosisAutocomplete from '../components/common/DiagnosisAutocomplete';
 import HelpHint from '../components/common/HelpHint';
 import { MONTH_NAMES, SEX } from '../constants';
@@ -33,16 +34,14 @@ function getCountField(ageGroupKey, sex) {
 }
 
 export default function AggregateEntry() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     diagnoses,
     settings,
     monthlyDiagnosisCounts,
-    monthlyDiagnosisCountsStatus,
-    monthlyDiagnosisCountsError,
-    canManageFacility,
     canWriteMonthlyDiagnosisCounts,
     saveMonthlyDiagnosisCounts,
-    clearMonthlyDiagnosisCounts,
   } = useAdultOpd();
   const now = new Date();
   const [year, setYear] = useState(Number(settings.reportingYear) || now.getFullYear());
@@ -56,10 +55,40 @@ export default function AggregateEntry() {
   const [saveError, setSaveError] = useState('');
   const [success, setSuccess] = useState('');
   const [saving, setSaving] = useState(false);
-  const [clearing, setClearing] = useState(false);
   const [progress, setProgress] = useState(null);
   const [uncertainIds, setUncertainIds] = useState([]);
   const savingRef = useRef(false);
+
+  useEffect(() => {
+    const editRequest = location.state?.aggregateEdit;
+    if (!editRequest) return;
+
+    const { item, ageGroupKey, sex } = editRequest;
+    const group = MONTHLY_DIAGNOSIS_AGE_GROUPS.find(({ key }) => key === ageGroupKey);
+    const field = group && (sex === SEX.FEMALE ? group.femaleField : group.maleField);
+    if (!item || !field || !item.diagnosisId) {
+      navigate(location.pathname, { replace: true, state: null });
+      return;
+    }
+
+    setYear(Number(item.reportingYear));
+    setMonth(Number(item.reportingMonth));
+    setEntry({
+      diagnosisId: item.diagnosisId,
+      diagnosisName: item.diagnosisName,
+      ageGroupKey,
+      sex,
+      count: String(item[field] ?? '0'),
+      registrationBookTotal: item.registrationBookTotal ?? '',
+      notes: item.notes || '',
+      discrepancyConfirmed: false,
+    });
+    setEditingSaved(true);
+    setEditingDiagnosisId(item.diagnosisId);
+    setErrors({});
+    setSaveError('');
+    navigate(location.pathname, { replace: true, state: null });
+  }, [location, navigate]);
 
   const savedForPeriod = monthlyDiagnosisCounts.filter((item) =>
     Number(item.reportingYear) === Number(year)
@@ -106,6 +135,12 @@ export default function AggregateEntry() {
     id: item.id,
     errors: validateMonthlyDiagnosisCount(item, { diagnoses }).errors,
   })), [diagnoses, queuedSummaries]);
+  const queuedTotals = useMemo(() => queued.reduce((totals, item) => {
+    const count = Number(item.count) || 0;
+    totals.cases += count;
+    totals[item.sex === SEX.MALE ? 'male' : 'female'] += count;
+    return totals;
+  }, { cases: 0, male: 0, female: 0 }), [queued]);
   const selectedDiagnosis = diagnoses.find((item) => item.id === entry.diagnosisId);
   const selectedSummary = queuedSummaries.find((item) => item.diagnosisId === entry.diagnosisId)
     || savedForPeriod.find((item) => item.diagnosisId === entry.diagnosisId);
@@ -126,15 +161,6 @@ export default function AggregateEntry() {
   const candidateTotals = candidateSummary
     ? calculateMonthlyDiagnosisTotals(candidateSummary)
     : null;
-  const savedBucketRows = savedForPeriod.flatMap((item) => {
-    const buckets = MONTHLY_DIAGNOSIS_AGE_GROUPS.flatMap((group) => [
-      { ...group, sex: SEX.FEMALE, field: group.femaleField },
-      { ...group, sex: SEX.MALE, field: group.maleField },
-    ]).filter(({ field }) => Number(item[field]) > 0);
-    return buckets.map((bucket) => ({ ...item, ...bucket }));
-  });
-  const periodLocked = queued.length > 0 || Boolean(editingId) || editingSaved;
-
   function changeCount(field, value) {
     setEntry((previous) => ({
       ...previous,
@@ -276,7 +302,7 @@ export default function AggregateEntry() {
     setErrors({});
   }
 
-  function editEntry(item, ageGroupKey, sex, isSaved = false) {
+  function editEntry(item, ageGroupKey, sex) {
     const group = MONTHLY_DIAGNOSIS_AGE_GROUPS.find(({ key }) => key === ageGroupKey);
     const field = group && (sex === SEX.FEMALE ? group.femaleField : group.maleField);
     setYear(Number(item.reportingYear));
@@ -291,8 +317,8 @@ export default function AggregateEntry() {
       notes: item.notes || '',
       discrepancyConfirmed: false,
     });
-    setEditingId(isSaved ? '' : item.id);
-    setEditingSaved(isSaved);
+    setEditingId(item.id);
+    setEditingSaved(false);
     setEditingDiagnosisId(item.diagnosisId);
     setErrors({});
     setSaveError('');
@@ -353,314 +379,249 @@ export default function AggregateEntry() {
     }
   }
 
-  async function clearPeriod() {
-    const periodLabel = `${MONTH_NAMES[Number(month) - 1]} ${year}`;
-    if (!window.confirm(
-      `Permanently delete all ${savedForPeriod.length} saved registration-book summaries for ${periodLabel}? Individual patient encounters will not be changed.`
-    )) return;
-    setClearing(true);
-    setSaveError('');
-    setSuccess('');
-    const result = await clearMonthlyDiagnosisCounts(year, month);
-    setClearing(false);
-    if (!result.ok) {
-      setSaveError(result.error);
-      return;
-    }
-    setSuccess(`Saved aggregate summaries for ${periodLabel} were cleared. Individual encounters were not changed.`);
-  }
-
   const discrepancy = candidateTotals && entry.count !== '' && entry.registrationBookTotal !== ''
     && /^\d+$/.test(String(entry.registrationBookTotal))
     && Number(entry.registrationBookTotal) !== candidateTotals.total;
 
   return (
     <main className="aopd-page aopd-aggregate-page">
-      <header className="aopd-aggregate-hero">
+      <header className="aopd-aggregate-page-heading">
         <div>
-          <span className="aopd-aggregate-eyebrow">Monthly reporting</span>
-          <h2>Registration-book counts</h2>
-          <p className="aopd-lede">
-            Enter monthly diagnosis totals separately from individual patient records. Counts for children under five are supported.
-          </p>
+          <span className="aopd-aggregate-eyebrow">Monthly reporting workspace</span>
+          <h2>Aggregate Reporting</h2>
+          <p>Monthly registration-book data entry</p>
         </div>
         <HelpHint label="Registration-book counts">Enter monthly counts from the book by diagnosis, age group, and sex. These numbers are added to eligible encounter counts in reports; do not include the same cases in both sources.</HelpHint>
-        <div className="aopd-aggregate-period">
-          <label>
-            Reporting year
-            <input
-              type="number"
-              min="1"
-              max="9999"
-              step="1"
-              value={year}
-              onChange={(event) => {
-                setYear(event.target.value);
-                setErrors((previous) => ({ ...previous, reportingYear: '' }));
-              }}
-              disabled={saving || periodLocked}
-            />
-            {errors.reportingYear && <span className="aopd-error">{errors.reportingYear}</span>}
-          </label>
-          <label>
-            Reporting month
-            <select
-              value={month}
-              onChange={(event) => {
-                setMonth(Number(event.target.value));
-                setErrors((previous) => ({ ...previous, reportingMonth: '' }));
-              }}
-              disabled={saving || periodLocked}
-            >
-              {MONTH_NAMES.map((name, index) => <option key={name} value={index + 1}>{name}</option>)}
-            </select>
-            {errors.reportingMonth && <span className="aopd-error">{errors.reportingMonth}</span>}
-          </label>
-        </div>
-        {periodLocked && (
-          <p className="aopd-aggregate-period-note">
-            Finish or cancel the current queued/editing summaries before changing the reporting period.
-          </p>
-        )}
       </header>
 
-      {monthlyDiagnosisCountsStatus === 'error' && (
-        <p className="aopd-error aopd-aggregate-migration" role="alert">
-          {monthlyDiagnosisCountsError} Review and apply
-          {' '}<code>supabase/migrations/20261024_monthly_diagnosis_counts.sql</code>
-          {' '}in Supabase SQL Editor before saving.
-        </p>
-      )}
-
-      <section className="aopd-panel aopd-aggregate-editor" aria-labelledby="aggregate-editor-heading">
-        <div className="aopd-aggregate-section-heading">
-          <span className="aopd-aggregate-step">01</span>
-          <div>
-            <h3 id="aggregate-editor-heading">{editingId || editingSaved ? 'Edit aggregate count' : 'Add aggregate count'}</h3>
-            <p>Enter one diagnosis, age group, and sex count at a time.</p>
+      <div className="aopd-aggregate-workspace">
+        <section className="aopd-panel aopd-aggregate-editor" aria-labelledby="aggregate-editor-heading">
+          <div className="aopd-aggregate-section-heading">
+            <div className="aopd-aggregate-heading-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5H6.5A2.5 2.5 0 0 0 4 7.5v10A2.5 2.5 0 0 0 6.5 20h11a2.5 2.5 0 0 0 2.5-2.5V12" /><path d="m15 5 4 4M10 14l7.8-7.8a1.7 1.7 0 0 1 2.4 2.4L12.4 17 9 18z" /></svg>
+            </div>
+            <div>
+              <h3 id="aggregate-editor-heading">{editingId || editingSaved ? 'Edit aggregate count' : 'Add a count'}</h3>
+              <p>Choose a diagnosis, age group, sex, and case total.</p>
+            </div>
           </div>
-        </div>
-        <form className="aopd-aggregate-count-form" onSubmit={queueEntry}>
-          <label className="aopd-aggregate-diagnosis-field">
-            Diagnosis
-            <DiagnosisAutocomplete
-              diagnoses={diagnoses}
-              value={entry.diagnosisName}
-              onChange={selectDiagnosis}
-              disabled={saving || !canWriteMonthlyDiagnosisCounts}
-            />
-            {selectedDiagnosis?.code && <span className="aopd-diagnosis-selected-code">{selectedDiagnosis.code}</span>}
-            {diagnoses.filter((item) => item.active !== false).length === 0 && (
-              <span className="aopd-error" role="status">No active diagnosis catalog is configured for this facility.</span>
-            )}
-            {errors.diagnosisId && <span className="aopd-error">{errors.diagnosisId}</span>}
-          </label>
+          <form className="aopd-aggregate-count-form" onSubmit={queueEntry}>
+            <label className="aopd-aggregate-diagnosis-field">
+              <span>Diagnosis</span>
+              <DiagnosisAutocomplete
+                diagnoses={diagnoses}
+                value={entry.diagnosisName}
+                onChange={selectDiagnosis}
+                disabled={saving || !canWriteMonthlyDiagnosisCounts}
+              />
+              {selectedDiagnosis?.code && <span className="aopd-diagnosis-selected-code">{selectedDiagnosis.code}</span>}
+              {diagnoses.filter((item) => item.active !== false).length === 0 && (
+                <span className="aopd-error" role="status">No active diagnosis catalog is configured for this facility.</span>
+              )}
+              {errors.diagnosisId && <span className="aopd-error">{errors.diagnosisId}</span>}
+            </label>
 
-          <label className="aopd-aggregate-age-field">
-            Age group
-            <select
-              value={entry.ageGroupKey}
-              onChange={(event) => changeCount('ageGroupKey', event.target.value)}
-              disabled={saving || !canWriteMonthlyDiagnosisCounts}
-            >
-              {MONTHLY_DIAGNOSIS_AGE_GROUPS.map(({ key, label }) => (
-                <option key={key} value={key}>{label}</option>
-              ))}
-            </select>
-            {errors.ageGroupKey && <span className="aopd-error">{errors.ageGroupKey}</span>}
-          </label>
-
-          <fieldset className="aopd-aggregate-sex-field">
-            <legend>Sex</legend>
-            {[SEX.MALE, SEX.FEMALE].map((sex) => (
-              <label className="aopd-inline" key={sex}>
-                <input
-                  type="radio"
-                  name="aggregate-sex"
-                  value={sex}
-                  checked={entry.sex === sex}
-                  onChange={() => changeCount('sex', sex)}
-                  disabled={saving || !canWriteMonthlyDiagnosisCounts}
-                />
-                {sex}
-              </label>
-            ))}
-            {errors.sex && <span className="aopd-error">{errors.sex}</span>}
-          </fieldset>
-
-          <label className="aopd-aggregate-count-field">
-            Number of cases
-            <input
-              type="number"
-              min="0"
-              max="2147483647"
-              step="1"
-              inputMode="numeric"
-              value={entry.count}
-              onChange={(event) => changeCount('count', event.target.value)}
-              required
-              disabled={saving || !canWriteMonthlyDiagnosisCounts}
-            />
-            {errors.count && <span className="aopd-error">{errors.count}</span>}
-          </label>
-
-          <details className="aopd-aggregate-optional">
-            <summary>Optional registration-book details</summary>
-            <div className="aopd-aggregate-meta">
-              <label>
-                Registration-book total (optional)
-                <input
-                  type="number"
-                  min="0"
-                  max="9007199254740991"
-                  step="1"
-                  inputMode="numeric"
-                  value={entry.registrationBookTotal}
-                  onChange={(event) => changeCount('registrationBookTotal', event.target.value)}
-                  disabled={saving || !canWriteMonthlyDiagnosisCounts}
-                />
-                {errors.registrationBookTotal && <span className="aopd-error">{errors.registrationBookTotal}</span>}
-              </label>
-              <label>
-                Notes or source reference (optional)
-                <textarea
-                  value={entry.notes}
-                  onChange={(event) => setEntry((previous) => ({ ...previous, notes: event.target.value }))}
-                  disabled={saving || !canWriteMonthlyDiagnosisCounts}
-                />
-              </label>
-            </div>
-          </details>
-
-          {discrepancy && (
-            <div className="aopd-alert aopd-aggregate-discrepancy" role="alert">
-              <strong>Registration-book total differs from the calculated total.</strong>
-              <span>Book: {Number(entry.registrationBookTotal)}</span>
-              <span>Calculated: {candidateTotals.total}</span>
-              <span>Difference: {Number(entry.registrationBookTotal) - candidateTotals.total}</span>
-              <label className="aopd-inline">
-                <input
-                  type="checkbox"
-                  checked={entry.discrepancyConfirmed}
-                  onChange={(event) => setEntry((previous) => ({ ...previous, discrepancyConfirmed: event.target.checked }))}
-                  disabled={saving || !canWriteMonthlyDiagnosisCounts}
-                />
-                I reviewed and confirm this discrepancy
-              </label>
-              {errors.discrepancyConfirmed && <span className="aopd-error">{errors.discrepancyConfirmed}</span>}
-            </div>
-          )}
-
-          <div className="aopd-actions">
-            <button className="aopd-btn" type="submit" disabled={saving || !canWriteMonthlyDiagnosisCounts}>
-              {editingId || editingSaved ? 'Update pending count' : 'Add to pending queue'}
-            </button>
-            {(editingId || editingSaved) && (
-              <button
-                className="aopd-btn secondary"
-                type="button"
-                onClick={() => {
-                  setEditingId('');
-                  setEditingSaved(false);
-                  setEditingDiagnosisId('');
-                  setEntry(blankEntry());
-                  setErrors({});
-                }}
-                disabled={saving}
+            <label className="aopd-aggregate-age-field">
+              Age group
+              <select
+                value={entry.ageGroupKey}
+                onChange={(event) => changeCount('ageGroupKey', event.target.value)}
+                disabled={saving || !canWriteMonthlyDiagnosisCounts}
               >
-                Cancel
-              </button>
+                {MONTHLY_DIAGNOSIS_AGE_GROUPS.map(({ key, label }) => (
+                  <option key={key} value={key}>{label}</option>
+                ))}
+              </select>
+              {errors.ageGroupKey && <span className="aopd-error">{errors.ageGroupKey}</span>}
+            </label>
+
+            <fieldset className="aopd-aggregate-sex-field">
+              <legend>Sex</legend>
+              <div className="aopd-aggregate-sex-options">
+                {[SEX.MALE, SEX.FEMALE].map((sex) => (
+                  <label key={sex}>
+                    <input
+                      type="radio"
+                      name="aggregate-sex"
+                      value={sex}
+                      checked={entry.sex === sex}
+                      onChange={() => changeCount('sex', sex)}
+                      disabled={saving || !canWriteMonthlyDiagnosisCounts}
+                    />
+                    <span>{sex === SEX.MALE ? '♂' : '♀'}</span>
+                    {sex}
+                  </label>
+                ))}
+              </div>
+              {errors.sex && <span className="aopd-error">{errors.sex}</span>}
+            </fieldset>
+
+            <label className="aopd-aggregate-count-field">
+              Number of cases
+              <input
+                type="number"
+                min="0"
+                max="2147483647"
+                step="1"
+                inputMode="numeric"
+                value={entry.count}
+                onChange={(event) => changeCount('count', event.target.value)}
+                required
+                disabled={saving || !canWriteMonthlyDiagnosisCounts}
+              />
+              {errors.count && <span className="aopd-error">{errors.count}</span>}
+            </label>
+
+            <details className="aopd-aggregate-optional">
+              <summary>Registration-book total and notes <span>Optional</span></summary>
+              <div className="aopd-aggregate-meta">
+                <label>
+                  Registration-book total (optional)
+                  <input
+                    type="number"
+                    min="0"
+                    max="9007199254740991"
+                    step="1"
+                    inputMode="numeric"
+                    value={entry.registrationBookTotal}
+                    onChange={(event) => changeCount('registrationBookTotal', event.target.value)}
+                    disabled={saving || !canWriteMonthlyDiagnosisCounts}
+                  />
+                  {errors.registrationBookTotal && <span className="aopd-error">{errors.registrationBookTotal}</span>}
+                </label>
+                <label>
+                  Notes or source reference (optional)
+                  <textarea
+                    value={entry.notes}
+                    onChange={(event) => setEntry((previous) => ({ ...previous, notes: event.target.value }))}
+                    disabled={saving || !canWriteMonthlyDiagnosisCounts}
+                  />
+                </label>
+              </div>
+            </details>
+
+            {discrepancy && (
+              <div className="aopd-alert aopd-aggregate-discrepancy" role="alert">
+                <strong>Registration-book total differs from the calculated total.</strong>
+                <span>Book: {Number(entry.registrationBookTotal)}</span>
+                <span>Calculated: {candidateTotals.total}</span>
+                <span>Difference: {Number(entry.registrationBookTotal) - candidateTotals.total}</span>
+                <label className="aopd-inline">
+                  <input
+                    type="checkbox"
+                    checked={entry.discrepancyConfirmed}
+                    onChange={(event) => setEntry((previous) => ({ ...previous, discrepancyConfirmed: event.target.checked }))}
+                    disabled={saving || !canWriteMonthlyDiagnosisCounts}
+                  />
+                  I reviewed and confirm this discrepancy
+                </label>
+                {errors.discrepancyConfirmed && <span className="aopd-error">{errors.discrepancyConfirmed}</span>}
+              </div>
             )}
-          </div>
-          {!canWriteMonthlyDiagnosisCounts && <p className="aopd-aggregate-readonly">You have read-only access to registration-book summaries.</p>}
-          {success && <p className="aopd-success" role="status">{success}</p>}
-        </form>
-      </section>
 
-      <section className="aopd-pending aopd-aggregate-list" aria-labelledby="aggregate-saved-heading">
-        <div className="aopd-pending-heading">
-          <div>
-            <h3 id="aggregate-saved-heading">Saved summaries — {MONTH_NAMES[Number(month) - 1]} {year}</h3>
-            <p>These registration-book counts are separate from individual encounter records.</p>
+            <div className="aopd-aggregate-form-actions">
+              <button className="aopd-btn" type="submit" disabled={saving || !canWriteMonthlyDiagnosisCounts}>
+                <span aria-hidden="true">{editingId || editingSaved ? '✓' : '+'}</span>
+                {editingId || editingSaved ? 'Update count' : 'Add count'}
+              </button>
+              {(editingId || editingSaved) && (
+                <button
+                  className="aopd-btn secondary"
+                  type="button"
+                  onClick={() => {
+                    setEditingId('');
+                    setEditingSaved(false);
+                    setEditingDiagnosisId('');
+                    setEntry(blankEntry());
+                    setErrors({});
+                  }}
+                  disabled={saving}
+                >
+                  Cancel edit
+                </button>
+              )}
+            </div>
+            {!canWriteMonthlyDiagnosisCounts && <p className="aopd-aggregate-readonly">You have read-only access to registration-book summaries.</p>}
+          </form>
+        </section>
+
+        <section className="aopd-pending aopd-aggregate-list" aria-labelledby="aggregate-queued-heading">
+          <div className="aopd-aggregate-list-heading">
+            <div>
+              <span className="aopd-aggregate-eyebrow">Submission queue</span>
+              <h3 id="aggregate-queued-heading">Added counts</h3>
+              <p>Review and save all entries for {MONTH_NAMES[Number(month) - 1]} {year}.</p>
+            </div>
+            <span className="aopd-aggregate-queue-count" aria-label={`${queued.length} aggregate entries`}>
+              {queued.length}
+            </span>
           </div>
-          {canManageFacility && (
-            <button
-              className="aopd-btn danger"
-              type="button"
-              onClick={clearPeriod}
-              disabled={clearing || saving || queued.length > 0 || Boolean(editingId) || editingSaved || savedForPeriod.length === 0}
-            >
-              {clearing ? 'Clearing…' : `Clear saved summaries (${savedForPeriod.length})`}
-            </button>
+
+          <div className="aopd-aggregate-summary" aria-label="Pending count summary">
+            <div><span>Total entries</span><strong>{queued.length}</strong></div>
+            <div><span>Total cases</span><strong>{queuedTotals.cases.toLocaleString()}</strong></div>
+            <div><span>Male cases</span><strong>{queuedTotals.male.toLocaleString()}</strong></div>
+            <div><span>Female cases</span><strong>{queuedTotals.female.toLocaleString()}</strong></div>
+          </div>
+
+          {progress && (
+            <p className="aopd-pending-progress" role="status">
+              Saving summaries: {progress.completed} of {progress.total} processed; {progress.saved} confirmed.
+            </p>
           )}
-        </div>
-        <div className="aopd-table-wrap">
-          <table className="aopd-pending-table">
-            <thead><tr><th>Diagnosis</th><th>Age group</th><th>Sex</th><th className="num">Cases</th><th>Action</th></tr></thead>
-            <tbody>
-              {savedBucketRows.map((item) => (
-                <tr key={`${item.id}:${item.key}:${item.sex}`}>
-                  <td>{item.diagnosisCode ? `${item.diagnosisCode} — ` : ''}{item.diagnosisName}</td>
-                  <td>{item.label}</td>
-                  <td>{item.sex}</td>
-                  <td className="num">{item[item.field]}</td>
-                  <td className="aopd-row-actions">
-                    <button
-                      type="button"
-                      onClick={() => editEntry(item, item.key, item.sex, true)}
-                      disabled={saving || !canWriteMonthlyDiagnosisCounts || uncertainIds.includes(item.diagnosisId)}
-                    >
-                      Edit count
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {!savedBucketRows.length && <tr><td colSpan="5" className="aopd-empty">No saved summaries for this period.</td></tr>}
-            </tbody>
-          </table>
-        </div>
-      </section>
+          {saveError && <p className="aopd-error aopd-aggregate-feedback" role="alert">{saveError}</p>}
+          {success && <p className="aopd-success aopd-aggregate-feedback" role="status">{success}</p>}
 
-      <section className="aopd-pending aopd-aggregate-list" aria-labelledby="aggregate-queued-heading">
-        <div className="aopd-pending-heading">
-          <div>
-            <h3 id="aggregate-queued-heading">Pending counts ({queued.length})</h3>
-            <p>Repeated diagnosis, age group, and sex entries replace the pending count.</p>
-          </div>
-          <button className="aopd-btn" type="button" onClick={saveAll} disabled={saving || !canWriteMonthlyDiagnosisCounts || queuedSummaries.length === 0}>
-            {saving ? 'Saving…' : `Save All (${queuedSummaries.length})`}
-          </button>
-        </div>
-        {progress && <p className="aopd-pending-progress" role="status">Processed {progress.completed} of {progress.total}; confirmed saved {progress.saved}.</p>}
-        {saveError && <p className="aopd-error" role="alert">{saveError}</p>}
-        {success && <p className="aopd-success" role="status">{success}</p>}
-        <div className="aopd-table-wrap">
-          <table className="aopd-pending-table">
-            <thead><tr><th>Diagnosis</th><th>Age group</th><th>Sex</th><th className="num">Cases</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody>
+          {queued.length > 0 ? (
+            <ul className="aopd-aggregate-queue">
               {queued.map((item) => {
                 const validation = queuedValidations.find((result) => result.id === item.summaryId)?.errors || {};
                 const uncertain = uncertainIds.includes(item.diagnosisId);
                 const ageGroup = MONTHLY_DIAGNOSIS_AGE_GROUPS.find(({ key }) => key === item.ageGroupKey);
                 return (
-                  <tr key={item.id}>
-                    <td>{item.diagnosisCode ? `${item.diagnosisCode} — ` : ''}{item.diagnosisName}</td>
-                    <td>{ageGroup?.label || '—'}</td>
-                    <td>{item.sex}</td>
-                    <td className="num">{item.count}</td>
-                    <td>{uncertain ? 'Save status unconfirmed' : Object.values(validation).filter(Boolean).join(' ') || 'Ready to save'}</td>
-                    <td className="aopd-row-actions">
+                  <li className="aopd-aggregate-queue-item" key={item.id}>
+                    <div className="aopd-aggregate-entry-main">
+                      <strong>{item.diagnosisName}</strong>
+                      {item.diagnosisCode && <span className="aopd-aggregate-entry-code">{item.diagnosisCode}</span>}
+                    </div>
+                    <div className="aopd-aggregate-entry-details">
+                      <span>{ageGroup?.label || '—'}</span>
+                      <span className={`aopd-aggregate-sex-tag${item.sex === SEX.MALE ? ' is-male' : ' is-female'}`}>{item.sex}</span>
+                      <strong className="aopd-aggregate-entry-count">{Number(item.count).toLocaleString()}</strong>
+                    </div>
+                    <div className="aopd-aggregate-entry-actions">
+                      <span className={uncertain ? 'is-uncertain' : Object.values(validation).some(Boolean) ? 'has-validation' : 'is-ready'}>
+                        {uncertain ? 'Save unconfirmed' : Object.values(validation).filter(Boolean).join(' ') || 'Ready to save'}
+                      </span>
                       <button type="button" onClick={() => editEntry(item, item.ageGroupKey, item.sex)} disabled={saving || uncertain}>Edit</button>
                       <button type="button" className="danger-text" onClick={() => removeEntry(item.id)} disabled={saving || uncertain}>Remove</button>
-                    </td>
-                  </tr>
+                    </div>
+                  </li>
                 );
               })}
-              {!queued.length && <tr><td colSpan="6" className="aopd-empty">No counts are waiting to be saved.</td></tr>}
-            </tbody>
-          </table>
-        </div>
-      </section>
+            </ul>
+          ) : (
+            <div className="aopd-aggregate-empty">
+              <span aria-hidden="true">▤</span>
+              <strong>No counts added yet</strong>
+              <p>Add one or more diagnosis counts. They’ll stay here until you save them.</p>
+            </div>
+          )}
+
+          <div className="aopd-aggregate-save-bar">
+            <span>{queued.length ? `${queued.length} ${queued.length === 1 ? 'entry' : 'entries'} ready for review` : 'Add counts to enable saving'}</span>
+            <button
+              className="aopd-btn"
+              type="button"
+              onClick={saveAll}
+              disabled={saving || !canWriteMonthlyDiagnosisCounts || queuedSummaries.length === 0}
+            >
+              {saving ? 'Saving to cloud…' : `Save All to the Cloud${queuedSummaries.length ? ` (${queuedSummaries.length})` : ''}`}
+            </button>
+          </div>
+        </section>
+      </div>
+
     </main>
   );
 }
