@@ -80,6 +80,58 @@ test('retries Gemini 429 then checks and uses the compatible fallback model', as
   assert.equal(fallbackRequests, 1);
 });
 
+test('uses the fallback when the primary model is not found', async () => {
+  const fallbackModel = 'gemini-3.5-flash-lite';
+  let primaryRequests = 0;
+  let fallbackRequests = 0;
+  const testOptions = options(async (url) => {
+    if (url.endsWith(`/models/${fallbackModel}`)) {
+      return response(200, { supportedGenerationMethods: ['generateContent'] });
+    }
+    if (url.includes('/models/primary-model:')) {
+      primaryRequests += 1;
+      return response(404, { error: { status: 'NOT_FOUND' } });
+    }
+    fallbackRequests += 1;
+    return response(200, { candidates: [] });
+  });
+  testOptions.values.fallbackModel = fallbackModel;
+
+  const result = await generateContentWithFallback(testOptions.values);
+
+  assert.equal(result.ok, true);
+  assert.equal(result.model, fallbackModel);
+  assert.equal(result.fallbackFor, 'primary-model');
+  assert.equal(primaryRequests, 1);
+  assert.equal(fallbackRequests, 1);
+});
+
+test('returns a model-not-found error when the fallback is unavailable', async () => {
+  let primaryRequests = 0;
+  let fallbackGenerationRequests = 0;
+  const testOptions = options(async (url) => {
+    if (url.endsWith('/models/fallback-model')) {
+      return response(404, { error: { status: 'NOT_FOUND' } });
+    }
+    if (url.includes('/models/primary-model:')) {
+      primaryRequests += 1;
+      return response(404, { error: { status: 'NOT_FOUND' } });
+    }
+    fallbackGenerationRequests += 1;
+    return response(200, { candidates: [] });
+  });
+
+  const result = await generateContentWithFallback(testOptions.values);
+
+  assert.equal(result.ok, false);
+  assert.equal(result.status, 404);
+  assert.equal(result.code, 'NOT_FOUND');
+  assert.equal(result.reason, 'model-check');
+  assert.equal(result.fallbackFor, 'primary-model');
+  assert.equal(primaryRequests, 1);
+  assert.equal(fallbackGenerationRequests, 0);
+});
+
 test('retries request timeouts and can fall back to a supported model', async () => {
   let primaryRequests = 0;
   let fallbackRequests = 0;

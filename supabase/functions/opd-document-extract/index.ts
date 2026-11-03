@@ -27,7 +27,7 @@ function corsHeaders(request: Request) {
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const DEFAULT_GEMINI_PRIMARY_MODEL = 'gemini-2.5-flash';
-const DEFAULT_GEMINI_FALLBACK_MODEL = 'gemini-2.5-flash-lite';
+const DEFAULT_GEMINI_FALLBACK_MODEL = 'gemini-3.5-flash-lite';
 const ALLOWED_TYPES = new Map([
   ['application/pdf', '.pdf'],
   ['image/jpeg', '.jpg'],
