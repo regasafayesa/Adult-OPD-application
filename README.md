@@ -129,8 +129,9 @@ structured fields in a facility-scoped table so review can resume; after a
 successful import, those extracted fields are cleared while metadata and
 counts remain in history. Individual encounter dates in scanner imports use
 the current local date, not a date extracted from the source; age is editable
-in the scanner review. Authorized facility staff can remove failed or imported
-document history entries without deleting any patient or tally records.
+in the scanner review. Authorized facility staff can remove failed, cancelled,
+or imported document history entries without deleting any patient or tally
+records.
 
 For an existing Supabase project, review and apply
 `supabase/migrations/20261031_document_imports.sql` after the facility schema
@@ -151,7 +152,9 @@ review and apply
 `supabase/migrations/20261102_document_import_history_failed_delete.sql`
 after the 20261101 migration. These policies allow authorized staff to delete
 only the matching history rows; they do not delete encounters or monthly tally
-data.
+data. To also allow removal of cancelled imports, review and apply
+`supabase/migrations/20261103_document_import_history_cancelled_delete.sql`
+after the 20261102 migration.
 
 `SUPABASE_URL` and `SUPABASE_ANON_KEY` are provided to Supabase Edge Functions
 by the platform. Set `ALLOWED_ORIGINS` to the exact production Vercel origin

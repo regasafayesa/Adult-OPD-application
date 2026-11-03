@@ -354,7 +354,7 @@ export default function DocumentScanner() {
     setHistoryError('');
   }
 
-  async function removeImportedHistory(item) {
+  async function removeDocumentHistory(item) {
     if (!window.confirm(
       'Remove this entry from document import history? Previously imported patient or tally records will not be deleted.'
     )) return;
@@ -998,11 +998,11 @@ export default function DocumentScanner() {
                         Resume review
                       </button>
                     )}
-                    {['imported', 'failed'].includes(item.status) && (
+                    {['imported', 'failed', 'cancelled'].includes(item.status) && (
                       <button
                         type="button"
                         className="aopd-btn secondary"
-                        onClick={() => removeImportedHistory(item)}
+                        onClick={() => removeDocumentHistory(item)}
                         disabled={Boolean(deletingHistoryId)}
                       >
                         {deletingHistoryId === item.id ? 'Removing…' : 'Remove history'}

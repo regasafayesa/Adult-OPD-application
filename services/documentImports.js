@@ -170,7 +170,7 @@ export async function deleteDocumentImportHistory(facilityId, importId) {
     .delete()
     .eq('facility_id', facilityId)
     .eq('id', importId)
-    .in('status', ['imported', 'failed'])
+    .in('status', ['imported', 'failed', 'cancelled'])
     .select('id')
     .single();
   if (error) throw new Error(`Could not remove document import history: ${error.message}`);
