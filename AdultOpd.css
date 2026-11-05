@@ -9547,3 +9547,358 @@ button:disabled,
     font-size: 0.74rem;
   }
 }
+
+/* Aggregate entry page refinements */
+.aopd-aggregate-page {
+  --aggregate-ink: #1d3046;
+  --aggregate-muted: #64748b;
+  --aggregate-line: #dce5ed;
+  --aggregate-accent: #147d69;
+  --aggregate-accent-hover: #106754;
+  --aggregate-accent-soft: #edf7f4;
+  --aggregate-focus: rgba(20, 125, 105, 0.2);
+  gap: 1.15rem;
+  padding: clamp(0.85rem, 1.6vw, 1.25rem);
+  border-radius: 16px;
+  background: #f4f7fa;
+  scroll-margin-top: 100px;
+}
+
+.aopd-aggregate-page .aopd-aggregate-page-heading {
+  align-items: flex-start;
+  padding: 0.2rem 0 0.15rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-page-heading h2 {
+  margin-top: 0.25rem;
+  font-size: clamp(1.5rem, 2.2vw, 1.85rem);
+  line-height: 1.25;
+}
+
+.aopd-aggregate-page .aopd-aggregate-page-heading p {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-workspace {
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  align-items: start;
+  gap: 1.15rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-editor,
+.aopd-aggregate-page .aopd-aggregate-workspace .aopd-aggregate-list {
+  border-color: var(--aggregate-line);
+  border-radius: 14px;
+  padding: clamp(1rem, 1.8vw, 1.35rem);
+  box-shadow: 0 3px 14px rgba(29, 48, 70, 0.045);
+}
+
+.aopd-aggregate-page .aopd-aggregate-section-heading {
+  gap: 0.85rem;
+  margin-bottom: 1.15rem;
+  padding-bottom: 1rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-heading-icon {
+  border-color: #d5e9e3;
+  background: #edf7f4;
+  color: var(--aggregate-accent);
+}
+
+.aopd-aggregate-page .aopd-aggregate-count-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem 0.85rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-diagnosis-field,
+.aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-sex-field,
+.aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-optional,
+.aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-discrepancy,
+.aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-form-actions,
+.aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-readonly {
+  grid-column: 1 / -1;
+}
+
+.aopd-aggregate-page .aopd-aggregate-diagnosis-field,
+.aopd-aggregate-page .aopd-aggregate-age-field,
+.aopd-aggregate-page .aopd-aggregate-count-field,
+.aopd-aggregate-page .aopd-aggregate-sex-field,
+.aopd-aggregate-page .aopd-aggregate-meta label {
+  color: #3d5369;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.aopd-aggregate-page .aopd-autocomplete input,
+.aopd-aggregate-page .aopd-aggregate-age-field select,
+.aopd-aggregate-page .aopd-aggregate-count-field input,
+.aopd-aggregate-page .aopd-aggregate-meta input,
+.aopd-aggregate-page .aopd-aggregate-meta textarea {
+  min-height: 46px;
+  border-color: #cfdae5;
+  border-radius: 9px;
+  color: var(--aggregate-ink);
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.aopd-aggregate-page .aopd-autocomplete input {
+  padding-left: 2.65rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-age-field select {
+  cursor: pointer;
+}
+
+.aopd-aggregate-page :is(.aopd-autocomplete input, .aopd-aggregate-age-field select, .aopd-aggregate-count-field input, .aopd-aggregate-meta input, .aopd-aggregate-meta textarea):focus {
+  border-color: var(--aggregate-accent);
+  box-shadow: 0 0 0 3px var(--aggregate-focus);
+  outline: 0;
+}
+
+.aopd-aggregate-page :is(.aopd-autocomplete input, .aopd-aggregate-age-field select, .aopd-aggregate-count-field input, .aopd-aggregate-meta input, .aopd-aggregate-meta textarea):disabled {
+  background-color: #f5f8fa;
+  color: #738295;
+  cursor: not-allowed;
+}
+
+.aopd-aggregate-page .aopd-aggregate-sex-options {
+  gap: 0.35rem;
+  border-color: #dbe5ed;
+  border-radius: 10px;
+  padding: 0.3rem;
+  background: #f4f7fa;
+}
+
+.aopd-aggregate-page .aopd-aggregate-sex-options label {
+  min-height: 44px;
+  border-radius: 7px;
+  color: #68798b;
+  font-weight: 650;
+}
+
+.aopd-aggregate-page .aopd-aggregate-sex-options label:has(input:checked) {
+  border-color: #b9ddd2;
+  background: #e8f5f0;
+  color: #116b58;
+  box-shadow: inset 0 0 0 1px rgba(20, 125, 105, 0.06);
+}
+
+.aopd-aggregate-page .aopd-aggregate-sex-options label:has(input[value="Male"]:checked) {
+  border-color: #c4dced;
+  background: #edf5fb;
+  color: #28618b;
+}
+
+.aopd-aggregate-page .aopd-aggregate-optional {
+  border-top-color: #e5ecf2;
+  padding-top: 0.75rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-optional summary {
+  min-height: 40px;
+  color: #226b5c;
+}
+
+.aopd-aggregate-page .aopd-aggregate-meta {
+  border-color: #e0e8ef;
+  border-radius: 10px;
+  padding: 0.85rem;
+  background: #f7f9fb;
+}
+
+.aopd-aggregate-page .aopd-aggregate-form-actions .aopd-btn,
+.aopd-aggregate-page .aopd-aggregate-save-bar .aopd-btn {
+  min-height: 46px;
+  border-color: var(--aggregate-accent);
+  border-radius: 9px;
+  padding-inline: 1.05rem;
+  background: var(--aggregate-accent);
+  box-shadow: 0 2px 6px rgba(20, 125, 105, 0.14);
+  font-size: 0.86rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-form-actions .aopd-btn:hover:not(:disabled),
+.aopd-aggregate-page .aopd-aggregate-save-bar .aopd-btn:hover:not(:disabled) {
+  border-color: var(--aggregate-accent-hover);
+  background: var(--aggregate-accent-hover);
+  box-shadow: 0 4px 10px rgba(20, 125, 105, 0.2);
+}
+
+.aopd-aggregate-page .aopd-aggregate-form-actions .aopd-btn:active:not(:disabled),
+.aopd-aggregate-page .aopd-aggregate-save-bar .aopd-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(20, 125, 105, 0.16);
+}
+
+.aopd-aggregate-page .aopd-aggregate-form-actions .aopd-btn:disabled,
+.aopd-aggregate-page .aopd-aggregate-save-bar .aopd-btn:disabled {
+  border-color: #d9e2e8;
+  background: #e9eef2;
+  box-shadow: none;
+  color: #7a8998;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.aopd-aggregate-page .aopd-aggregate-list-heading h3 {
+  font-size: 1.05rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-queue-count {
+  border-color: #d3e8e1;
+  border-radius: 10px;
+  background: var(--aggregate-accent-soft);
+  color: var(--aggregate-accent-hover);
+}
+
+.aopd-aggregate-page .aopd-aggregate-summary {
+  gap: 0.6rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-summary > div {
+  gap: 0.3rem;
+  border-color: #e2eaf0;
+  border-radius: 10px;
+  padding: 0.7rem 0.75rem;
+  background: #f6f9fb;
+}
+
+.aopd-aggregate-page .aopd-aggregate-summary span {
+  color: #64768a;
+  font-size: 0.7rem;
+  letter-spacing: 0.01em;
+}
+
+.aopd-aggregate-page .aopd-aggregate-summary strong {
+  color: #233950;
+  font-size: 1.18rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-queue {
+  max-height: none;
+  overflow: visible;
+  gap: 0.6rem;
+  padding-right: 0;
+}
+
+.aopd-aggregate-page .aopd-aggregate-queue-item {
+  border-color: #e0e8ef;
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: #fbfcfd;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.aopd-aggregate-page .aopd-aggregate-queue-item:hover {
+  border-color: #c8d9e2;
+  background: #fff;
+}
+
+.aopd-aggregate-page .aopd-aggregate-entry-main strong {
+  color: #293f56;
+  font-size: 0.85rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-empty {
+  min-height: 174px;
+  gap: 0.5rem;
+  border-color: #cfdde5;
+  border-radius: 11px;
+  background: #f8fafc;
+}
+
+.aopd-aggregate-page .aopd-aggregate-empty > span {
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border: 1px solid #d6e8e2;
+  border-radius: 12px;
+  background: #edf7f4;
+  color: var(--aggregate-accent);
+}
+
+.aopd-aggregate-page .aopd-aggregate-empty > span svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.aopd-aggregate-page .aopd-aggregate-empty strong {
+  color: #293f56;
+}
+
+.aopd-aggregate-page .aopd-aggregate-save-bar {
+  align-items: center;
+  border-top-color: #e4ebf0;
+  padding-top: 0.95rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-save-bar > span {
+  color: #64768a;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 1000px) {
+  .aopd-aggregate-page .aopd-aggregate-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .aopd-aggregate-page {
+    gap: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-page-heading {
+    gap: 0.65rem;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-page-heading h2 {
+    font-size: 1.45rem;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-editor,
+  .aopd-aggregate-page .aopd-aggregate-workspace .aopd-aggregate-list {
+    padding: 0.9rem;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-count-form {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-diagnosis-field,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-age-field,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-count-field,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-sex-field,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-optional,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-discrepancy,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-form-actions,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-readonly {
+    grid-column: 1;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-meta {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-summary {
+    gap: 0.45rem;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-summary > div {
+    padding: 0.6rem;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-save-bar {
+    align-items: stretch;
+  }
+}

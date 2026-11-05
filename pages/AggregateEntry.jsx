@@ -602,7 +602,12 @@ export default function AggregateEntry() {
             </ul>
           ) : (
             <div className="aopd-aggregate-empty">
-              <span aria-hidden="true">▤</span>
+              <span aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 3.75h7l4 4v12.5H7a2 2 0 0 1-2-2v-12.5a2 2 0 0 1 2-2Z" />
+                  <path d="M14 3.75v4h4M8.5 12h7M8.5 15.5h7" />
+                </svg>
+              </span>
               <strong>No counts added yet</strong>
               <p>Add one or more diagnosis counts. They’ll stay here until you save them.</p>
             </div>

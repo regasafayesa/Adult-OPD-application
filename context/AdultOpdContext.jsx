@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { DEFAULT_SETTINGS } from '../constants';
 import { enrichEncounter, createId, readLegacyLocalData } from '../services/storage';
 import { buildDemoRecords } from '../services/demoData';
+import { getErrorMessage, isNetworkError } from '../services/networkErrors.mjs';
 import { generateDashboardStats, generateMonthlyReport, generateYearlyReport } from '../services/reporting';
 import { validateMonthlyDiagnosisCount } from '../services/monthlyDiagnosisCounts.mjs';
 import {
@@ -52,7 +53,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
         setSyncStatus('ready');
       } catch (error) {
         if (!active) return;
-        setSyncError(error.message || 'Could not sync facility data.');
+        setSyncError(getErrorMessage(error, 'Could not sync facility data.'));
         setSyncStatus('error');
       }
     }
@@ -79,7 +80,8 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       return undefined;
     }
     if (syncStatus !== 'ready') {
-      setMonthlyDiagnosisCountsStatus(syncStatus === 'error' ? 'error' : 'loading');
+      setMonthlyDiagnosisCountsError('');
+      setMonthlyDiagnosisCountsStatus('ready');
       return undefined;
     }
 
@@ -94,7 +96,12 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
         setMonthlyDiagnosisCountsStatus('ready');
       } catch (error) {
         if (!active) return;
-        setMonthlyDiagnosisCountsError(error.message || 'Could not load monthly aggregate summaries.');
+        if (isNetworkError(error)) {
+          setMonthlyDiagnosisCountsError('');
+          setMonthlyDiagnosisCountsStatus('ready');
+          return;
+        }
+        setMonthlyDiagnosisCountsError(getErrorMessage(error, 'Could not load monthly aggregate summaries.'));
         setMonthlyDiagnosisCountsStatus('error');
       }
     }
@@ -112,8 +119,9 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
   }, [diagnoses, facilityId, remote, syncStatus]);
 
   const reportSyncError = useCallback((error) => {
-    setSyncError(error.message || 'Could not sync facility data.');
-    return { ok: false, error: error.message || 'Could not sync facility data.' };
+    const message = getErrorMessage(error, 'Could not sync facility data.');
+    setSyncError(message);
+    return { ok: false, error: message };
   }, []);
 
   const refreshFacilityData = useCallback(async () => {
@@ -239,8 +247,9 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       }
       return { ok: true, ...result };
     } catch (error) {
-      setMonthlyDiagnosisCountsError(error.message || 'Could not save monthly aggregate summaries.');
-      return { ok: false, error: error.message || 'Could not save monthly aggregate summaries.' };
+      const message = getErrorMessage(error, 'Could not save monthly aggregate summaries.');
+      setMonthlyDiagnosisCountsError(message);
+      return { ok: false, error: message };
     }
   }, [
     canWriteMonthlyDiagnosisCounts,
@@ -450,9 +459,9 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       setSettingsSyncStatus('saved');
       return { ok: true };
     } catch (error) {
-      setSyncError(error.message || 'Could not save facility settings.');
+      setSyncError(getErrorMessage(error, 'Could not save facility settings.'));
       setSettingsSyncStatus('error');
-      return { ok: false, error: error.message || 'Could not save facility settings.' };
+      return { ok: false, error: getErrorMessage(error, 'Could not save facility settings.') };
     }
   }, [facilityId, remote, settings, syncStatus]);
 
@@ -586,7 +595,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       setMonthlyDiagnosisCountsStatus('ready');
       return { ok: true };
     } catch (error) {
-      const message = error.message || 'Could not clear aggregate summaries for this reporting period.';
+      const message = getErrorMessage(error, 'Could not clear aggregate summaries for this reporting period.');
       setMonthlyDiagnosisCountsError(message);
       return { ok: false, error: message };
     }

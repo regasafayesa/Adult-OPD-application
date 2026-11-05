@@ -581,10 +581,6 @@ export default function DocumentScanner() {
         <span className="aopd-scanner-icon" aria-hidden="true">▤</span>
       </header>
 
-      <div className="aopd-scanner-notice" role="note">
-        Uploaded originals are processed in memory and are not stored by this app. Document content is sent to OpenAI for extraction. Use only with facility authorization and in accordance with your privacy policy. Do not upload documents containing names or identifiers.
-      </div>
-
       {(!isCloud || !facilityId || !canEdit) && (
         <p className="aopd-error" role="alert">
           The scanner is available to authorized facility staff in cloud mode only. Manual patient and aggregate entry remain available.
