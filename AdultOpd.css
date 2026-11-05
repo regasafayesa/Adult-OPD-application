@@ -10564,6 +10564,118 @@ button:disabled,
   }
 }
 
+.aopd-aggregate-page .aopd-aggregate-period-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
+  align-items: center;
+  gap: 0.75rem 1rem;
+  min-width: 0;
+  border: 1px solid #d5e3db;
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  background: #f5f9f6;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-title {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-title > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-title strong {
+  color: #203b32;
+  font-size: 0.94rem;
+  font-weight: 750;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-title > div > span {
+  color: #64776c;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-selector {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(100px, 0.72fr);
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-selector label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  color: #34483f;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-selector select,
+.aopd-aggregate-page .aopd-aggregate-period-selector input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  border: 1px solid #bdcfc4;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  background-color: #fff;
+  color: #203b32;
+  font: inherit;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-selector select:focus-visible,
+.aopd-aggregate-page .aopd-aggregate-period-selector input:focus-visible {
+  border-color: #16745a;
+  outline: 3px solid rgba(22, 116, 90, 0.17);
+  outline-offset: 1px;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-selector :disabled {
+  background-color: #edf2ef;
+  color: #66776d;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #64776c;
+  font-size: 0.77rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .aopd-aggregate-page .aopd-aggregate-period-bar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-period-note {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .aopd-aggregate-page .aopd-aggregate-period-bar {
+    padding: 0.85rem;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-period-selector {
+    grid-template-columns: minmax(0, 1fr) minmax(90px, 0.72fr);
+    gap: 0.5rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .aopd-help-page *,
   .aopd-help-launch {

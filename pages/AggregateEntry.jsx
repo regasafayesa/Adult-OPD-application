@@ -400,8 +400,12 @@ export default function AggregateEntry() {
           <span className="aopd-aggregate-period-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M7 3v3m10-3v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z" /><path d="M8 12h2m4 0h2M8 16h2" /></svg>
           </span>
+          <div>
+            <strong>Reporting period</strong>
+            <span>Choose the month and year for these registration-book counts.</span>
+          </div>
         </div>
-        <div className="aopd-aggregate-period">
+        <div className="aopd-aggregate-period-selector">
           <label>
             Month
             <select
