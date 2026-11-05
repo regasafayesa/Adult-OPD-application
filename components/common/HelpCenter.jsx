@@ -244,6 +244,49 @@ const HELP_TOPICS = [
     ],
   },
   {
+    id: 'document-scanner',
+    title: 'AI Document Scanner',
+    category: 'Entering data',
+    summary: 'Recognize encounter or monthly tally documents, verify every field, then import confirmed data.',
+    keywords: 'AI scanner document upload JPG PNG PDF recognize extract import draft history individual patient registration monthly tally sheet OCR confidence duplicate review cloud',
+    path: '/adult-opd/document-scanner',
+    sections: [
+      {
+        title: 'Upload a document',
+        steps: [
+          'The scanner is available to authorized facility staff in cloud mode. Choose Individual Patient Registration or Monthly OPD Tally Sheet before selecting a file.',
+          'Upload a JPG, PNG, or PDF up to 10 MB, then choose Upload and recognize. Wait for processing to finish.',
+          'Check the source preview against the extracted fields. Recognition can be uncertain, so correct every date, age, sex, diagnosis, and count that does not match the document.',
+        ],
+        note: 'Do not import directly from the recognition result. No encounter or aggregate data is imported until you complete the review and confirm.',
+      },
+      {
+        title: 'Review and import encounters',
+        steps: [
+          'For individual registrations, verify each encounter row and choose an active diagnosis. Add a missing row or remove an incorrect one.',
+          'Correct invalid fields before importing. If potential duplicates are listed, compare them with Patient Records and confirm only if you intend to import them.',
+          'Confirm that you reviewed the source, then choose Accept and Import. Wait for the saved confirmation and resolve any partial-save message before retrying.',
+        ],
+      },
+      {
+        title: 'Review and import monthly tally sheets',
+        steps: [
+          'Select the reporting month and year, then verify the diagnosis and each Female/Male age-band count against the source sheet.',
+          'Correct invalid rows and review any difference between a registration-book total and the sum of its age/sex counts. A matching saved diagnosis and month must be reconciled in Aggregate Entry before import.',
+          'Confirm that you reviewed the source, then choose Accept and Import. Wait for the saved confirmation.',
+        ],
+        note: 'Monthly tally imports create registration-book summaries. They are combined with eligible individual encounters in reports, so do not import the same cases through both sources.',
+      },
+      {
+        title: 'Save drafts and review import history',
+        paragraphs: [
+          'Choose Save as Draft to continue reviewing later. Resume review from Document Import History; the original uploaded scan is not retained, so reopen the draft with its original file to view the source again.',
+          'History records document metadata and draft extraction, not the original scan. Removing an import-history entry does not delete encounters or tally summaries that were already imported.',
+        ],
+      },
+    ],
+  },
+  {
     id: 'yearly-report',
     title: 'Yearly Report',
     category: 'Reports',
@@ -389,6 +432,8 @@ const HELP_TOPICS = [
   },
 ];
 
+const HELP_CATEGORIES = [...new Set(HELP_TOPICS.map((topic) => topic.category))];
+
 function normalizeSearchText(value) {
   return String(value).toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 }
@@ -475,18 +520,33 @@ export default function HelpCenter() {
   return (
     <main className="aopd-page aopd-help-page">
       <header className="aopd-help-hero">
-        <div>
+        <div className="aopd-help-hero-copy">
           <p className="aopd-help-eyebrow">OPD MONTHLY REPORTING SYSTEM</p>
-          <h2>Help Center</h2>
-          <p>Practical instructions for entering data, managing your facility, and preparing reliable reports.</p>
+          <h2>How can we help?</h2>
+          <p>Find practical guidance for entering data, managing your facility, and preparing accurate reports.</p>
+          <Link className="aopd-help-back" to="/adult-opd">← Back to application</Link>
         </div>
-        <Link className="aopd-help-back" to="/adult-opd">← Back to application</Link>
+        <div className="aopd-help-hero-aside" aria-label="Help guide overview">
+          <span className="aopd-help-hero-mark" aria-hidden="true">?</span>
+          <div className="aopd-help-hero-stats">
+            <div><strong>{HELP_TOPICS.length}</strong><span>step-by-step guides</span></div>
+            <div><strong>{HELP_CATEGORIES.length}</strong><span>help categories</span></div>
+          </div>
+          <p>Search by task, report, or keyword to find the right instructions.</p>
+        </div>
       </header>
 
       <div className="aopd-help-layout">
         <aside className="aopd-help-nav" aria-label="Help topics">
+          <div className="aopd-help-nav-heading">
+            <div>
+              <span>HELP LIBRARY</span>
+              <h3>Browse topics</h3>
+            </div>
+            <span className="aopd-help-topic-total">{topics.length}</span>
+          </div>
           <label className="aopd-help-search">
-            <span>Search help</span>
+            <span>Search all guides</span>
             <input
               type="search"
               value={query}
@@ -494,7 +554,7 @@ export default function HelpCenter() {
                 setQuery(event.target.value);
                 setActiveTopicId('');
               }}
-              placeholder="Search instructions…"
+              placeholder="Try “monthly report”…"
               aria-label="Search help topics"
             />
           </label>
@@ -516,8 +576,11 @@ export default function HelpCenter() {
                   onClick={() => selectTopic(topic.id)}
                   aria-current={activeTopic?.id === topic.id ? 'page' : undefined}
                 >
-                  {topic.featured && <span aria-hidden="true">★ </span>}
-                  {topic.title}
+                  <span className="aopd-help-topic-title">
+                    {topic.featured && <span className="aopd-help-featured-mark" aria-hidden="true">★</span>}
+                    {topic.title}
+                  </span>
+                  <span className="aopd-help-topic-count">{topic.sections.length}</span>
                 </button>
               ))}
             </section>
@@ -528,7 +591,11 @@ export default function HelpCenter() {
           {activeTopic ? (
             <>
               <div className="aopd-help-topic-heading">
-                <span>{activeTopic.category}{activeTopic.featured ? ' · Detailed tutorial' : ''}</span>
+                <div className="aopd-help-topic-meta">
+                  <span>{activeTopic.category}</span>
+                  {activeTopic.featured && <span className="aopd-help-tutorial-badge">DETAILED TUTORIAL</span>}
+                  <span>{activeTopic.sections.length} {activeTopic.sections.length === 1 ? 'section' : 'sections'}</span>
+                </div>
                 <h3>{activeTopic.title}</h3>
                 <p>{activeTopic.summary}</p>
                 {activeTopic.path && (
