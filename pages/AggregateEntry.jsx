@@ -382,6 +382,7 @@ export default function AggregateEntry() {
   const discrepancy = candidateTotals && entry.count !== '' && entry.registrationBookTotal !== ''
     && /^\d+$/.test(String(entry.registrationBookTotal))
     && Number(entry.registrationBookTotal) !== candidateTotals.total;
+  const periodLocked = saving || queued.length > 0 || Boolean(editingId || editingSaved);
 
   return (
     <main className="aopd-page aopd-aggregate-page">
@@ -393,6 +394,47 @@ export default function AggregateEntry() {
         </div>
         <HelpHint label="Registration-book counts">Enter monthly counts from the book by diagnosis, age group, and sex. These numbers are added to eligible encounter counts in reports; do not include the same cases in both sources.</HelpHint>
       </header>
+
+      <section className="aopd-aggregate-period-bar" aria-label="Reporting period">
+        <div className="aopd-aggregate-period-title">
+          <span className="aopd-aggregate-period-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M7 3v3m10-3v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z" /><path d="M8 12h2m4 0h2M8 16h2" /></svg>
+          </span>
+        </div>
+        <div className="aopd-aggregate-period">
+          <label>
+            Month
+            <select
+              value={month}
+              onChange={(event) => setMonth(Number(event.target.value))}
+              disabled={periodLocked}
+              aria-label="Aggregate reporting month"
+            >
+              {MONTH_NAMES.map((name, index) => (
+                <option key={name} value={index + 1}>{name}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Year
+            <input
+              type="number"
+              min="1"
+              max="9999"
+              step="1"
+              value={year}
+              onChange={(event) => setYear(event.target.value === '' ? '' : Number(event.target.value))}
+              disabled={periodLocked}
+              aria-label="Aggregate reporting year"
+            />
+          </label>
+        </div>
+        <p className="aopd-aggregate-period-note">
+          {periodLocked
+            ? 'Save or remove pending counts, or finish editing, before changing the reporting period.'
+            : 'Pending counts will be saved for this selected month and year.'}
+        </p>
+      </section>
 
       <div className="aopd-aggregate-workspace">
         <section className="aopd-panel aopd-aggregate-editor" aria-labelledby="aggregate-editor-heading">
