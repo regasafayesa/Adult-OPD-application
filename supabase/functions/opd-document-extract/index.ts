@@ -149,6 +149,8 @@ function buildPrompt(documentType: string) {
       ...common,
       'This is an individual registration document. Return each encounter as a separate row.',
       'Extract only encounter date, diagnosis text/code if visibly printed, age in years, sex, confidence, issues, and page.',
+      'Return Gregorian dates as YYYY-MM-DD. For dates written in the Ethiopian calendar, return EC:YYYY-MM-DD using the Ethiopian year, month number (1-13), and day exactly as shown; do not convert Ethiopian dates to Gregorian.',
+      'Use null for a missing or unreadable encounter date.',
       'Represent unknown sex as Unknown. Do not treat tally-sheet counts as encounters.',
       'Ignore names and identifier columns. Empty encounter-level fields must be null.',
       'Return empty summaries and null reporting period unless clearly printed.',

@@ -19,7 +19,13 @@ import {
   validateDocumentFile,
 } from '../services/documentImports';
 import { createId } from '../services/storage';
-import { formatDisplayDate, todayISO } from '../utils/dates';
+import {
+  daysInEthiopianMonth,
+  ETHIOPIAN_MONTH_NAMES,
+  ethiopianDateToGregorianISO,
+  formatEthiopianDate,
+  getEthiopianDateParts,
+} from '../utils/ethiopianCalendar';
 import { validateEncounter } from '../utils/validation';
 
 const EMPTY_EXTRACTION = {
@@ -53,6 +59,86 @@ function exactDiagnosis(diagnoses, name, code) {
     || null;
 }
 
+function todayEncounterDateISO() {
+  return ethiopianDateToGregorianISO(getEthiopianDateParts(new Date()));
+}
+
+function normalizeExtractedEncounterDate(value) {
+  if (typeof value !== 'string') return null;
+  const ethiopianDate = /^EC:(\d{1,4})-(\d{1,2})-(\d{1,2})$/i.exec(value.trim());
+  if (ethiopianDate) {
+    return ethiopianDateToGregorianISO({
+      year: Number(ethiopianDate[1]),
+      month: Number(ethiopianDate[2]),
+      day: Number(ethiopianDate[3]),
+    });
+  }
+  const gregorianParts = getEthiopianDateParts(value);
+  return gregorianParts ? ethiopianDateToGregorianISO(gregorianParts) : null;
+}
+
+function EthiopianEncounterDateEditor({ value, onSave, onCancel }) {
+  const initialDate = getEthiopianDateParts(value) || getEthiopianDateParts(new Date());
+  const [date, setDate] = useState({
+    year: initialDate?.year || '',
+    month: initialDate?.month || '',
+    day: initialDate?.day || '',
+  });
+  const daysInMonth = daysInEthiopianMonth(Number(date.year), date.month);
+  const gregorianDate = ethiopianDateToGregorianISO(date);
+
+  function updatePart(part, nextValue) {
+    setDate((current) => {
+      const updated = { ...current, [part]: nextValue };
+      if (part !== 'day' && updated.day
+          && Number(updated.day) > daysInEthiopianMonth(Number(updated.year), updated.month)) {
+        updated.day = '';
+      }
+      return updated;
+    });
+  }
+
+  return (
+    <div className="aopd-scanner-ethiopian-date-editor">
+      <label>
+        Year
+        <input
+          type="number"
+          min="1"
+          max="9999"
+          step="1"
+          value={date.year}
+          onChange={(event) => updatePart('year', event.target.value)}
+        />
+      </label>
+      <label>
+        Month
+        <select value={date.month} onChange={(event) => updatePart('month', Number(event.target.value) || '')}>
+          <option value="">Select</option>
+          {ETHIOPIAN_MONTH_NAMES.map((month, index) => (
+            <option key={month} value={index + 1}>{month}</option>
+          ))}
+        </select>
+      </label>
+      <label>
+        Day
+        <select value={date.day} onChange={(event) => updatePart('day', Number(event.target.value) || '')}>
+          <option value="">Select</option>
+          {Array.from({ length: daysInMonth }, (_, index) => (
+            <option key={index + 1} value={index + 1}>{index + 1}</option>
+          ))}
+        </select>
+      </label>
+      <div className="aopd-scanner-ethiopian-date-editor-actions">
+        <button type="button" className="aopd-btn secondary" onClick={() => onSave(gregorianDate)} disabled={!gregorianDate}>
+          Save date
+        </button>
+        <button type="button" className="aopd-btn secondary" onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
 function recognizedExtraction(extraction, diagnoses, documentType) {
   if (documentType === 'individual') {
     return {
@@ -60,11 +146,16 @@ function recognizedExtraction(extraction, diagnoses, documentType) {
       ...extraction,
       encounters: (extraction.encounters || []).map((row) => {
         const diagnosis = exactDiagnosis(diagnoses, row.diagnosis, row.diagnosisCode);
+        const extractedDate = normalizeExtractedEncounterDate(row.date);
+        const issues = (row.issues || []).filter((issue) => !/missing encounter date/i.test(issue));
+        if (!extractedDate && row.date) {
+          issues.push('Date could not be read; set the encounter date manually.');
+        }
         return {
           ...row,
           recordId: row.recordId || createId('enc'),
-          date: todayISO(),
-          issues: (row.issues || []).filter((issue) => !/missing encounter date/i.test(issue)),
+          date: extractedDate || todayEncounterDateISO(),
+          issues,
           diagnosis: diagnosis?.name || row.diagnosis || '',
           diagnosisId: diagnosis?.id || '',
           age: row.age == null ? '' : String(row.age),
@@ -202,6 +293,7 @@ export default function DocumentScanner() {
   const [reviewConfirmed, setReviewConfirmed] = useState(false);
   const [duplicateConfirmed, setDuplicateConfirmed] = useState(false);
   const [editingAgeId, setEditingAgeId] = useState('');
+  const [editingDateId, setEditingDateId] = useState('');
   const [deletingHistoryId, setDeletingHistoryId] = useState('');
   const [dragging, setDragging] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -254,7 +346,7 @@ export default function DocumentScanner() {
     if (documentType !== 'individual' || !extraction) return [];
     return extraction.encounters.map((row, index) => {
       const savedRecord = records.find((record) => record.id === row.recordId);
-      const encounter = { ...row, date: savedRecord?.date || row.date || todayISO() };
+      const encounter = { ...row, date: savedRecord?.date || row.date || todayEncounterDateISO() };
       const errors = fieldErrors(encounter, diagnoses);
       const duplicate = records.some((record) => isSameEncounter(encounter, record))
         || extraction.encounters.slice(0, index).some((previous) => isSameEncounter(encounter, previous));
@@ -288,6 +380,7 @@ export default function DocumentScanner() {
     setError('');
     setMessage('');
     setEditingAgeId('');
+    setEditingDateId('');
     if (!nextFile) {
       setFile(null);
       setExtraction(null);
@@ -450,6 +543,7 @@ export default function DocumentScanner() {
     if (!importId) {
       setExtraction(null);
       setEditingAgeId('');
+      setEditingDateId('');
       setMessage('Review cancelled.');
       return;
     }
@@ -461,6 +555,7 @@ export default function DocumentScanner() {
       });
       setExtraction(null);
       setEditingAgeId('');
+      setEditingDateId('');
       setImportId('');
       await refreshHistory();
       setMessage('Import cancelled. The original document was not retained.');
@@ -481,6 +576,7 @@ export default function DocumentScanner() {
     });
     setExtraction(null);
     setEditingAgeId('');
+    setEditingDateId('');
     setMessage(`Import complete: ${importedEntries} ${documentType === 'individual' ? 'encounter(s)' : 'diagnosis summary row(s)'} confirmed saved.`);
     try {
       await refreshHistory();
@@ -495,10 +591,9 @@ export default function DocumentScanner() {
     if (invalidEncounterCount || duplicateRequiresConfirm || !reviewConfirmed) return;
     setProcessing(true);
     try {
-      const importDate = todayISO();
       const entries = extraction.encounters.map((row) => ({
         id: row.recordId || createId('enc'),
-        date: records.find((record) => record.id === row.recordId)?.date || importDate,
+        date: records.find((record) => record.id === row.recordId)?.date || row.date,
         age: Number(row.age),
         sex: row.sex,
         diagnosis: activeDiagnoses.find((item) => item.id === row.diagnosisId)?.name || '',
@@ -561,6 +656,7 @@ export default function DocumentScanner() {
     setReviewConfirmed(false);
     setDuplicateConfirmed(false);
     setEditingAgeId('');
+    setEditingDateId('');
     setError('');
     setMessage('Draft restored. The original document is not stored; review the saved extraction before importing.');
   }
@@ -745,7 +841,7 @@ export default function DocumentScanner() {
                         ...previous,
                         encounters: [...previous.encounters, {
                           recordId: createId('enc'),
-                          date: todayISO(), diagnosis: '', diagnosisId: '', age: '', sex: '',
+                          date: todayEncounterDateISO(), diagnosis: '', diagnosisId: '', age: '', sex: '',
                           confidence: 0, issues: ['Manually added; verify against the document.'], page: null,
                         }],
                       }))}
@@ -755,19 +851,40 @@ export default function DocumentScanner() {
                   </div>
                   <div className="aopd-document-table-wrap">
                     <table className="aopd-document-table">
-                      <thead><tr><th>Date (automatic)</th><th>Diagnosis</th><th>Age</th><th>Sex</th><th>Confidence / review</th><th /></tr></thead>
+                      <thead><tr><th>Encounter date (Ethiopian)</th><th>Diagnosis</th><th>Age</th><th>Sex</th><th>Confidence / review</th><th /></tr></thead>
                       <tbody>
                         {extraction.encounters.map((row, index) => {
                           const review = encounterReview[index];
                           const encounterDate = records.find((record) => record.id === row.recordId)?.date
                             || row.date
-                            || todayISO();
+                            || todayEncounterDateISO();
                           return (
                             <tr key={`encounter-${index}`} className={Object.keys(review.errors).length ? 'has-review-error' : ''}>
                               <td>
                                 <time dateTime={encounterDate}>
-                                  {formatDisplayDate(encounterDate)}
+                                  {formatEthiopianDate(encounterDate)}
                                 </time>
+                                {editingDateId === row.recordId ? (
+                                  <EthiopianEncounterDateEditor
+                                    key={`${row.recordId}-${encounterDate}`}
+                                    value={encounterDate}
+                                    onSave={(date) => {
+                                      updateEncounter(index, 'date', date);
+                                      setEditingDateId('');
+                                    }}
+                                    onCancel={() => setEditingDateId('')}
+                                  />
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className="aopd-btn secondary aopd-scanner-edit-date"
+                                    aria-label={`Edit encounter ${index + 1} date`}
+                                    onClick={() => setEditingDateId(row.recordId)}
+                                    disabled={processing || records.some((record) => record.id === row.recordId)}
+                                  >
+                                    Edit date
+                                  </button>
+                                )}
                               </td>
                               <td>
                                 <DiagnosisAutocomplete

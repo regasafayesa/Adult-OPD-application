@@ -179,9 +179,20 @@ export async function searchFacilityEncounters(facilityId, filters) {
     .select('*')
     .eq('facility_id', facilityId);
 
-  if (filters.date) query = query.eq('encounter_date', filters.date);
-  if (filters.month) query = query.eq('reporting_month', Number(filters.month));
-  if (filters.year) query = query.eq('reporting_year', Number(filters.year));
+  if (filters.encounterDateFrom) {
+    query = query.gte('encounter_date', filters.encounterDateFrom);
+  } else if (filters.date) {
+    query = query.eq('encounter_date', filters.date);
+  }
+  if (filters.encounterDateBefore) {
+    query = query.lt('encounter_date', filters.encounterDateBefore);
+  }
+  if (!filters.encounterDateFrom && filters.month) {
+    query = query.eq('reporting_month', Number(filters.month));
+  }
+  if (!filters.encounterDateFrom && filters.year) {
+    query = query.eq('reporting_year', Number(filters.year));
+  }
   if (filters.sex) query = query.eq('sex', filters.sex);
   if (filters.ageGroup) query = query.eq('adult_report_age_group', filters.ageGroup);
   if (filters.diagnosis) query = query.eq('diagnosis', filters.diagnosis);

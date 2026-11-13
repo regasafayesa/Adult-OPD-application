@@ -6,11 +6,29 @@ import { useAdultOpd } from '../context/AdultOpdContext';
 import { retainPendingRecords } from '../services/batchInsert.mjs';
 import { createId } from '../services/storage';
 import { classifyAge } from '../utils/ageClassification';
-import { todayISO } from '../utils/dates';
+import {
+  daysInEthiopianMonth,
+  ETHIOPIAN_MONTH_NAMES,
+  ethiopianDateToGregorianISO,
+  getEthiopianDateParts,
+} from '../utils/ethiopianCalendar';
 import { validateEncounter } from '../utils/validation';
 
-const EMPTY = { date: todayISO(), age: '', sex: SEX.FEMALE, diagnosis: '' };
+const ENTRY_MONTH_NAMES = ETHIOPIAN_MONTH_NAMES.map((name, index) =>
+  index === 7 ? 'Miazia' : name
+);
 const BATCH_SIZE = 100;
+
+function formatEntryDate(isoDate) {
+  const date = getEthiopianDateParts(isoDate);
+  if (!date) return '—';
+  return `${String(date.day).padStart(2, '0')} ${ENTRY_MONTH_NAMES[date.month - 1]} ${date.year}`;
+}
+
+function getInitialEthiopianDate(isoDate) {
+  const date = isoDate ? getEthiopianDateParts(isoDate) : getEthiopianDateParts(new Date());
+  return date || { year: '', month: '', day: '' };
+}
 
 export default function PatientEntry({ editingRecord, onDone }) {
   const {
@@ -19,6 +37,9 @@ export default function PatientEntry({ editingRecord, onDone }) {
     addRecord,
     updateRecord,
   } = useAdultOpd();
+  const [ethiopianDate, setEthiopianDate] = useState(() =>
+    getInitialEthiopianDate(editingRecord?.date)
+  );
   const [form, setForm] = useState(
     editingRecord
       ? {
@@ -27,7 +48,12 @@ export default function PatientEntry({ editingRecord, onDone }) {
           sex: editingRecord.sex,
           diagnosis: editingRecord.diagnosis,
         }
-      : EMPTY
+      : {
+          date: ethiopianDateToGregorianISO(ethiopianDate) || '',
+          age: '',
+          sex: SEX.FEMALE,
+          diagnosis: '',
+        }
   );
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
@@ -56,8 +82,23 @@ export default function PatientEntry({ editingRecord, onDone }) {
     setSuccess('');
   }
 
+  function handleEthiopianDateChange(part, value) {
+    const next = { ...ethiopianDate, [part]: value };
+    if (part !== 'day' && next.day) {
+      const monthLength = daysInEthiopianMonth(next.year, next.month);
+      if (Number(next.day) > monthLength) next.day = '';
+    }
+    setEthiopianDate(next);
+    setForm((current) => ({
+      ...current,
+      date: ethiopianDateToGregorianISO(next) || '',
+    }));
+    setErrors((previousErrors) => ({ ...previousErrors, date: '' }));
+    setSuccess('');
+  }
+
   function resetForm() {
-    setForm((prev) => ({ ...EMPTY, date: prev.date, sex: prev.sex }));
+    setForm((prev) => ({ ...prev, age: '', diagnosis: '' }));
     setEditingPendingId(null);
     setErrors({});
   }
@@ -106,6 +147,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
   }
 
   function editPendingRecord(record) {
+    setEthiopianDate(getInitialEthiopianDate(record.date));
     setForm({
       date: record.date,
       age: String(record.age),
@@ -171,21 +213,77 @@ export default function PatientEntry({ editingRecord, onDone }) {
 
   return (
     <div className="aopd-page aopd-entry-page">
-      <h2>{editingRecord ? 'Edit encounter' : 'Patient entry'}</h2>
-      <p className="aopd-lede">
-        Record each OPD encounter once. Age group and OPD category are calculated automatically. Do not enter
-        patient names or other identifiers.
-      </p>
-      <HelpHint label="Age and diagnosis">Enter age as a whole number of years and choose an active diagnosis from the suggestions. Individual encounters under age 5 are outside OPD report categories; use registration-book counts for the under-five report columns.</HelpHint>
+      <header className="aopd-entry-intro">
+        <div>
+          <h2>{editingRecord ? 'Edit encounter' : 'Patient entry'}</h2>
+          <p className="aopd-lede">
+            Record each OPD encounter once. Age group and OPD category are calculated automatically. Do not enter
+            patient names or other identifiers.
+          </p>
+        </div>
+        <div className="aopd-entry-help">
+          <HelpHint label="Age and diagnosis">Enter age as a whole number of years and choose an active diagnosis from the suggestions. Individual encounters under age 5 are outside OPD report categories; use registration-book counts for the under-five report columns.</HelpHint>
+        </div>
+      </header>
 
       <form className="aopd-entry" onSubmit={handleSubmit}>
-        <label>
-          Date
-          <input type="date" value={form.date} onChange={(e) => handleChange('date', e.target.value)} required disabled={saving} />
+        <div className="aopd-entry-ethiopian-date">
+          <span className="aopd-entry-field-label">Encounter Date (Ethiopian Calendar)</span>
+          <div className="aopd-entry-ethiopian-date-fields">
+            <label>
+              <span>Year</span>
+              <input
+                type="number"
+                min="1"
+                max="9999"
+                step="1"
+                value={ethiopianDate.year}
+                onChange={(event) => handleEthiopianDateChange('year', event.target.value)}
+                required
+                disabled={saving}
+                aria-label="Encounter year (Ethiopian)"
+              />
+            </label>
+            <label>
+              <span>Month</span>
+              <select
+                value={ethiopianDate.month}
+                onChange={(event) => handleEthiopianDateChange('month', event.target.value)}
+                required
+                disabled={saving}
+                aria-label="Encounter month (Ethiopian)"
+              >
+                <option value="">Select month</option>
+                {ENTRY_MONTH_NAMES.map((name, index) => (
+                  <option key={name} value={index + 1}>{name}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Day</span>
+              <select
+                value={ethiopianDate.day}
+                onChange={(event) => handleEthiopianDateChange('day', event.target.value)}
+                required
+                disabled={saving || !Number(ethiopianDate.year) || !Number(ethiopianDate.month)}
+                aria-label="Encounter day (Ethiopian)"
+              >
+                <option value="">Select day</option>
+                {Array.from({
+                  length: daysInEthiopianMonth(ethiopianDate.year, ethiopianDate.month),
+                }, (_, index) => (
+                  <option key={index + 1} value={index + 1}>{index + 1}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <p className="aopd-entry-date-preview" aria-live="polite">
+            Selected date: {formatEntryDate(form.date)}
+          </p>
           {errors.date && <span className="aopd-error">{errors.date}</span>}
-        </label>
+        </div>
 
-        <label>
+        <label className="aopd-entry-age">
           Age (years)
           <input
             ref={ageRef}
@@ -200,7 +298,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
           {errors.age && <span className="aopd-error">{errors.age}</span>}
         </label>
 
-        <fieldset>
+        <fieldset className="aopd-entry-sex">
           <legend>Sex</legend>
           <label className="aopd-inline">
             <input
@@ -225,7 +323,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
           {errors.sex && <span className="aopd-error">{errors.sex}</span>}
         </fieldset>
 
-        <label>
+        <label className="aopd-entry-diagnosis">
           Diagnosis
           {diagnoses.filter((item) => item.active !== false).length === 0 && (
             <span className="aopd-error" role="status">
@@ -237,6 +335,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
             value={form.diagnosis}
             onChange={(value) => handleChange('diagnosis', value)}
             inputRef={diagnosisRef}
+            placeholder="Search a diagnosis name or ESV-1 code"
             disabled={saving}
           />
           {errors.diagnosis && <span className="aopd-error">{errors.diagnosis}</span>}
@@ -319,7 +418,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
             <table className="aopd-pending-table">
               <thead>
                 <tr>
-                  <th>Date / reporting year</th>
+                  <th>Encounter date (Ethiopian)</th>
                   <th>Age</th>
                   <th>Age group</th>
                   <th>Sex</th>
@@ -339,7 +438,7 @@ export default function PatientEntry({ editingRecord, onDone }) {
                   const rowError = Object.values(validation).join(' ');
                   return (
                     <tr key={record.id}>
-                      <td>{record.date} ({record.date.slice(0, 4)})</td>
+                      <td>{formatEntryDate(record.date)}</td>
                       <td className="num">{record.age}</td>
                       <td>{classification.ageGroup || '—'}</td>
                       <td>{record.sex}</td>

@@ -3687,21 +3687,72 @@ button:disabled,
 }
 
 .aopd-entry-page .aopd-entry > label {
-
   position: relative;
-
   min-width: 0;
-
   color: #29483b;
-
   font-size: 0.91rem;
-
   font-weight: 700;
+}
 
+.aopd-entry-page .aopd-entry-ethiopian-date {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 0.45rem;
+  color: #29483b;
+  font-size: 0.91rem;
+  font-weight: 700;
+}
+
+.aopd-entry-page .aopd-entry-field-label {
+  display: block;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields {
+  display: grid;
+  grid-template-columns: minmax(5rem, 0.8fr) minmax(0, 1.35fr) minmax(5rem, 0.6fr);
+  gap: 0.6rem;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields label {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #667b71;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields input,
+.aopd-entry-page .aopd-entry-ethiopian-date-fields select {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  border: 1px solid #cbdcd1;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  background-color: #fff;
+  color: #1d352b;
+  font-size: 0.95rem;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields input:focus-visible,
+.aopd-entry-page .aopd-entry-ethiopian-date-fields select:focus-visible {
+  border-color: #16745a;
+  outline: 3px solid rgba(22, 116, 90, 0.16);
+  outline-offset: 1px;
+}
+
+.aopd-entry-page .aopd-entry-date-preview {
+  margin: 0;
+  color: #16745a;
+  font-size: 0.86rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
 }
 
 .aopd-entry-page .aopd-entry > label > input,
-
 .aopd-entry-page .aopd-entry .aopd-autocomplete input {
 
   width: 100%;
@@ -3952,6 +4003,20 @@ button:disabled,
 
   }
 
+}
+
+@media (max-width: 480px) {
+  .aopd-entry-page .aopd-entry-ethiopian-date-fields {
+    grid-template-columns: minmax(4rem, 0.75fr) minmax(0, 1.2fr) minmax(4rem, 0.6fr);
+    gap: 0.4rem;
+  }
+
+  .aopd-entry-page .aopd-entry-ethiopian-date-fields input,
+  .aopd-entry-page .aopd-entry-ethiopian-date-fields select {
+    min-height: 44px;
+    padding-inline: 0.5rem;
+    font-size: 0.84rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -6097,6 +6162,20 @@ button:disabled,
   grid-column: span 2;
 }
 
+.aopd-records-page .aopd-records-ethiopian-date {
+  min-width: 0;
+  color: #486556;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+.aopd-records-page .aopd-records-ethiopian-date-fields {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 0.8fr) minmax(0, 1.4fr) minmax(4rem, 0.6fr);
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
 .aopd-records-page .aopd-records-filters input,
 .aopd-records-page .aopd-records-filters select {
   width: 100%;
@@ -6219,6 +6298,11 @@ button:disabled,
     min-height: 44px;
     padding-inline: 0.65rem;
     font-size: 0.84rem;
+  }
+
+  .aopd-records-page .aopd-records-ethiopian-date-fields {
+    grid-template-columns: minmax(3.5rem, 0.8fr) minmax(0, 1.2fr) minmax(3rem, 0.6fr);
+    gap: 0.25rem;
   }
 }
 
@@ -10682,4 +10766,1099 @@ button:disabled,
     scroll-behavior: auto;
     transition-duration: 0.01ms;
   }
+}
+
+/* Patient records page refinements */
+.aopd-records-page {
+  gap: 0.65rem;
+  min-width: 0;
+  padding-block: 0.15rem 0.75rem;
+  color: #23384b;
+}
+
+.aopd-records-page .aopd-records-intro {
+  margin-bottom: 0.1rem;
+}
+
+.aopd-records-page .aopd-records-intro h2 {
+  margin: 0 0 0.25rem;
+  color: #1d344a;
+  font-size: clamp(1.55rem, 2.2vw, 1.9rem);
+  font-weight: 760;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.aopd-records-page .aopd-records-intro .aopd-lede {
+  max-width: 76ch;
+  margin: 0;
+  color: #617282;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.aopd-records-page .aopd-records-tabs {
+  gap: 0.35rem;
+  margin: 0;
+  border-bottom-color: #dce5eb;
+  padding-inline: 0.25rem;
+}
+
+.aopd-records-page .aopd-records-tabs button {
+  position: relative;
+  min-height: 42px;
+  border-radius: 7px 7px 0 0;
+  padding: 0.55rem 0.85rem;
+  color: #657789;
+  font-size: 0.84rem;
+  font-weight: 660;
+}
+
+.aopd-records-page .aopd-records-tabs button:hover {
+  background: #f4f8f6;
+  color: #17684f;
+}
+
+.aopd-records-page .aopd-records-tabs button.is-active {
+  border-bottom-color: #16745a;
+  background: #f1f8f3;
+  color: #155e48;
+  font-weight: 750;
+}
+
+.aopd-records-page .aopd-records-encounters {
+  display: grid;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.aopd-records-page .aopd-records-filter-toolbar {
+  min-height: 40px;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.aopd-records-page .aopd-records-filter-toggle {
+  min-height: 38px;
+  gap: 0.48rem;
+  border-color: #d7e1e7;
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  color: #2b4357;
+  font-size: 0.82rem;
+  font-weight: 720;
+  box-shadow: none;
+}
+
+.aopd-records-page .aopd-records-filter-toggle:hover,
+.aopd-records-page .aopd-records-filter-toggle[aria-expanded="true"] {
+  border-color: #9fc2ad;
+  background: #f1f8f3;
+  box-shadow: 0 2px 7px rgba(27, 86, 61, 0.08);
+}
+
+.aopd-records-page .aopd-records-filter-toggle:focus-visible,
+.aopd-records-page .aopd-records-clear-filters:focus-visible {
+  outline: 3px solid rgba(22, 116, 90, 0.2);
+  outline-offset: 2px;
+}
+
+.aopd-records-page .aopd-records-filter-icon {
+  color: #19745a;
+  font-size: 1rem;
+}
+
+.aopd-records-page .aopd-records-filter-count {
+  min-width: 1.25rem;
+  height: 1.25rem;
+  background: #16745a;
+  font-size: 0.68rem;
+}
+
+.aopd-records-page .aopd-records-filter-summary {
+  color: #687b89;
+  font-size: 0.77rem;
+}
+
+.aopd-records-page .aopd-records-filters {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+  border: 1px solid #dfe7eb;
+  border-radius: 11px;
+  padding: 0.85rem;
+  background: #f8fafb;
+  box-shadow: none;
+}
+
+.aopd-records-page .aopd-records-filters > * {
+  min-width: 0;
+}
+
+.aopd-records-page .aopd-records-filters > .aopd-records-search {
+  grid-column: span 2;
+}
+
+.aopd-records-page .aopd-records-filters > .aopd-records-ethiopian-date {
+  grid-column: span 2;
+}
+
+.aopd-records-page .aopd-records-filters input,
+.aopd-records-page .aopd-records-filters select {
+  min-height: 42px;
+  border-color: #d3dee5;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  color: #263d50;
+  font-size: 0.82rem;
+}
+
+.aopd-records-page .aopd-records-filters input::placeholder {
+  color: #80909c;
+}
+
+.aopd-records-page .aopd-records-filters input:focus-visible,
+.aopd-records-page .aopd-records-filters select:focus-visible {
+  border-color: #378368;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(22, 116, 90, 0.12);
+}
+
+.aopd-records-page .aopd-records-ethiopian-date {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  color: #40596c;
+  font-size: 0.75rem;
+  font-weight: 720;
+}
+
+.aopd-records-page .aopd-records-ethiopian-date-fields {
+  grid-template-columns: minmax(4.5rem, 0.72fr) minmax(9rem, 1.35fr) minmax(4.5rem, 0.62fr);
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.aopd-records-page .aopd-records-ethiopian-date-fields input,
+.aopd-records-page .aopd-records-ethiopian-date-fields select {
+  min-width: 0;
+  min-height: 42px;
+  padding-inline: 0.55rem;
+  background-color: #fff;
+  font-size: 0.8rem;
+}
+
+.aopd-records-page .aopd-records-filters > .aopd-records-clear-filters {
+  min-height: 40px;
+  align-self: end;
+  border-color: #d8e6dd;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  color: #17684f;
+  font-size: 0.78rem;
+}
+
+.aopd-records-page .aopd-records-filters > .aopd-records-clear-filters:hover {
+  border-color: #bfd8c8;
+  background: #eef7f1;
+}
+
+.aopd-records-page .aopd-records-table-wrap {
+  min-width: 0;
+  overflow-x: auto;
+  margin-top: 0;
+  border-color: #dce5eb;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(28, 52, 72, 0.045);
+  scrollbar-color: #aebfc8 #f2f5f7;
+}
+
+.aopd-records-page .aopd-records-table {
+  width: 100%;
+  min-width: 1040px;
+  table-layout: fixed;
+}
+
+.aopd-records-page .aopd-records-table thead th {
+  z-index: 1;
+  border-bottom-color: #dbe4e9;
+  padding: 0.72rem 0.7rem;
+  background: #f1f5f7;
+  color: #465e71;
+  font-size: 0.68rem;
+  font-weight: 760;
+  letter-spacing: 0.045em;
+  text-align: left;
+}
+
+.aopd-records-page .aopd-records-table thead th:nth-child(1) {
+  width: 150px;
+}
+
+.aopd-records-page .aopd-records-table thead th:nth-child(2) {
+  width: 66px;
+}
+
+.aopd-records-page .aopd-records-table thead th:nth-child(3) {
+  width: 125px;
+}
+
+.aopd-records-page .aopd-records-table thead th:nth-child(4) {
+  width: 145px;
+}
+
+.aopd-records-page .aopd-records-table thead th:nth-child(5) {
+  width: 82px;
+}
+
+.aopd-records-page .aopd-records-table thead th:nth-child(6) {
+  width: 245px;
+}
+
+.aopd-records-page .aopd-records-table thead th:nth-child(7) {
+  width: 140px;
+}
+
+.aopd-records-page .aopd-records-table thead th:nth-child(8) {
+  width: 185px;
+}
+
+.aopd-records-page .aopd-records-table td {
+  padding: 0.68rem 0.7rem;
+  border-bottom: 1px solid #edf1f3;
+  color: #354b5d;
+  font-size: 0.81rem;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.aopd-records-page .aopd-records-table tbody tr:nth-child(even) {
+  background: #f9fbfc;
+}
+
+.aopd-records-page .aopd-records-table tbody tr:hover {
+  background: #f0f7f3;
+}
+
+.aopd-records-page .aopd-records-table td:first-child {
+  color: #25513e;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.aopd-records-page .aopd-records-table td:nth-child(6) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 620;
+}
+
+.aopd-records-page .aopd-records-table td:nth-child(7) {
+  white-space: normal;
+}
+
+.aopd-records-page .aopd-records-table .aopd-badge {
+  justify-content: center;
+  min-width: 82px;
+  border: 1px solid transparent;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.aopd-records-page .aopd-records-table .aopd-badge-adult {
+  border-color: #cce5d3;
+  background: #edf7f0;
+  color: #176343;
+}
+
+.aopd-records-page .aopd-records-table .aopd-badge-outside {
+  border-color: #dfe5e9;
+  background: #f2f5f7;
+  color: #566a79;
+}
+
+.aopd-records-page .aopd-records-table .aopd-demo-tag {
+  margin-left: 0.4rem;
+}
+
+.aopd-records-page .aopd-row-actions {
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+}
+
+.aopd-records-page .aopd-row-actions button {
+  min-height: 32px;
+  border: 1px solid #d7e1e6;
+  border-radius: 7px;
+  padding: 0.35rem 0.5rem;
+  background: #fff;
+  color: #38556a;
+  font-size: 0.72rem;
+  font-weight: 680;
+  transition: border-color 140ms ease, background-color 140ms ease, color 140ms ease;
+}
+
+.aopd-records-page .aopd-row-actions button:hover:not(:disabled) {
+  border-color: #a9cbb6;
+  background: #eff7f1;
+  color: #176343;
+}
+
+.aopd-records-page .aopd-row-actions button.danger-text {
+  border-color: #ead8d3;
+  color: #9b4a3b;
+}
+
+.aopd-records-page .aopd-row-actions button.danger-text:hover:not(:disabled) {
+  border-color: #e0b5aa;
+  background: #fff3ef;
+}
+
+.aopd-records-page .aopd-row-actions button:focus-visible {
+  outline: 3px solid rgba(22, 116, 90, 0.2);
+  outline-offset: 2px;
+}
+
+.aopd-records-page .aopd-records-table .aopd-empty {
+  padding: 2rem 1rem;
+  color: #71818d;
+  text-align: center;
+}
+
+.aopd-records-page .aopd-records-aggregate {
+  gap: 0.8rem;
+  border-color: #dce5eb;
+  border-radius: 11px;
+  box-shadow: 0 4px 14px rgba(28, 52, 72, 0.04);
+}
+
+.aopd-records-page .aopd-records-aggregate-header h3 {
+  color: #1f3b52;
+  font-size: 1.02rem;
+}
+
+.aopd-records-page .aopd-records-aggregate-header p {
+  color: #687b89;
+}
+
+.aopd-records-page .aopd-records-aggregate-table-wrap {
+  border: 1px solid #e1e8ed;
+  border-radius: 9px;
+}
+
+.aopd-records-page .aopd-records-aggregate-table th {
+  background: #f1f5f7;
+  color: #4a6275;
+  font-size: 0.7rem;
+}
+
+.aopd-records-page .aopd-records-aggregate-table td {
+  color: #354b5d;
+  font-size: 0.82rem;
+}
+
+.aopd-records-page .aopd-records-aggregate-table tbody tr:nth-child(even) {
+  background: #f9fbfc;
+}
+
+.aopd-records-page .aopd-records-aggregate-table tbody tr:hover {
+  background: #f0f7f3;
+}
+
+@media (max-width: 980px) {
+  .aopd-records-page .aopd-records-filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .aopd-records-page .aopd-records-filters > .aopd-records-search,
+  .aopd-records-page .aopd-records-filters > .aopd-records-ethiopian-date {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 700px) {
+  .aopd-records-page .aopd-records-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    padding: 0.7rem;
+  }
+
+  .aopd-records-page .aopd-records-filters > .aopd-records-search,
+  .aopd-records-page .aopd-records-filters > .aopd-records-ethiopian-date {
+    grid-column: 1 / -1;
+  }
+
+  .aopd-records-page .aopd-records-ethiopian-date-fields {
+    grid-template-columns: minmax(4.5rem, 0.72fr) minmax(9rem, 1.35fr) minmax(4.5rem, 0.62fr);
+  }
+
+  .aopd-records-page .aopd-records-aggregate-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .aopd-records-page .aopd-records-aggregate-period {
+    flex-basis: auto;
+  }
+}
+
+@media (max-width: 430px) {
+  .aopd-records-page .aopd-records-intro h2 {
+    font-size: 1.5rem;
+  }
+
+  .aopd-records-page .aopd-records-ethiopian-date-fields {
+    grid-template-columns: minmax(4rem, 0.72fr) minmax(7.5rem, 1.35fr) minmax(4rem, 0.62fr);
+    gap: 0.3rem;
+  }
+
+  .aopd-records-page .aopd-records-ethiopian-date-fields input,
+  .aopd-records-page .aopd-records-ethiopian-date-fields select {
+    padding-inline: 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  .aopd-records-page .aopd-records-tabs button {
+    flex: 1 1 130px;
+    padding-inline: 0.45rem;
+    font-size: 0.78rem;
+  }
+}
+
+/* Patient entry page refinements */
+.aopd-entry-page {
+  gap: 0.65rem;
+  color: #1d3046;
+}
+
+.aopd-entry-page .aopd-entry-intro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.1rem;
+}
+
+.aopd-entry-page .aopd-entry-intro h2 {
+  margin: 0 0 0.35rem;
+  color: #19344c;
+  font-size: clamp(1.55rem, 2.2vw, 1.9rem);
+  font-weight: 760;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.aopd-entry-page .aopd-entry-intro .aopd-lede {
+  max-width: 70ch;
+  margin: 0;
+  color: #5f7180;
+  font-size: 0.91rem;
+  line-height: 1.5;
+}
+
+.aopd-entry-page .aopd-entry-help {
+  position: relative;
+  z-index: 15;
+  flex: 0 0 auto;
+  padding-top: 0.15rem;
+}
+
+.aopd-entry-page .aopd-entry-help .aopd-help-hint > summary {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-color: #b7d4c3;
+  background: #f1f8f3;
+  color: #17684f;
+  font-size: 0.85rem;
+  transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.aopd-entry-page .aopd-entry-help .aopd-help-hint > summary:hover,
+.aopd-entry-page .aopd-entry-help .aopd-help-hint > summary:focus-visible {
+  border-color: #438d70;
+  background: #e6f3eb;
+  box-shadow: 0 0 0 3px rgba(22, 116, 90, 0.12);
+  outline: 0;
+}
+
+.aopd-entry-page .aopd-entry-help .aopd-help-hint-popover {
+  right: 0;
+  left: auto;
+  width: min(21rem, 78vw);
+  border-color: #d7e3dd;
+  border-radius: 11px;
+  box-shadow: 0 14px 32px rgba(20, 43, 61, 0.16);
+}
+
+.aopd-entry-page > .aopd-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: start;
+  gap: 1.1rem 1rem;
+  overflow: visible;
+  margin: 0;
+  border: 1px solid #dce5eb;
+  border-radius: 14px;
+  padding: clamp(1rem, 2vw, 1.4rem);
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(28, 52, 72, 0.055);
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date,
+.aopd-entry-page .aopd-entry-age,
+.aopd-entry-page .aopd-entry-sex,
+.aopd-entry-page .aopd-entry-diagnosis,
+.aopd-entry-page .aopd-classification,
+.aopd-entry-page .aopd-actions,
+.aopd-entry-page .aopd-entry > .aopd-error,
+.aopd-entry-page .aopd-entry > .aopd-success {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date {
+  gap: 0.65rem;
+  border: 1px solid #d8e8de;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #f7fbf8;
+}
+
+.aopd-entry-page .aopd-entry-field-label {
+  color: #244b3b;
+  font-size: 0.94rem;
+  font-weight: 760;
+  letter-spacing: -0.01em;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  max-width: 760px;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields label {
+  gap: 0.35rem;
+  color: #627568;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields input,
+.aopd-entry-page .aopd-entry-ethiopian-date-fields select {
+  min-height: 46px;
+  border-color: #cbd9d1;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  color: #20394c;
+  font-size: 0.9rem;
+  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields input:hover,
+.aopd-entry-page .aopd-entry-ethiopian-date-fields select:hover {
+  border-color: #8eb6a0;
+}
+
+.aopd-entry-page .aopd-entry-ethiopian-date-fields input:focus-visible,
+.aopd-entry-page .aopd-entry-ethiopian-date-fields select:focus-visible {
+  border-color: #16745a;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(22, 116, 90, 0.14);
+}
+
+.aopd-entry-page .aopd-entry-date-preview {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  border: 1px solid #d1e6d9;
+  border-radius: 999px;
+  padding: 0.32rem 0.7rem;
+  background: #edf7f0;
+  color: #17684f;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.aopd-entry-page .aopd-entry-age {
+  grid-column: span 3;
+}
+
+.aopd-entry-page .aopd-entry-sex {
+  grid-column: span 3;
+  display: flex;
+  min-height: 76px;
+  align-content: center;
+  gap: 0.55rem;
+  border: 1px solid #d8e1e8;
+  border-radius: 10px;
+  padding: 0.45rem 0.65rem 0.65rem;
+  background: #fafcfd;
+}
+
+.aopd-entry-page .aopd-entry-sex legend {
+  padding: 0 0.25rem;
+  color: #40566a;
+  font-size: 0.78rem;
+  font-weight: 730;
+}
+
+.aopd-entry-page .aopd-entry-sex label {
+  min-height: 34px;
+  gap: 0.45rem;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  padding: 0.35rem 0.5rem;
+  color: #3f5365;
+  font-size: 0.84rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.aopd-entry-page .aopd-entry-sex label:has(input:checked) {
+  border-color: #cce2d3;
+  background: #edf7f0;
+  color: #17684f;
+}
+
+.aopd-entry-page .aopd-entry-sex input[type="radio"] {
+  accent-color: #16745a;
+}
+
+.aopd-entry-page .aopd-entry-diagnosis {
+  grid-column: span 6;
+  position: relative;
+  z-index: 5;
+}
+
+.aopd-entry-page .aopd-entry > label {
+  gap: 0.42rem;
+  color: #344b5e;
+  font-size: 0.82rem;
+  font-weight: 720;
+}
+
+.aopd-entry-page .aopd-entry-age > input,
+.aopd-entry-page .aopd-entry-diagnosis .aopd-autocomplete > input {
+  min-height: 46px;
+  border-color: #cbd8e0;
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  color: #20394c;
+  font-size: 0.92rem;
+  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+.aopd-entry-page .aopd-entry-age > input:hover,
+.aopd-entry-page .aopd-entry-diagnosis .aopd-autocomplete > input:hover {
+  border-color: #91ae9e;
+}
+
+.aopd-entry-page .aopd-entry-age > input:focus-visible,
+.aopd-entry-page .aopd-entry-diagnosis .aopd-autocomplete > input:focus-visible {
+  border-color: #16745a;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(22, 116, 90, 0.14);
+}
+
+.aopd-entry-page .aopd-entry-diagnosis .aopd-autocomplete {
+  z-index: 10;
+}
+
+.aopd-entry-page .aopd-entry-diagnosis .aopd-autocomplete > input {
+  border-color: #9fbfac;
+  background: #fcfefc;
+  font-weight: 550;
+}
+
+.aopd-entry-page .aopd-entry-diagnosis .aopd-autocomplete > input::placeholder {
+  color: #778a7f;
+  opacity: 1;
+}
+
+.aopd-entry-page .aopd-autocomplete-list {
+  z-index: 50;
+  max-height: min(20rem, 50vh);
+  border-color: #cbd9d2;
+  border-radius: 10px;
+  padding: 0.3rem;
+  box-shadow: 0 14px 30px rgba(24, 49, 39, 0.18);
+}
+
+.aopd-entry-page .aopd-autocomplete-list button {
+  min-height: 42px;
+  border-radius: 7px;
+  padding: 0.6rem 0.7rem;
+  color: #273f52;
+}
+
+.aopd-entry-page .aopd-autocomplete-list button:hover,
+.aopd-entry-page .aopd-autocomplete-list button.is-active {
+  background: #edf7f0;
+  color: #175c45;
+}
+
+.aopd-entry-page .aopd-classification {
+  min-height: 0;
+  border-color: #d2e5d8;
+  border-radius: 11px;
+  padding: 0.85rem 1rem;
+  background: #f4f9f5;
+}
+
+.aopd-entry-page .aopd-classification h3 {
+  margin: 0 0 0.55rem;
+  color: #214b3a;
+  font-size: 0.9rem;
+  font-weight: 760;
+  letter-spacing: 0;
+}
+
+.aopd-entry-page .aopd-classification > p {
+  margin: 0;
+  color: #697b70;
+  font-size: 0.84rem;
+}
+
+.aopd-entry-page .aopd-classification dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.aopd-entry-page .aopd-classification dl > div {
+  min-width: 0;
+  border: 1px solid #dce9df;
+  border-left: 3px solid #73ae88;
+  border-radius: 7px;
+  padding: 0.5rem 0.65rem;
+  background: #fff;
+}
+
+.aopd-entry-page .aopd-classification dt {
+  color: #66796d;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.aopd-entry-page .aopd-classification dd {
+  margin-top: 0.18rem;
+  color: #203f31;
+  font-size: 0.88rem;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+
+.aopd-entry-page .aopd-actions {
+  gap: 0.6rem;
+  margin-top: -0.15rem;
+}
+
+.aopd-entry-page .aopd-entry > .aopd-actions > .aopd-btn:not(.secondary),
+.aopd-entry-page .aopd-pending-heading > .aopd-btn {
+  min-height: 46px;
+  border: 1px solid #176a50;
+  border-radius: 9px;
+  padding: 0.68rem 1.15rem;
+  background: #16745a;
+  box-shadow: 0 2px 5px rgba(22, 116, 90, 0.12);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 740;
+  transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+.aopd-entry-page .aopd-entry > .aopd-actions > .aopd-btn:not(.secondary):hover:not(:disabled),
+.aopd-entry-page .aopd-pending-heading > .aopd-btn:hover:not(:disabled) {
+  border-color: #105d45;
+  background: #12664d;
+  box-shadow: 0 5px 12px rgba(22, 116, 90, 0.18);
+  transform: translateY(-1px);
+}
+
+.aopd-entry-page .aopd-entry > .aopd-actions > .aopd-btn:not(.secondary):active:not(:disabled),
+.aopd-entry-page .aopd-pending-heading > .aopd-btn:active:not(:disabled) {
+  background: #0e573f;
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.aopd-entry-page .aopd-entry > .aopd-actions > .aopd-btn:not(.secondary):focus-visible,
+.aopd-entry-page .aopd-pending-heading > .aopd-btn:focus-visible {
+  outline: 3px solid rgba(22, 116, 90, 0.28);
+  outline-offset: 3px;
+}
+
+.aopd-entry-page .aopd-entry > .aopd-actions > .aopd-btn:not(.secondary):disabled,
+.aopd-entry-page .aopd-pending-heading > .aopd-btn:disabled {
+  border-color: #aab8b0;
+  background: #aab8b0;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.aopd-entry-page .aopd-pending {
+  gap: 0.85rem;
+  margin-top: 0.35rem;
+  border: 1px solid #dce5eb;
+  border-radius: 14px;
+  padding: clamp(0.9rem, 1.8vw, 1.2rem);
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(28, 52, 72, 0.045);
+}
+
+.aopd-entry-page .aopd-pending-heading {
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #edf1f3;
+}
+
+.aopd-entry-page .aopd-pending-heading h3 {
+  margin: 0 0 0.2rem;
+  color: #1e3a50;
+  font-size: 1.02rem;
+  font-weight: 760;
+  letter-spacing: -0.015em;
+}
+
+.aopd-entry-page .aopd-pending-heading p,
+.aopd-entry-page .aopd-pending-progress {
+  color: #687b89;
+  font-size: 0.83rem;
+}
+
+.aopd-entry-page .aopd-pending-progress {
+  border: 1px solid #d9e8df;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  background: #f4f9f5;
+}
+
+.aopd-entry-page .aopd-pending .aopd-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e1e8ed;
+  border-radius: 9px;
+}
+
+.aopd-entry-page .aopd-pending-table {
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.aopd-entry-page .aopd-pending-table th {
+  border-bottom: 1px solid #dfe7ec;
+  padding: 0.7rem 0.75rem;
+  background: #f4f7f9;
+  color: #536a7c;
+  font-size: 0.7rem;
+  letter-spacing: 0.045em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.aopd-entry-page .aopd-pending-table td {
+  border-bottom: 1px solid #edf1f3;
+  padding: 0.7rem 0.75rem;
+  color: #344b5e;
+  font-size: 0.82rem;
+  vertical-align: middle;
+}
+
+.aopd-entry-page .aopd-pending-table tbody tr:nth-child(even) {
+  background: #fafcfd;
+}
+
+.aopd-entry-page .aopd-pending-table tbody tr:hover {
+  background: #f3f8f5;
+}
+
+.aopd-entry-page .aopd-pending-table td:first-child {
+  color: #25513e;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.aopd-entry-page .aopd-pending-table .aopd-row-actions {
+  min-width: 138px;
+  gap: 0.4rem;
+}
+
+.aopd-entry-page .aopd-pending-table .aopd-row-actions button {
+  min-height: 34px;
+  border: 1px solid #d5e0e6;
+  border-radius: 7px;
+  padding: 0.38rem 0.58rem;
+  background: #fff;
+  color: #35556a;
+  font-size: 0.76rem;
+  font-weight: 680;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.aopd-entry-page .aopd-pending-table .aopd-row-actions button:hover:not(:disabled) {
+  border-color: #9fc2ad;
+  background: #f0f8f2;
+}
+
+.aopd-entry-page .aopd-pending-table .aopd-row-actions button.danger-text:hover:not(:disabled) {
+  border-color: #e4b7aa;
+  background: #fff4f1;
+  color: #9b4432;
+}
+
+.aopd-entry-page .aopd-pending-table .aopd-row-actions button:focus-visible {
+  outline: 3px solid rgba(22, 116, 90, 0.2);
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .aopd-entry-page > .aopd-entry {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.95rem;
+  }
+
+  .aopd-entry-page .aopd-entry-age {
+    grid-column: span 2;
+  }
+
+  .aopd-entry-page .aopd-entry-sex {
+    grid-column: span 4;
+  }
+
+  .aopd-entry-page .aopd-entry-diagnosis {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .aopd-entry-page .aopd-entry-intro {
+    gap: 0.65rem;
+  }
+
+  .aopd-entry-page > .aopd-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+    padding: 0.9rem;
+  }
+
+  .aopd-entry-page .aopd-entry-age,
+  .aopd-entry-page .aopd-entry-sex,
+  .aopd-entry-page .aopd-entry-diagnosis {
+    grid-column: 1;
+  }
+
+  .aopd-entry-page .aopd-entry-ethiopian-date {
+    padding: 0.8rem;
+  }
+
+  .aopd-entry-page .aopd-entry-ethiopian-date-fields {
+    gap: 0.5rem;
+  }
+
+  .aopd-entry-page .aopd-classification dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aopd-entry-page .aopd-pending-heading {
+    align-items: stretch;
+  }
+
+  .aopd-entry-page .aopd-pending-heading > .aopd-btn {
+    width: 100%;
+  }
+
+  .aopd-entry-page .aopd-entry > .aopd-actions > .aopd-btn {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .aopd-entry-page .aopd-entry-intro h2 {
+    font-size: 1.45rem;
+  }
+
+  .aopd-entry-page .aopd-entry-ethiopian-date-fields {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr) minmax(0, 0.7fr);
+    gap: 0.35rem;
+  }
+
+  .aopd-entry-page .aopd-entry-ethiopian-date-fields input,
+  .aopd-entry-page .aopd-entry-ethiopian-date-fields select {
+    padding-inline: 0.45rem;
+    font-size: 0.82rem;
+  }
+}
+
+.aopd-document-table:not(.aopd-tally-table) td:first-child {
+  min-width: 310px;
+}
+
+.aopd-document-table .aopd-scanner-edit-date {
+  display: block;
+  min-height: 30px;
+  margin-top: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+}
+
+.aopd-scanner-ethiopian-date-editor {
+  display: grid;
+  grid-template-columns: minmax(4rem, 0.7fr) minmax(8rem, 1.4fr) minmax(4rem, 0.6fr);
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+  border: 1px solid #d5e5da;
+  border-radius: 8px;
+  padding: 0.55rem;
+  background: #f5faf6;
+}
+
+.aopd-scanner-ethiopian-date-editor label {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+  color: #50685b;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.aopd-scanner-ethiopian-date-editor input,
+.aopd-scanner-ethiopian-date-editor select {
+  width: 100%;
+  min-width: 0 !important;
+  min-height: 34px !important;
+  border: 1px solid #c8d8ce;
+  border-radius: 6px;
+  padding: 0.35rem;
+  background: #fff;
+  color: #263d32;
+  font-size: 0.76rem !important;
+}
+
+.aopd-scanner-ethiopian-date-editor input:focus-visible,
+.aopd-scanner-ethiopian-date-editor select:focus-visible {
+  border-color: #16745a;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(22, 116, 90, 0.13);
+}
+
+.aopd-scanner-ethiopian-date-editor-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.aopd-scanner-ethiopian-date-editor-actions .aopd-btn {
+  min-height: 32px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.75rem;
 }

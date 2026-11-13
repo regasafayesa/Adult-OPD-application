@@ -3,24 +3,79 @@ import { useNavigate } from 'react-router-dom';
 import { StatusBadge } from '../components/common/ReportTables';
 import { ADULT_AGE_GROUPS, MONTH_NAMES, OPD_CATEGORY, SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
-import { formatDisplayDate, todayISO } from '../utils/dates';
+import {
+  daysInEthiopianMonth,
+  ETHIOPIAN_MONTH_NAMES,
+  formatEthiopianDate,
+  getEthiopianEncounterDateBounds,
+  matchesEthiopianEncounterDate,
+} from '../utils/ethiopianCalendar';
 import { searchFacilityEncounters } from '../services/supabaseData';
 import { MONTHLY_DIAGNOSIS_AGE_GROUPS } from '../services/monthlyDiagnosisCounts.mjs';
 import PatientEntry from './PatientEntry';
 
-function defaultRecordFilters() {
-  const [year, month] = todayISO().split('-');
+function emptyRecordFilters() {
   return {
     query: '',
-    date: '',
-    month: String(Number(month)),
-    year,
+    date: { year: '', month: '', day: '' },
     sex: '',
     ageGroup: '',
     diagnosis: '',
     opdCategory: '',
     status: '',
   };
+}
+
+function EthiopianDateFilter({ label, value, onChange }) {
+  const year = Number(value.year);
+  const daysInMonth = daysInEthiopianMonth(year, value.month);
+
+  function updatePart(part, nextValue) {
+    const updated = { ...value, [part]: nextValue };
+    if (part !== 'day' && updated.day
+        && Number(updated.day) > daysInEthiopianMonth(Number(updated.year), updated.month)) {
+      updated.day = '';
+    }
+    onChange(updated);
+  }
+
+  return (
+    <div className="aopd-records-ethiopian-date">
+      <span>{label}</span>
+      <div className="aopd-records-ethiopian-date-fields">
+        <input
+          type="number"
+          min="1"
+          max="9999"
+          step="1"
+          placeholder="Year"
+          aria-label={`${label} year (Ethiopian)`}
+          value={value.year}
+          onChange={(event) => updatePart('year', event.target.value)}
+        />
+        <select
+          aria-label={`${label} month (Ethiopian)`}
+          value={value.month}
+          onChange={(event) => updatePart('month', event.target.value)}
+        >
+          <option value="">Month</option>
+          {ETHIOPIAN_MONTH_NAMES.map((name, index) => (
+            <option key={name} value={index + 1}>{name}</option>
+          ))}
+        </select>
+        <select
+          aria-label={`${label} day (Ethiopian)`}
+          value={value.day}
+          onChange={(event) => updatePart('day', event.target.value)}
+        >
+          <option value="">Day</option>
+          {Array.from({ length: daysInMonth }, (_, index) => (
+            <option key={index + 1} value={index + 1}>{index + 1}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
 }
 
 export default function PatientRecords() {
@@ -45,7 +100,7 @@ export default function PatientRecords() {
   const [clearingAggregates, setClearingAggregates] = useState(false);
   const [aggregateMessage, setAggregateMessage] = useState('');
   const [aggregateMessageIsError, setAggregateMessageIsError] = useState(false);
-  const [filters, setFilters] = useState(defaultRecordFilters);
+  const [filters, setFilters] = useState(emptyRecordFilters);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
@@ -61,9 +116,7 @@ export default function PatientRecords() {
         const hay = `${record.diagnosis} ${record.age} ${record.sex} ${record.ageGroup} ${record.opdCategory}`.toLowerCase();
         if (!hay.includes(filters.query.toLowerCase())) return false;
       }
-      if (filters.date && record.date !== filters.date) return false;
-      if (filters.month && record.reportingMonth !== Number(filters.month)) return false;
-      if (filters.year && record.reportingYear !== Number(filters.year)) return false;
+      if (!matchesEthiopianEncounterDate(record.date, filters)) return false;
       if (filters.sex && record.sex !== filters.sex) return false;
       if (filters.ageGroup && record.ageGroup !== filters.ageGroup) return false;
       if (filters.diagnosis && record.diagnosis !== filters.diagnosis) return false;
@@ -79,9 +132,21 @@ export default function PatientRecords() {
     let active = true;
     setSearchLoading(true);
     setSearchError('');
-    searchFacilityEncounters(facilityId, filters)
+    const dateBounds = getEthiopianEncounterDateBounds(filters);
+    searchFacilityEncounters(facilityId, {
+      ...filters,
+      date: '',
+      month: '',
+      year: '',
+      encounterDateFrom: dateBounds.from,
+      encounterDateBefore: dateBounds.before,
+    })
       .then((results) => {
-        if (active) setCloudFiltered(results);
+        if (active) {
+          setCloudFiltered(results.filter((record) =>
+            matchesEthiopianEncounterDate(record.date, filters)
+          ));
+        }
       })
       .catch((error) => {
         if (!active) return;
@@ -96,8 +161,21 @@ export default function PatientRecords() {
     };
   }, [facilityId, filters, records]);
 
-  const filtered = facilityId ? cloudFiltered : localFiltered;
-  const activeFilterCount = Object.values(filters).filter(Boolean).length;
+  const filtered = useMemo(() => {
+    const source = facilityId ? cloudFiltered : localFiltered;
+    return [...source].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  }, [cloudFiltered, facilityId, localFiltered]);
+  const activeFilterCount = [
+    filters.query,
+    filters.year,
+    filters.month,
+    filters.sex,
+    filters.ageGroup,
+    filters.diagnosis,
+    filters.opdCategory,
+    filters.status,
+    filters.date.year && filters.date.month && filters.date.day,
+  ].filter(Boolean).length;
   const savedAggregateRows = useMemo(() => monthlyDiagnosisCounts
     .filter((item) =>
       Number(item.reportingYear) === Number(aggregateYear)
@@ -121,7 +199,7 @@ export default function PatientRecords() {
   }
 
   function clearFilters() {
-    setFilters(defaultRecordFilters());
+    setFilters(emptyRecordFilters());
   }
 
   async function handleDelete(id) {
@@ -162,13 +240,15 @@ export default function PatientRecords() {
 
   return (
     <div className="aopd-page aopd-records-page">
-      <h2>Patient records</h2>
-      <p className="aopd-lede">
-        Encounters are stored without names or identifiers and classified into four age groups.
-      </p>
-      <p className="aopd-lede">
-        Showing this month’s records by default. Use Filters to find older records; they remain saved.
-      </p>
+      <header className="aopd-records-intro">
+        <div>
+          <h2>Patient records</h2>
+          <p className="aopd-lede">
+            Encounters are stored without names or identifiers and classified into four age groups.
+            Filter records below; all saved encounters remain available.
+          </p>
+        </div>
+      </header>
 
       <nav className="aopd-records-tabs" role="tablist" aria-label="Record type">
         <button
@@ -229,31 +309,17 @@ export default function PatientRecords() {
       >
         <input
           type="search"
+          className="aopd-records-search"
           placeholder="Search diagnosis, age, sex..."
           value={filters.query}
           onChange={(e) => updateFilter('query', e.target.value)}
         />
-        <input type="date" value={filters.date} onChange={(e) => updateFilter('date', e.target.value)} />
-        <select value={filters.month} onChange={(e) => updateFilter('month', e.target.value)}>
-          <option value="">All months</option>
-          {MONTH_NAMES.map((name, index) => (
-            <option key={name} value={index + 1}>
-              {name}
-            </option>
-          ))}
-        </select>
-        <input
-          type="number"
-          placeholder="Year"
-          value={filters.year}
-          onChange={(e) => updateFilter('year', e.target.value)}
-        />
-        <select value={filters.sex} onChange={(e) => updateFilter('sex', e.target.value)}>
+        <select className="aopd-records-sex-filter" value={filters.sex} onChange={(e) => updateFilter('sex', e.target.value)}>
           <option value="">All sexes</option>
           <option value={SEX.MALE}>Male</option>
           <option value={SEX.FEMALE}>Female</option>
         </select>
-        <select value={filters.ageGroup} onChange={(e) => updateFilter('ageGroup', e.target.value)}>
+        <select className="aopd-records-age-filter" value={filters.ageGroup} onChange={(e) => updateFilter('ageGroup', e.target.value)}>
           <option value="">All age groups</option>
           {ADULT_AGE_GROUPS.map((group) => (
             <option key={group} value={group}>
@@ -261,7 +327,7 @@ export default function PatientRecords() {
             </option>
           ))}
         </select>
-        <select value={filters.diagnosis} onChange={(e) => updateFilter('diagnosis', e.target.value)}>
+        <select className="aopd-records-diagnosis-filter" value={filters.diagnosis} onChange={(e) => updateFilter('diagnosis', e.target.value)}>
           <option value="">All diagnoses</option>
           {diagnoses.map((item) => (
             <option key={item.id} value={item.name}>
@@ -269,12 +335,17 @@ export default function PatientRecords() {
             </option>
           ))}
         </select>
-        <select value={filters.opdCategory} onChange={(e) => updateFilter('opdCategory', e.target.value)}>
+        <EthiopianDateFilter
+          label="Encounter date"
+          value={filters.date}
+          onChange={(value) => updateFilter('date', value)}
+        />
+        <select className="aopd-records-category-filter" value={filters.opdCategory} onChange={(e) => updateFilter('opdCategory', e.target.value)}>
           <option value="">All OPD categories</option>
           <option value={OPD_CATEGORY.ADULT}>OPD</option>
           <option value={OPD_CATEGORY.OUTSIDE}>Outside OPD Categories</option>
         </select>
-        <select value={filters.status} onChange={(e) => updateFilter('status', e.target.value)}>
+        <select className="aopd-records-status-filter" value={filters.status} onChange={(e) => updateFilter('status', e.target.value)}>
           <option value="">All reporting status</option>
           <option value="adult">Included in OPD report</option>
           <option value="outside">Outside reporting age groups</option>
@@ -314,7 +385,7 @@ export default function PatientRecords() {
             )}
             {filtered.map((record) => (
               <tr key={record.id}>
-                <td>{formatDisplayDate(record.date)}</td>
+                <td>{formatEthiopianDate(record.date)}</td>
                 <td className="num">{record.age}</td>
                 <td>{record.ageGroup || '—'}</td>
                 <td>{record.opdCategory}</td>
@@ -468,7 +539,7 @@ export default function PatientRecords() {
             <dl className="aopd-view">
               <div>
                 <dt>Date</dt>
-                <dd>{formatDisplayDate(viewing.date)}</dd>
+                <dd>{formatEthiopianDate(viewing.date)}</dd>
               </div>
               <div>
                 <dt>Age</dt>
