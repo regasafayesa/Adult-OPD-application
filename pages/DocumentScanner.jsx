@@ -20,6 +20,11 @@ import {
 } from '../services/documentImports';
 import { createId } from '../services/storage';
 import {
+  assignTodayToExtractedEncounters,
+  reviewedEncounterDate,
+  todayEncounterDateISO,
+} from '../services/scannerEncounterDates.mjs';
+import {
   daysInEthiopianMonth,
   ETHIOPIAN_MONTH_NAMES,
   ethiopianDateToGregorianISO,
@@ -57,24 +62,6 @@ function exactDiagnosis(diagnoses, name, code) {
   return active.find((item) => normalizedName && normalizeName(item.name) === normalizedName)
     || active.find((item) => normalizedCode && normalizeCode(item.code) === normalizedCode)
     || null;
-}
-
-function todayEncounterDateISO() {
-  return ethiopianDateToGregorianISO(getEthiopianDateParts(new Date()));
-}
-
-function normalizeExtractedEncounterDate(value) {
-  if (typeof value !== 'string') return null;
-  const ethiopianDate = /^EC:(\d{1,4})-(\d{1,2})-(\d{1,2})$/i.exec(value.trim());
-  if (ethiopianDate) {
-    return ethiopianDateToGregorianISO({
-      year: Number(ethiopianDate[1]),
-      month: Number(ethiopianDate[2]),
-      day: Number(ethiopianDate[3]),
-    });
-  }
-  const gregorianParts = getEthiopianDateParts(value);
-  return gregorianParts ? ethiopianDateToGregorianISO(gregorianParts) : null;
 }
 
 function EthiopianEncounterDateEditor({ value, onSave, onCancel }) {
@@ -139,29 +126,24 @@ function EthiopianEncounterDateEditor({ value, onSave, onCancel }) {
   );
 }
 
-function recognizedExtraction(extraction, diagnoses, documentType) {
+function recognizedExtraction(extraction, diagnoses, documentType, { assignToday = false } = {}) {
   if (documentType === 'individual') {
+    const encounters = (extraction.encounters || []).map((row) => {
+      const diagnosis = exactDiagnosis(diagnoses, row.diagnosis, row.diagnosisCode);
+      return {
+        ...row,
+        recordId: row.recordId || createId('enc'),
+        date: reviewedEncounterDate(row.date),
+        diagnosis: diagnosis?.name || row.diagnosis || '',
+        diagnosisId: diagnosis?.id || '',
+        age: row.age == null ? '' : String(row.age),
+        sex: row.sex === SEX.FEMALE || row.sex === SEX.MALE ? row.sex : '',
+      };
+    });
     return {
       ...EMPTY_EXTRACTION,
       ...extraction,
-      encounters: (extraction.encounters || []).map((row) => {
-        const diagnosis = exactDiagnosis(diagnoses, row.diagnosis, row.diagnosisCode);
-        const extractedDate = normalizeExtractedEncounterDate(row.date);
-        const issues = (row.issues || []).filter((issue) => !/missing encounter date/i.test(issue));
-        if (!extractedDate && row.date) {
-          issues.push('Date could not be read; set the encounter date manually.');
-        }
-        return {
-          ...row,
-          recordId: row.recordId || createId('enc'),
-          date: extractedDate || todayEncounterDateISO(),
-          issues,
-          diagnosis: diagnosis?.name || row.diagnosis || '',
-          diagnosisId: diagnosis?.id || '',
-          age: row.age == null ? '' : String(row.age),
-          sex: row.sex === SEX.FEMALE || row.sex === SEX.MALE ? row.sex : '',
-        };
-      }),
+      encounters: assignToday ? assignTodayToExtractedEncounters(encounters) : encounters,
       summaries: [],
     };
   }
@@ -347,8 +329,7 @@ export default function DocumentScanner() {
   const encounterReview = useMemo(() => {
     if (documentType !== 'individual' || !extraction) return [];
     return extraction.encounters.map((row, index) => {
-      const savedRecord = records.find((record) => record.id === row.recordId);
-      const encounter = { ...row, date: savedRecord?.date || row.date || todayEncounterDateISO() };
+      const encounter = { ...row, date: row.date || todayEncounterDateISO() };
       const errors = fieldErrors(encounter, diagnoses);
       const duplicate = records.some((record) => isSameEncounter(encounter, record))
         || extraction.encounters.slice(0, index).some((previous) => isSameEncounter(encounter, previous));
@@ -486,7 +467,7 @@ export default function DocumentScanner() {
       setProgress(35);
       const result = await extractDocument({ facilityId, file, documentType });
       setProgress(85);
-      const normalized = recognizedExtraction(result, activeDiagnoses, documentType);
+      const normalized = recognizedExtraction(result, activeDiagnoses, documentType, { assignToday: true });
       const reportingMonth = normalized.reportingMonth || null;
       const reportingYear = normalized.reportingYear || null;
       setExtraction(normalized);
@@ -595,7 +576,7 @@ export default function DocumentScanner() {
     try {
       const entries = extraction.encounters.map((row) => ({
         id: row.recordId || createId('enc'),
-        date: records.find((record) => record.id === row.recordId)?.date || row.date,
+        date: row.date,
         age: Number(row.age),
         sex: row.sex,
         diagnosis: activeDiagnoses.find((item) => item.id === row.diagnosisId)?.name || '',
@@ -698,7 +679,7 @@ export default function DocumentScanner() {
             />
             <span>
               <strong>Individual Patient Registration</strong>
-              <small>Extract dated patient encounters with age, sex, and diagnosis.</small>
+              <small>Extract age, sex, and diagnosis. Each encounter starts on today’s Ethiopian date and can be changed on its own.</small>
             </span>
           </label>
           <label>
@@ -857,9 +838,7 @@ export default function DocumentScanner() {
                       <tbody>
                         {extraction.encounters.map((row, index) => {
                           const review = encounterReview[index];
-                          const encounterDate = records.find((record) => record.id === row.recordId)?.date
-                            || row.date
-                            || todayEncounterDateISO();
+                          const encounterDate = row.date || todayEncounterDateISO();
                           return (
                             <tr key={`encounter-${index}`} className={Object.keys(review.errors).length ? 'has-review-error' : ''}>
                               <td>

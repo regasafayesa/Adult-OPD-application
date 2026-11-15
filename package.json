@@ -17,7 +17,7 @@
     "build": "vite build",
     "dev": "vite",
     "preview": "vite preview",
-    "test:catalog": "node --test services/diagnosisCatalog.test.mjs services/batchInsert.test.mjs scripts/generate-shared-esv1-import.test.mjs services/monthlyDiagnosisCounts.test.mjs services/monthlyAggregateReporting.test.mjs services/ethiopianReporting.test.mjs utils/validation.test.mjs utils/ethiopianCalendar.test.mjs utils/reportingPeriod.test.mjs utils/ageClassification.test.mjs utils/tallyMarks.test.mjs",
+    "test:catalog": "node --test services/diagnosisCatalog.test.mjs services/batchInsert.test.mjs scripts/generate-shared-esv1-import.test.mjs services/monthlyDiagnosisCounts.test.mjs services/monthlyAggregateReporting.test.mjs services/ethiopianReporting.test.mjs services/scannerEncounterDates.test.mjs utils/validation.test.mjs utils/ethiopianCalendar.test.mjs utils/reportingPeriod.test.mjs utils/ageClassification.test.mjs utils/tallyMarks.test.mjs",
     "test:document-recognition": "node --test services/documentRecognitionErrors.test.mjs"
   },
   "devDependencies": {
