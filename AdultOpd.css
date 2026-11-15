@@ -11863,6 +11863,85 @@ button:disabled,
   font-size: 0.75rem;
 }
 
+.aopd-entry-page .aopd-entry-ethiopian-date-fields {
+  grid-template-columns: 7.25rem 12rem 6.5rem;
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+}
+
+.aopd-entry-page .aopd-entry-age > input {
+  width: 8.5rem;
+  max-width: 100%;
+}
+
+.aopd-entry-page .aopd-entry-diagnosis {
+  max-width: 26rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-bar {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.aopd-aggregate-page .aopd-aggregate-period-selector {
+  grid-template-columns: 12rem 7.25rem;
+  width: max-content;
+  max-width: 100%;
+}
+
+.aopd-aggregate-page .aopd-aggregate-count-form {
+  grid-template-columns: minmax(12rem, 16rem) minmax(8.5rem, 10.5rem);
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+}
+
+.aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-diagnosis-field {
+  max-width: 28rem;
+}
+
+.aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-sex-field {
+  width: max-content;
+  max-width: 100%;
+}
+
+.aopd-aggregate-page .aopd-aggregate-meta {
+  grid-template-columns: 11rem minmax(16rem, 22rem);
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+}
+
+.aopd-aggregate-page .aopd-aggregate-meta textarea {
+  width: 22rem;
+  max-width: 100%;
+  min-height: 4.75rem;
+}
+
+@media (max-width: 620px) {
+  .aopd-entry-page .aopd-entry-ethiopian-date-fields {
+    width: 100%;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.35fr) minmax(0, 0.75fr);
+  }
+
+  .aopd-entry-page .aopd-entry-age > input,
+  .aopd-entry-page .aopd-entry-diagnosis,
+  .aopd-aggregate-page .aopd-aggregate-count-form,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-diagnosis-field,
+  .aopd-aggregate-page .aopd-aggregate-count-form > .aopd-aggregate-sex-field,
+  .aopd-aggregate-page .aopd-aggregate-meta,
+  .aopd-aggregate-page .aopd-aggregate-meta textarea,
+  .aopd-aggregate-page .aopd-aggregate-period-selector {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-count-form,
+  .aopd-aggregate-page .aopd-aggregate-meta {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .aopd-settings > label .aopd-field-note {
   color: var(--aopd-muted);
   font-size: 0.78rem;
