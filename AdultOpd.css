@@ -11948,3 +11948,24 @@ button:disabled,
   font-weight: 500;
   line-height: 1.4;
 }
+
+@media (max-width: 760px) {
+  .aopd-aggregate-page .aopd-aggregate-period-bar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-period-title,
+  .aopd-aggregate-page .aopd-aggregate-period-title > div,
+  .aopd-aggregate-page .aopd-aggregate-period-selector,
+  .aopd-aggregate-page .aopd-aggregate-period-note,
+  .aopd-aggregate-page .aopd-aggregate-period-bar > .aopd-alert {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .aopd-aggregate-page .aopd-aggregate-period-selector {
+    grid-template-columns: minmax(0, 1.35fr) minmax(6.5rem, 0.8fr);
+  }
+}
