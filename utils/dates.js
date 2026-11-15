@@ -1,4 +1,9 @@
-import { MONTH_NAMES } from '../constants.js';
+import {
+  ethiopianMonthName,
+  ethiopianReportingPeriod,
+  formatEthiopianDate,
+  todayGregorianISO,
+} from './ethiopianCalendar.js';
 
 export function pad2(value) {
   return String(value).padStart(2, '0');
@@ -11,7 +16,7 @@ export function toISODate(date) {
 }
 
 export function todayISO() {
-  return toISODate(new Date());
+  return todayGregorianISO();
 }
 
 export function parseISODate(iso) {
@@ -33,23 +38,13 @@ export function parseISODate(iso) {
 }
 
 export function reportingPeriodFromDate(iso) {
-  const date = parseISODate(iso);
-  if (!date) {
-    return { reportingMonth: null, reportingYear: null, monthName: null };
-  }
-  return {
-    reportingMonth: date.getMonth() + 1,
-    reportingYear: date.getFullYear(),
-    monthName: MONTH_NAMES[date.getMonth()],
-  };
+  return ethiopianReportingPeriod(iso);
 }
 
 export function monthName(monthNumber) {
-  return MONTH_NAMES[monthNumber - 1] || '';
+  return ethiopianMonthName(monthNumber);
 }
 
 export function formatDisplayDate(iso) {
-  const date = parseISODate(iso);
-  if (!date) return iso || '—';
-  return `${pad2(date.getDate())} ${MONTH_NAMES[date.getMonth()].slice(0, 3)} ${date.getFullYear()}`;
+  return formatEthiopianDate(iso);
 }

@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MONTH_NAMES } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
+import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES } from '../utils/ethiopianCalendar';
 
 export default function Dashboard() {
   const {
-    settings,
     generateDashboardStats,
     hasDemoRecords,
     loadDemoData,
@@ -14,10 +13,13 @@ export default function Dashboard() {
     canWriteEncounters,
     monthlyDiagnosisCountsStatus,
     monthlyDiagnosisCountsError,
+    syncStatus,
+    syncError,
   } = useAdultOpd();
-  const now = new Date();
-  const [year, setYear] = useState(Number(settings.reportingYear) || now.getFullYear());
-  const [month, setMonth] = useState(now.getMonth() + 1);
+  const initialPeriod = currentEthiopianPeriod();
+  const [year, setYear] = useState(initialPeriod.year);
+  const [month, setMonth] = useState(initialPeriod.month);
+  const totalsReady = syncStatus === 'ready' && monthlyDiagnosisCountsStatus !== 'loading';
   const stats = useMemo(() => generateDashboardStats(year, month), [generateDashboardStats, year, month]);
   const { monthly } = stats;
   const ageMax = Math.max(...Object.values(monthly.combined.ageGroups).map((group) => group.total), 1);
@@ -30,17 +32,17 @@ export default function Dashboard() {
       <div className="aopd-toolbar">
         <div>
           <h2>Dashboard</h2>
-          <p>Monthly totals combine individual encounters with registration-book summaries.</p>
+          <p>Ethiopian monthly totals combine individual encounters with registration-book summaries.</p>
         </div>
         <div className="aopd-filters">
           <label>
-            Year
+            Ethiopian year
             <input type="number" value={year} onChange={(e) => setYear(Number(e.target.value))} />
           </label>
           <label>
-            Month
+            Ethiopian month
             <select value={month} onChange={(e) => setMonth(Number(e.target.value))}>
-              {MONTH_NAMES.map((name, index) => (
+              {ETHIOPIAN_MONTH_NAMES.map((name, index) => (
                 <option key={name} value={index + 1}>
                   {name}
                 </option>
@@ -55,14 +57,26 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {(syncStatus === 'loading' || monthlyDiagnosisCountsStatus === 'loading') && (
+        <p className="aopd-alert" role="status">Loading facility records. Totals are not final yet.</p>
+      )}
+      {syncStatus === 'error' && (
+        <p className="aopd-alert" role="alert">{syncError || 'Facility records could not be loaded. Totals are not shown as zero.'}</p>
+      )}
+      {monthly.legacyAggregateMessage && (
+        <p className="aopd-alert" role="status">{monthly.legacyAggregateMessage}</p>
+      )}
       <div className="aopd-card-grid">
-        <StatCard label="Total cases" value={monthly.combined.overall.total} />
-        <StatCard label="Male cases" value={monthly.combined.overall.male} />
-        <StatCard label="Female cases" value={monthly.combined.overall.female} />
+        <StatCard label="Total cases" value={totalsReady ? monthly.combined.overall.total : '…'} />
+        <StatCard label="Male cases" value={totalsReady ? monthly.combined.overall.male : '…'} />
+        <StatCard label="Female cases" value={totalsReady ? monthly.combined.overall.female : '…'} />
         {Object.entries(monthly.combined.ageGroups).map(([key, group]) => (
-          <StatCard key={key} label={group.label} value={group.total} />
+          <StatCard key={key} label={group.label} value={totalsReady ? group.total : '…'} />
         ))}
       </div>
+      {totalsReady && monthly.combined.overall.total === 0 && (
+        <p>No individual encounters or Ethiopian registration-book counts in this month.</p>
+      )}
       {monthlyDiagnosisCountsStatus === 'error' && (
         <p className="aopd-alert" role="alert">
           Dashboard totals include individual encounters only because aggregate counts could not load:
@@ -82,16 +96,17 @@ export default function Dashboard() {
           <h3>Male vs Female cases</h3>
           <div className="aopd-stacked">
             <span className="male" style={{ width: `${(monthly.combined.overall.male / sexTotal) * 100}%` }}>
-              M {monthly.combined.overall.male}
+              M {totalsReady ? monthly.combined.overall.male : '…'}
             </span>
             <span className="female" style={{ width: `${(monthly.combined.overall.female / sexTotal) * 100}%` }}>
-              F {monthly.combined.overall.female}
+              F {totalsReady ? monthly.combined.overall.female : '…'}
             </span>
           </div>
         </section>
         <section className="aopd-panel">
           <h3>Cases by diagnosis</h3>
-          {stats.diagnosisBars.length === 0 && <p>No diagnoses this month.</p>}
+          {!totalsReady && <p>Loading diagnosis totals…</p>}
+          {totalsReady && stats.diagnosisBars.length === 0 && <p>No diagnoses this Ethiopian month.</p>}
           {stats.diagnosisBars.slice(0, 8).map((item) => (
             <BarRow key={item.name} label={item.name} value={item.total} max={diagnosisMax} />
           ))}

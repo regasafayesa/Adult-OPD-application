@@ -27,6 +27,10 @@ const DATABASE_FIELD_NAMES = {
   years65PlusMale: 'years_65_plus_male',
 };
 
+export function isGregorianAggregate(summary) {
+  return summary?.reportingCalendar === 'gregorian';
+}
+
 export function emptyMonthlyDiagnosisCounts() {
   return Object.fromEntries(MONTHLY_DIAGNOSIS_COUNT_FIELDS.map((field) => [field, '0']));
 }
@@ -67,8 +71,8 @@ export function validateMonthlyDiagnosisCount(entry, { diagnoses = [] } = {}) {
   }
   if (!Number.isInteger(Number(entry.reportingMonth))
       || Number(entry.reportingMonth) < 1
-      || Number(entry.reportingMonth) > 12) {
-    errors.reportingMonth = 'Select a valid reporting month.';
+      || Number(entry.reportingMonth) > 13) {
+    errors.reportingMonth = 'Select a valid Ethiopian reporting month.';
   }
 
   const diagnosis = diagnoses.find((item) => item.id === entry.diagnosisId && item.active !== false);
@@ -106,6 +110,7 @@ export function monthlyDiagnosisCountPayload(entry, facilityId) {
     facility_id: facilityId,
     reporting_year: Number(entry.reportingYear),
     reporting_month: Number(entry.reportingMonth),
+    reporting_calendar: entry.reportingCalendar === 'gregorian' ? 'gregorian' : 'ethiopian',
     diagnosis_id: entry.diagnosisId,
     diagnosis_source: entry.diagnosisId.startsWith('official:') ? 'official' : 'facility',
     registration_book_total: entry.registrationBookTotal === ''
@@ -131,6 +136,7 @@ export function mapMonthlyDiagnosisCountRow(row, diagnoses = []) {
     facilityId: row.facility_id,
     reportingYear: row.reporting_year,
     reportingMonth: row.reporting_month,
+    reportingCalendar: row.reporting_calendar === 'ethiopian' ? 'ethiopian' : 'gregorian',
     diagnosisId: row.diagnosis_id,
     diagnosisSource: row.diagnosis_source,
     diagnosisName: diagnosis?.name || 'Unavailable diagnosis',
@@ -156,6 +162,8 @@ export function monthlyDiagnosisCountRowsMatch(left, right) {
   return (!left.facilityId || !right.facilityId || left.facilityId === right.facilityId)
     && Number(left.reportingYear) === Number(right.reportingYear)
     && Number(left.reportingMonth) === Number(right.reportingMonth)
+    && (left.reportingCalendar === 'gregorian' ? 'gregorian' : 'ethiopian')
+      === (right.reportingCalendar === 'gregorian' ? 'gregorian' : 'ethiopian')
     && left.diagnosisId === right.diagnosisId
     && (left.diagnosisSource || (left.diagnosisId.startsWith('official:') ? 'official' : 'facility'))
       === (right.diagnosisSource || (right.diagnosisId.startsWith('official:') ? 'official' : 'facility'))

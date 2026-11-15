@@ -75,7 +75,11 @@ test('rejects negative, decimal, invalid, and unsafe count values', () => {
 });
 
 test('accepts selected reporting years and rejects invalid periods or diagnoses', () => {
-  assert.ok(validateMonthlyDiagnosisCount(makeEntry({ reportingMonth: 13 }), {
+  assert.equal(validateMonthlyDiagnosisCount(makeEntry({ reportingMonth: 13 }), {
+    diagnoses,
+    reportingYear: 2026,
+  }).valid, true);
+  assert.ok(validateMonthlyDiagnosisCount(makeEntry({ reportingMonth: 14 }), {
     diagnoses,
     reportingYear: 2026,
   }).errors.reportingMonth);

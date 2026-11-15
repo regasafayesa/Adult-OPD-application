@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import DiagnosisAutocomplete from '../components/common/DiagnosisAutocomplete';
-import { MONTH_NAMES, SEX } from '../constants';
+import { SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import {
   calculateMonthlyDiagnosisTotals,
@@ -238,6 +238,7 @@ function newMonthlySummary(row, year, month, diagnoses) {
     facilityId: '',
     reportingYear: Number(year),
     reportingMonth: Number(month),
+    reportingCalendar: 'ethiopian',
     diagnosisId: row.diagnosisId,
     diagnosisName: diagnosis?.name || row.diagnosis,
     diagnosisCode: diagnosis?.code || '',
@@ -253,7 +254,8 @@ function summaryStatus(row, year, month, diagnoses, existing, allRows) {
   const validation = validateMonthlyDiagnosisCount(candidate, { diagnoses });
   const errors = { ...validation.errors };
   if (existing.some((item) =>
-    Number(item.reportingYear) === Number(year)
+    item.reportingCalendar !== 'gregorian'
+    && Number(item.reportingYear) === Number(year)
     && Number(item.reportingMonth) === Number(month)
     && item.diagnosisId === row.diagnosisId
   )) {
@@ -665,7 +667,7 @@ export default function DocumentScanner() {
   const isPdf = file?.name.toLowerCase().endsWith('.pdf');
   const isValidPeriod = Number.isInteger(Number(period.year))
     && Number(period.year) >= 1 && Number(period.year) <= 9999
-    && Number.isInteger(Number(period.month)) && Number(period.month) >= 1 && Number(period.month) <= 12;
+    && Number.isInteger(Number(period.month)) && Number(period.month) >= 1 && Number(period.month) <= 13;
 
   return (
     <main className="aopd-page aopd-document-scanner">
@@ -983,13 +985,13 @@ export default function DocumentScanner() {
                     </button>
                   </div>
                   <div className="aopd-period-selectors">
-                    <label>Reporting month
+                      <label>Ethiopian month
                       <select value={period.month} onChange={(event) => { setPeriod((current) => ({ ...current, month: event.target.value })); setReviewConfirmed(false); }}>
                         <option value="">Select month</option>
-                        {MONTH_NAMES.map((name, index) => <option key={name} value={index + 1}>{name}</option>)}
+                        {ETHIOPIAN_MONTH_NAMES.map((name, index) => <option key={name} value={index + 1}>{name}</option>)}
                       </select>
                     </label>
-                    <label>Reporting year
+                    <label>Ethiopian year
                       <input type="number" min="1" max="9999" value={period.year} onChange={(event) => { setPeriod((current) => ({ ...current, year: event.target.value })); setReviewConfirmed(false); }} />
                     </label>
                     {!isValidPeriod && <span className="aopd-error-text">Select a valid reporting month and year.</span>}
@@ -1102,7 +1104,7 @@ export default function DocumentScanner() {
                   <td>{item.file_name}<small>{fileSizeLabel(item.file_size_bytes)}</small></td>
                   <td>{item.document_type === 'individual' ? 'Patient registration' : 'Monthly tally'}</td>
                   <td>{new Date(item.created_at).toLocaleString()}<small>Staff ID: {item.uploaded_by?.slice(0, 8) || '—'}</small></td>
-                  <td>{item.reporting_month && item.reporting_year ? `${MONTH_NAMES[item.reporting_month - 1]} ${item.reporting_year}` : '—'}</td>
+                  <td>{item.reporting_month && item.reporting_year ? `Month ${item.reporting_month}, ${item.reporting_year}` : '—'}</td>
                   <td>{statusLabel(item.status)}</td>
                   <td>{item.recognized_entries} / {item.imported_entries}</td>
                   <td>

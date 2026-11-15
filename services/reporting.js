@@ -1,7 +1,9 @@
-import { ADULT_AGE_GROUPS, MONTH_NAMES } from '../constants.js';
+import { ADULT_AGE_GROUPS } from '../constants.js';
 import { classifyAge } from '../utils/ageClassification.js';
+import { ETHIOPIAN_MONTH_NAMES, ethiopianMonthName } from '../utils/ethiopianCalendar.js';
 import {
   calculateMonthlyDiagnosisTotals,
+  isGregorianAggregate,
   MONTHLY_DIAGNOSIS_AGE_GROUPS,
 } from './monthlyDiagnosisCounts.mjs';
 import {
@@ -26,9 +28,20 @@ function recordsForYear(records, year) {
   return records.filter((record) => record.reportingYear === Number(year));
 }
 
+function ethiopianAggregateSummaries(summaries) {
+  return summaries.filter((summary) => !isGregorianAggregate(summary));
+}
+
+export function legacyAggregateMessage(summaries) {
+  const count = summaries.filter(isGregorianAggregate).length;
+  if (!count) return '';
+  const label = count === 1 ? 'summary was' : 'summaries were';
+  return `${count} registration-book ${label} saved with a Gregorian month and year. Those counts remain stored and are not added to Ethiopian reporting periods. Re-enter them under the Ethiopian month if they belong in a report.`;
+}
+
 function uniqueMonthlySummaries(summaries, year, month) {
   const uniqueSummaries = new Map();
-  summaries.filter((summary) =>
+  ethiopianAggregateSummaries(summaries).filter((summary) =>
     Number(summary.reportingYear) === Number(year)
     && (month === undefined || Number(summary.reportingMonth) === Number(month))
   ).forEach((summary) => {
@@ -85,7 +98,7 @@ export function generateMonthlyAggregateReport(summaries, year, month) {
 
 export function generateYearlyAggregateReport(summaries, year) {
   const matchingSummaries = uniqueMonthlySummaries(summaries, year);
-  const months = MONTH_NAMES.map((monthName, index) => {
+  const months = ETHIOPIAN_MONTH_NAMES.map((monthName, index) => {
     const report = generateMonthlyAggregateReport(matchingSummaries, year, index + 1);
     return {
       month: monthName,
@@ -108,7 +121,7 @@ export function generateYearlyAggregateReport(summaries, year) {
       male: 0,
       female: 0,
       total: 0,
-      months: Array(12).fill(0),
+      months: Array(ETHIOPIAN_MONTH_NAMES.length).fill(0),
       ageGroups: Object.fromEntries(MONTHLY_DIAGNOSIS_AGE_GROUPS.map(({ key }) => [key, {
         male: 0,
         female: 0,
@@ -384,7 +397,7 @@ export function generateMonthlyReport(records, year, month, aggregateSummaries =
   });
 
   const report = {
-    month: MONTH_NAMES[Number(month) - 1],
+    month: ethiopianMonthName(month),
     monthNumber: Number(month),
     year: Number(year),
     overall,
@@ -395,6 +408,7 @@ export function generateMonthlyReport(records, year, month, aggregateSummaries =
     adultCount: adultRecords.length,
     validation,
     aggregate: generateMonthlyAggregateReport(aggregateSummaries, year, month),
+    legacyAggregateMessage: legacyAggregateMessage(aggregateSummaries),
   };
   report.combined = combineMonthlyCounts(report);
   return report;
@@ -402,11 +416,11 @@ export function generateMonthlyReport(records, year, month, aggregateSummaries =
 
 export function generateYearlyReport(records, year, aggregateSummaries = [], diagnosisCatalog = []) {
   const yearRecords = recordsForYear(records, year);
-  const monthlyReports = MONTH_NAMES.map((_, index) => {
+  const monthlyReports = ETHIOPIAN_MONTH_NAMES.map((_, index) => {
     return generateMonthlyReport(records, year, index + 1, aggregateSummaries, diagnosisCatalog);
   });
   const months = monthlyReports.map((monthly, index) => ({
-    month: MONTH_NAMES[index],
+    month: ETHIOPIAN_MONTH_NAMES[index],
     monthNumber: index + 1,
     male: monthly.combined.overall.male,
     female: monthly.combined.overall.female,
@@ -455,7 +469,7 @@ export function generateYearlyReport(records, year, aggregateSummaries = [], dia
           male: 0,
           female: 0,
           total: 0,
-          months: Array(12).fill(0),
+          months: Array(ETHIOPIAN_MONTH_NAMES.length).fill(0),
         });
       }
       const yearlyDiagnosis = combinedDiagnoses.get(identity);
@@ -506,6 +520,7 @@ export function generateYearlyReport(records, year, aggregateSummaries = [], dia
           : ['Individual encounter total does not match OPD records for the selected year.'],
     },
     aggregate: generateYearlyAggregateReport(aggregateSummaries, year),
+    legacyAggregateMessage: legacyAggregateMessage(aggregateSummaries),
   };
 }
 

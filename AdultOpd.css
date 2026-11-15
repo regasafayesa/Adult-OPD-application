@@ -11862,3 +11862,10 @@ button:disabled,
   padding: 0.3rem 0.55rem;
   font-size: 0.75rem;
 }
+
+.aopd-settings > label .aopd-field-note {
+  color: var(--aopd-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.4;
+}

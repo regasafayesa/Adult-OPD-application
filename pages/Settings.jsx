@@ -116,8 +116,9 @@ export default function Settings() {
           <input name="woreda" value={settings.woreda} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
         </label>
         <label>
-          Reporting year
+          Facility year on record (Gregorian)
           <input type="number" name="reportingYear" value={settings.reportingYear} onChange={handleChange} disabled={!canManageFacility || settingsSyncStatus === 'saving'} />
+          <span className="aopd-field-note">Reports use the Ethiopian year selected on each report page. This stored year is not used to group encounters.</span>
         </label>
         <label>
           Responsible person name

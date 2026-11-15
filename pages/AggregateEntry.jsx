@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import DiagnosisAutocomplete from '../components/common/DiagnosisAutocomplete';
 import HelpHint from '../components/common/HelpHint';
-import { MONTH_NAMES, SEX } from '../constants';
+import { SEX } from '../constants';
+import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES, ethiopianMonthName } from '../utils/ethiopianCalendar';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import {
   calculateMonthlyDiagnosisTotals,
@@ -38,14 +39,15 @@ export default function AggregateEntry() {
   const navigate = useNavigate();
   const {
     diagnoses,
-    settings,
     monthlyDiagnosisCounts,
     canWriteMonthlyDiagnosisCounts,
     saveMonthlyDiagnosisCounts,
+    aggregateCalendarReady,
+    isCloud,
   } = useAdultOpd();
-  const now = new Date();
-  const [year, setYear] = useState(Number(settings.reportingYear) || now.getFullYear());
-  const [month, setMonth] = useState(now.getMonth() + 1);
+  const initialPeriod = currentEthiopianPeriod();
+  const [year, setYear] = useState(initialPeriod.year);
+  const [month, setMonth] = useState(initialPeriod.month);
   const [entry, setEntry] = useState(blankEntry);
   const [queued, setQueued] = useState([]);
   const [editingId, setEditingId] = useState('');
@@ -91,9 +93,11 @@ export default function AggregateEntry() {
   }, [location, navigate]);
 
   const savedForPeriod = monthlyDiagnosisCounts.filter((item) =>
-    Number(item.reportingYear) === Number(year)
+    item.reportingCalendar !== 'gregorian'
+    && Number(item.reportingYear) === Number(year)
     && Number(item.reportingMonth) === Number(month)
   );
+  const legacyAggregateCount = monthlyDiagnosisCounts.filter((item) => item.reportingCalendar === 'gregorian').length;
   const queuedSummaries = useMemo(() => {
     const summariesByDiagnosis = new Map();
     queued.forEach((item) => {
@@ -115,6 +119,7 @@ export default function AggregateEntry() {
           id: summary.id || item.summaryId,
           reportingYear: Number(year),
           reportingMonth: Number(month),
+          reportingCalendar: 'ethiopian',
           diagnosisId: item.diagnosisId,
           diagnosisName: item.diagnosisName,
           diagnosisCode: item.diagnosisCode,
@@ -150,6 +155,7 @@ export default function AggregateEntry() {
         ...(selectedSummary || emptyMonthlyDiagnosisCounts()),
         reportingYear: Number(year),
         reportingMonth: Number(month),
+        reportingCalendar: 'ethiopian',
         diagnosisId: selectedDiagnosis.id,
         diagnosisName: selectedDiagnosis.name,
         [countField]: entry.count,
@@ -219,8 +225,8 @@ export default function AggregateEntry() {
     if (!Number.isInteger(Number(year)) || Number(year) < 1 || Number(year) > 9999) {
       nextErrors.reportingYear = 'Select a valid reporting year.';
     }
-    if (!Number.isInteger(Number(month)) || Number(month) < 1 || Number(month) > 12) {
-      nextErrors.reportingMonth = 'Select a valid reporting month.';
+    if (!Number.isInteger(Number(month)) || Number(month) < 1 || Number(month) > 13) {
+      nextErrors.reportingMonth = 'Select a valid Ethiopian reporting month.';
     }
     if (!/^\d+$/.test(nextCount)) {
       nextErrors.count = 'Number of cases must be a non-negative whole number.';
@@ -239,6 +245,7 @@ export default function AggregateEntry() {
       id: existingSummary?.id || createId('aggregate'),
       reportingYear: Number(year),
       reportingMonth: Number(month),
+      reportingCalendar: 'ethiopian',
       diagnosisId: diagnosis.id,
       diagnosisName: diagnosis.name,
       diagnosisCode: diagnosis.code || '',
@@ -275,6 +282,7 @@ export default function AggregateEntry() {
       facilityId: existingSummary?.facilityId || '',
       reportingYear: Number(year),
       reportingMonth: Number(month),
+      reportingCalendar: 'ethiopian',
       diagnosisId: diagnosis.id,
       diagnosisName: diagnosis.name,
       diagnosisCode: diagnosis.code || '',
@@ -401,26 +409,26 @@ export default function AggregateEntry() {
             <svg viewBox="0 0 24 24"><path d="M7 3v3m10-3v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z" /><path d="M8 12h2m4 0h2M8 16h2" /></svg>
           </span>
           <div>
-            <strong>Reporting period</strong>
-            <span>Choose the month and year for these registration-book counts.</span>
+            <strong>Ethiopian reporting period</strong>
+            <span>Choose the Ethiopian month and year for these registration-book counts.</span>
           </div>
         </div>
         <div className="aopd-aggregate-period-selector">
           <label>
-            Month
+            Ethiopian month
             <select
               value={month}
               onChange={(event) => setMonth(Number(event.target.value))}
               disabled={periodLocked}
               aria-label="Aggregate reporting month"
             >
-              {MONTH_NAMES.map((name, index) => (
+              {ETHIOPIAN_MONTH_NAMES.map((name, index) => (
                 <option key={name} value={index + 1}>{name}</option>
               ))}
             </select>
           </label>
           <label>
-            Year
+            Ethiopian year
             <input
               type="number"
               min="1"
@@ -433,6 +441,19 @@ export default function AggregateEntry() {
             />
           </label>
         </div>
+        {isCloud && !aggregateCalendarReady && (
+          <p className="aopd-alert" role="status">
+            New Ethiopian aggregate months, including Pagume, can be saved after
+            {' '}<code>supabase/migrations/20261115_ethiopian_reporting_calendar.sql</code> is applied.
+            Existing summaries are unchanged.
+          </p>
+        )}
+        {legacyAggregateCount > 0 && (
+          <p className="aopd-alert" role="status">
+            {legacyAggregateCount} saved registration-book {legacyAggregateCount === 1 ? 'summary uses' : 'summaries use'} a Gregorian month and year.
+            They stay stored and are not mixed into this Ethiopian period.
+          </p>
+        )}
         <p className="aopd-aggregate-period-note">
           {periodLocked
             ? 'Save or remove pending counts, or finish editing, before changing the reporting period.'
@@ -596,7 +617,7 @@ export default function AggregateEntry() {
             <div>
               <span className="aopd-aggregate-eyebrow">Submission queue</span>
               <h3 id="aggregate-queued-heading">Added counts</h3>
-              <p>Review and save all entries for {MONTH_NAMES[Number(month) - 1]} {year}.</p>
+              <p>Review and save all entries for {ethiopianMonthName(month)} {year} E.C.</p>
             </div>
             <span className="aopd-aggregate-queue-count" aria-label={`${queued.length} aggregate entries`}>
               {queued.length}

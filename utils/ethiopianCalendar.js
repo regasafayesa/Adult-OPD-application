@@ -99,6 +99,43 @@ export function formatEthiopianDate(value) {
   return `${String(date.day).padStart(2, '0')} ${ETHIOPIAN_MONTH_NAMES[date.month - 1]} ${date.year}`;
 }
 
+export function ethiopianMonthName(monthNumber) {
+  return ETHIOPIAN_MONTH_NAMES[Number(monthNumber) - 1] || '';
+}
+
+export function gregorianISOFromParts(parts) {
+  if (!parts?.year || !parts?.month || !parts?.day) return '';
+  return `${String(parts.year).padStart(4, '0')}-${String(parts.month).padStart(2, '0')}-${String(parts.day).padStart(2, '0')}`;
+}
+
+export function todayGregorianISO(value = new Date()) {
+  return gregorianISOFromParts(getGregorianDateParts(value));
+}
+
+export function currentEthiopianDate(value = new Date()) {
+  return getEthiopianDateParts(value);
+}
+
+export function currentEthiopianPeriod(value = new Date()) {
+  const date = currentEthiopianDate(value);
+  return {
+    year: date?.year || '',
+    month: date?.month || '',
+  };
+}
+
+export function ethiopianReportingPeriod(value) {
+  const date = getEthiopianDateParts(value);
+  if (!date) {
+    return { reportingMonth: null, reportingYear: null, monthName: null };
+  }
+  return {
+    reportingMonth: date.month,
+    reportingYear: date.year,
+    monthName: ethiopianMonthName(date.month),
+  };
+}
+
 export function isEthiopianLeapYear(year) {
   return Number.isInteger(Number(year)) && Number(year) % 4 === 3;
 }

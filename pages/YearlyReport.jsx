@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { MONTH_NAMES } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
+import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES } from '../utils/ethiopianCalendar';
 import { exportYearlyReportExcel } from '../services/export';
 
 export default function YearlyReport() {
@@ -9,8 +9,10 @@ export default function YearlyReport() {
     generateYearlyReport,
     monthlyDiagnosisCountsStatus,
     monthlyDiagnosisCountsError,
+    syncStatus,
+    syncError,
   } = useAdultOpd();
-  const [year, setYear] = useState(Number(settings.reportingYear) || new Date().getFullYear());
+  const [year, setYear] = useState(currentEthiopianPeriod().year);
   const [showTrends, setShowTrends] = useState(true);
   const [exportError, setExportError] = useState('');
   const report = useMemo(() => generateYearlyReport(year), [generateYearlyReport, year]);
@@ -29,11 +31,11 @@ export default function YearlyReport() {
       <div className="aopd-toolbar no-print">
         <div>
           <h2>Yearly report</h2>
-          <p>Year totals combine individual encounters and monthly registration-book counts across six age groups.</p>
+          <p>Ethiopian year totals combine individual encounters and monthly registration-book counts across six age groups, including Pagume.</p>
         </div>
         <div className="aopd-filters">
           <label>
-            Year
+            Ethiopian year
             <input type="number" value={year} onChange={(e) => setYear(Number(e.target.value))} />
           </label>
           <button type="button" className="aopd-btn secondary" onClick={handleExcel}>
@@ -45,6 +47,15 @@ export default function YearlyReport() {
         </div>
       </div>
 
+      {(syncStatus === 'loading' || monthlyDiagnosisCountsStatus === 'loading') && (
+        <p className="aopd-alert no-print" role="status">Loading facility records. This report is not final yet.</p>
+      )}
+      {syncStatus === 'error' && (
+        <p className="aopd-alert no-print" role="alert">{syncError || 'Facility records could not be loaded.'}</p>
+      )}
+      {report.legacyAggregateMessage && (
+        <p className="aopd-alert no-print" role="status">{report.legacyAggregateMessage}</p>
+      )}
       {exportError && <p className="aopd-error no-print">{exportError}</p>}
       {monthlyDiagnosisCountsStatus === 'error' && (
         <p className="aopd-alert no-print" role="alert">
@@ -61,7 +72,7 @@ export default function YearlyReport() {
         <header className="aopd-report-header">
           <h2>{settings.healthCenterName || 'Health Center Name not set'}</h2>
           <h3>OPD YEARLY REPORT</h3>
-          <p>Reporting Year: {report.year}</p>
+          <p>Ethiopian reporting year: {report.year}</p>
           <p>Totals include individual encounters and registration-book aggregates. Individual encounter records are unchanged.</p>
         </header>
 
@@ -169,7 +180,7 @@ export default function YearlyReport() {
                 <thead>
                   <tr>
                     <th>Diagnosis</th>
-                    {MONTH_NAMES.map((name) => (
+                    {ETHIOPIAN_MONTH_NAMES.map((name) => (
                       <th key={name} className="num">
                         {name.slice(0, 3)}
                       </th>

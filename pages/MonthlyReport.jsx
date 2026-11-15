@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { MONTH_NAMES } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
+import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES } from '../utils/ethiopianCalendar';
 import TallyMarks from '../components/common/TallyMarks';
 import HelpHint from '../components/common/HelpHint';
 import {
@@ -17,10 +17,12 @@ export default function MonthlyReport() {
     generateMonthlyReport,
     monthlyDiagnosisCountsStatus,
     monthlyDiagnosisCountsError,
+    syncStatus,
+    syncError,
   } = useAdultOpd();
-  const now = new Date();
-  const [year, setYear] = useState(Number(settings.reportingYear) || now.getFullYear());
-  const [month, setMonth] = useState(now.getMonth() + 1);
+  const initialPeriod = currentEthiopianPeriod();
+  const [year, setYear] = useState(initialPeriod.year);
+  const [month, setMonth] = useState(initialPeriod.month);
   const [exportError, setExportError] = useState('');
   const report = useMemo(() => generateMonthlyReport(year, month), [generateMonthlyReport, year, month]);
   const tallyRows = useMemo(() => buildMonthlyIctTallyRows(report), [report]);
@@ -48,18 +50,18 @@ export default function MonthlyReport() {
       <div className="aopd-toolbar no-print">
         <div>
           <h2>Monthly report</h2>
-          <p>ICT tally sheet by sex and age group.</p>
-          <HelpHint label="Reporting period">Choose the year and month for this sheet. It combines eligible individual encounters and saved registration-book counts for this period.</HelpHint>
+          <p>ICT tally sheet by sex and age group for an Ethiopian month.</p>
+          <HelpHint label="Reporting period">Choose the Ethiopian year and month. The sheet combines eligible individual encounters and Ethiopian registration-book counts for that period.</HelpHint>
         </div>
         <div className="aopd-filters">
           <label>
-            Year
+            Ethiopian year
             <input type="number" value={year} onChange={(e) => setYear(Number(e.target.value))} />
           </label>
           <label>
-            Month
+            Ethiopian month
             <select value={month} onChange={(e) => setMonth(Number(e.target.value))}>
-              {MONTH_NAMES.map((name, index) => (
+              {ETHIOPIAN_MONTH_NAMES.map((name, index) => (
                 <option key={name} value={index + 1}>
                   {name}
                 </option>
@@ -78,6 +80,15 @@ export default function MonthlyReport() {
         </div>
       </div>
 
+      {(syncStatus === 'loading' || monthlyDiagnosisCountsStatus === 'loading') && (
+        <p className="aopd-alert no-print" role="status">Loading facility records. This report is not final yet.</p>
+      )}
+      {syncStatus === 'error' && (
+        <p className="aopd-alert no-print" role="alert">{syncError || 'Facility records could not be loaded.'}</p>
+      )}
+      {report.legacyAggregateMessage && (
+        <p className="aopd-alert no-print" role="status">{report.legacyAggregateMessage}</p>
+      )}
       {exportError && <p className="aopd-error no-print">{exportError}</p>}
       {monthlyDiagnosisCountsStatus === 'error' && (
         <p className="aopd-error no-print" role="alert">

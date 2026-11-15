@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { enrichEncounter } from './storage';
+import { getEthiopianEncounterDateBounds } from '../utils/ethiopianCalendar';
 import { insertEncounterBatches } from './batchInsert.mjs';
 import { loadDiagnosisCatalog, mapDiagnosisRow } from './diagnosisCatalog.mjs';
 import {
@@ -81,6 +82,16 @@ export async function loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses =
   const pageSize = 500;
   let offset = 0;
 
+  const calendarProbe = await supabase
+    .from('monthly_diagnosis_counts')
+    .select('reporting_calendar')
+    .eq('facility_id', facilityId)
+    .limit(1);
+  if (calendarProbe.error && !missingReportingCalendarColumn(calendarProbe.error)) {
+    throw new Error(calendarProbe.error.message);
+  }
+  const calendarSupported = !calendarProbe.error;
+
   while (true) {
     const page = unwrap(await supabase
       .from('monthly_diagnosis_counts')
@@ -95,19 +106,33 @@ export async function loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses =
     offset += pageSize;
   }
 
-  return rows.map((row) => mapMonthlyDiagnosisCountRow(row, diagnoses));
+  const summaries = rows.map((row) => mapMonthlyDiagnosisCountRow(row, diagnoses));
+  summaries.ethiopianCalendarSupported = calendarSupported;
+  return summaries;
 }
 
-export async function deleteFacilityMonthlyDiagnosisCounts(facilityId, reportingYear, reportingMonth) {
+function missingReportingCalendarColumn(error) {
+  const message = String(error?.message || '').toLowerCase();
+  return message.includes('reporting_calendar')
+    && (message.includes('does not exist') || message.includes('schema cache') || message.includes('could not find'));
+}
+
+export async function deleteFacilityMonthlyDiagnosisCounts(facilityId, reportingYear, reportingMonth, reportingCalendar) {
   assertSupabase();
   if (!Number.isInteger(Number(reportingYear)) || Number(reportingYear) < 1 || Number(reportingYear) > 9999
-      || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 12) {
+      || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 13) {
     throw new Error('Select a valid reporting year and month before clearing aggregate summaries.');
   }
-  const periodFilter = (query) => query
-    .eq('facility_id', facilityId)
-    .eq('reporting_year', Number(reportingYear))
-    .eq('reporting_month', Number(reportingMonth));
+  const periodFilter = (query) => {
+    let periodQuery = query
+      .eq('facility_id', facilityId)
+      .eq('reporting_year', Number(reportingYear))
+      .eq('reporting_month', Number(reportingMonth));
+    if (reportingCalendar === 'ethiopian' || reportingCalendar === 'gregorian') {
+      periodQuery = periodQuery.eq('reporting_calendar', reportingCalendar);
+    }
+    return periodQuery;
+  };
   const deleted = unwrap(await periodFilter(
     supabase.from('monthly_diagnosis_counts').delete().select('id')
   ));
@@ -161,6 +186,7 @@ export async function saveFacilityMonthlyDiagnosisCounts(
         .eq('facility_id', facilityId)
         .eq('reporting_year', Number(first.reportingYear))
         .eq('reporting_month', Number(first.reportingMonth))
+        .eq('reporting_calendar', first.reportingCalendar === 'gregorian' ? 'gregorian' : 'ethiopian')
         .in('diagnosis_id', diagnosisIds);
       if (response.error) throw new Error(response.error.message);
       return response.data.map((row) => mapMonthlyDiagnosisCountRow(row, diagnoses));
@@ -187,11 +213,10 @@ export async function searchFacilityEncounters(facilityId, filters) {
   if (filters.encounterDateBefore) {
     query = query.lt('encounter_date', filters.encounterDateBefore);
   }
-  if (!filters.encounterDateFrom && filters.month) {
-    query = query.eq('reporting_month', Number(filters.month));
-  }
-  if (!filters.encounterDateFrom && filters.year) {
-    query = query.eq('reporting_year', Number(filters.year));
+  if (!filters.encounterDateFrom && (filters.month || filters.year)) {
+    const bounds = getEthiopianEncounterDateBounds({ year: filters.year, month: filters.month });
+    if (bounds.from) query = query.gte('encounter_date', bounds.from);
+    if (bounds.before) query = query.lt('encounter_date', bounds.before);
   }
   if (filters.sex) query = query.eq('sex', filters.sex);
   if (filters.ageGroup) query = query.eq('adult_report_age_group', filters.ageGroup);

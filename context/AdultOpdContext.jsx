@@ -4,6 +4,7 @@ import { enrichEncounter, createId, readLegacyLocalData } from '../services/stor
 import { buildDemoRecords } from '../services/demoData';
 import { getErrorMessage, isNetworkError } from '../services/networkErrors.mjs';
 import { generateDashboardStats, generateMonthlyReport, generateYearlyReport } from '../services/reporting';
+import { currentEthiopianPeriod } from '../utils/ethiopianCalendar';
 import { validateMonthlyDiagnosisCount } from '../services/monthlyDiagnosisCounts.mjs';
 import {
   addFacilityDiagnosis,
@@ -33,6 +34,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
   const [diagnoses, setDiagnoses] = useState([]);
   const [monthlyDiagnosisCounts, setMonthlyDiagnosisCounts] = useState([]);
   const [monthlyDiagnosisCountsStatus, setMonthlyDiagnosisCountsStatus] = useState(remote ? 'loading' : 'ready');
+  const [aggregateCalendarReady, setAggregateCalendarReady] = useState(!remote);
   const [monthlyDiagnosisCountsError, setMonthlyDiagnosisCountsError] = useState('');
   const [settings, setSettingsState] = useState(() => ({ ...DEFAULT_SETTINGS, ...initialSettings }));
   const [syncStatus, setSyncStatus] = useState(remote ? 'loading' : 'ready');
@@ -77,11 +79,15 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       setMonthlyDiagnosisCounts([]);
       setMonthlyDiagnosisCountsStatus('ready');
       setMonthlyDiagnosisCountsError('');
+      setAggregateCalendarReady(true);
+      return undefined;
+    }
+    if (syncStatus === 'loading') {
+      setMonthlyDiagnosisCountsStatus('loading');
       return undefined;
     }
     if (syncStatus !== 'ready') {
-      setMonthlyDiagnosisCountsError('');
-      setMonthlyDiagnosisCountsStatus('ready');
+      setMonthlyDiagnosisCountsStatus('error');
       return undefined;
     }
 
@@ -92,13 +98,14 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
         const summaries = await loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses);
         if (!active) return;
         setMonthlyDiagnosisCounts(summaries);
+        setAggregateCalendarReady(summaries.ethiopianCalendarSupported !== false);
         setMonthlyDiagnosisCountsError('');
         setMonthlyDiagnosisCountsStatus('ready');
       } catch (error) {
         if (!active) return;
         if (isNetworkError(error)) {
-          setMonthlyDiagnosisCountsError('');
-          setMonthlyDiagnosisCountsStatus('ready');
+          setMonthlyDiagnosisCountsError('Registration-book counts could not be loaded because the connection failed. Report totals do not include them until the connection succeeds.');
+          setMonthlyDiagnosisCountsStatus('error');
           return;
         }
         setMonthlyDiagnosisCountsError(getErrorMessage(error, 'Could not load monthly aggregate summaries.'));
@@ -156,6 +163,12 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       return {
         ok: false,
         error: 'Facility access is not ready. No aggregate summaries were saved; retry after access is restored.',
+      };
+    }
+    if (remote && !aggregateCalendarReady) {
+      return {
+        ok: false,
+        error: 'Ethiopian aggregate months cannot be saved until supabase/migrations/20261115_ethiopian_reporting_calendar.sql is applied. Existing summaries were not changed.',
       };
     }
 
@@ -222,6 +235,8 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
           result.savedRecords.forEach((saved) => {
             const index = next.findIndex((item) =>
               item.facilityId === saved.facilityId
+              && (item.reportingCalendar === 'gregorian' ? 'gregorian' : 'ethiopian')
+                === (saved.reportingCalendar === 'gregorian' ? 'gregorian' : 'ethiopian')
               && item.reportingYear === saved.reportingYear
               && item.reportingMonth === saved.reportingMonth
               && item.diagnosisId === saved.diagnosisId
@@ -239,6 +254,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
         try {
           const latest = await loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses);
           setMonthlyDiagnosisCounts(latest);
+          setAggregateCalendarReady(latest.ethiopianCalendarSupported !== false);
         } catch (refreshError) {
           setMonthlyDiagnosisCountsError(
             `${result.errors.map((item) => item.message).join(' ')} Could not refresh saved summaries: ${refreshError.message}`
@@ -252,6 +268,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       return { ok: false, error: message };
     }
   }, [
+    aggregateCalendarReady,
     canWriteMonthlyDiagnosisCounts,
     diagnoses,
     facilityId,
@@ -501,9 +518,8 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
   }, [facilityId, remote, reportSyncError, syncStatus]);
 
   const loadDemoData = useCallback(async () => {
-    const year = Number(settings.reportingYear) || new Date().getFullYear();
-    const month = new Date().getMonth() + 1;
-    const demoRecords = buildDemoRecords(year, month);
+    const period = currentEthiopianPeriod();
+    const demoRecords = buildDemoRecords(period.year, period.month);
     if (remote) {
       try {
         await deleteFacilityEncounters(facilityId, true);
@@ -531,7 +547,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       setRecords((prev) => [...demoRecords, ...prev.filter((record) => !record.isDemo)]);
     }
     return { ok: true };
-  }, [facilityId, hasDemoRecords, refreshFacilityData, remote, reportSyncError, settings.reportingYear, syncStatus]);
+  }, [facilityId, hasDemoRecords, refreshFacilityData, remote, reportSyncError, syncStatus]);
 
   const clearDemoData = useCallback(async () => {
     if (remote) {
@@ -580,15 +596,21 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       return { ok: false, error: 'Only facility owners and administrators can clear aggregate summaries.' };
     }
     if (!Number.isInteger(Number(reportingYear)) || Number(reportingYear) < 1 || Number(reportingYear) > 9999
-        || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 12) {
+        || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 13) {
       return { ok: false, error: 'Select a valid reporting year and month before clearing aggregate summaries.' };
     }
     try {
       if (remote) {
-        await deleteFacilityMonthlyDiagnosisCounts(facilityId, reportingYear, reportingMonth);
+        await deleteFacilityMonthlyDiagnosisCounts(
+          facilityId,
+          reportingYear,
+          reportingMonth,
+          aggregateCalendarReady ? 'ethiopian' : undefined
+        );
       }
       setMonthlyDiagnosisCounts((current) => current.filter((item) =>
-        Number(item.reportingYear) !== Number(reportingYear)
+        item.reportingCalendar === 'gregorian'
+        || Number(item.reportingYear) !== Number(reportingYear)
         || Number(item.reportingMonth) !== Number(reportingMonth)
       ));
       setMonthlyDiagnosisCountsError('');
@@ -599,7 +621,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       setMonthlyDiagnosisCountsError(message);
       return { ok: false, error: message };
     }
-  }, [canManageFacility, facilityId, remote]);
+  }, [aggregateCalendarReady, canManageFacility, facilityId, remote]);
 
   const demoLoaded = hasDemoRecords;
 
@@ -610,6 +632,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       monthlyDiagnosisCounts,
       monthlyDiagnosisCountsStatus,
       monthlyDiagnosisCountsError,
+      aggregateCalendarReady,
       settings,
       demoLoaded,
       settingsSyncStatus,
@@ -646,6 +669,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       monthlyDiagnosisCounts,
       monthlyDiagnosisCountsStatus,
       monthlyDiagnosisCountsError,
+      aggregateCalendarReady,
       settings,
       demoLoaded,
       settingsSyncStatus,

@@ -1,14 +1,12 @@
 import { enrichEncounter } from './storage';
-
-function iso(year, month, day) {
-  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-}
+import { ethiopianDateToGregorianISO } from '../utils/ethiopianCalendar.js';
 
 /**
  * Small labelled demo dataset spanning all OPD age groups.
  * Not official MOH statistics. Not real patient data.
  */
 export function buildDemoRecords(year, month) {
+  const ethiopianMonth = Number(month) === 13 ? 12 : Number(month);
   const samples = [
     { day: 2, age: 6, sex: 'Female', diagnosis: 'UTI' },
     { day: 3, age: 8, sex: 'Male', diagnosis: 'Pneumonia' },
@@ -35,7 +33,7 @@ export function buildDemoRecords(year, month) {
 
   return samples.map((sample) =>
     enrichEncounter({
-      date: iso(year, month, sample.day),
+      date: ethiopianDateToGregorianISO({ year: Number(year), month: ethiopianMonth, day: sample.day }),
       age: sample.age,
       sex: sample.sex,
       diagnosis: sample.diagnosis,

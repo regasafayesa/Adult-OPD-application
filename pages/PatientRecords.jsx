@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StatusBadge } from '../components/common/ReportTables';
-import { ADULT_AGE_GROUPS, MONTH_NAMES, OPD_CATEGORY, SEX } from '../constants';
+import { ADULT_AGE_GROUPS, OPD_CATEGORY, SEX } from '../constants';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import {
   daysInEthiopianMonth,
+  currentEthiopianPeriod,
   ETHIOPIAN_MONTH_NAMES,
+  ethiopianMonthName,
   formatEthiopianDate,
   getEthiopianEncounterDateBounds,
   matchesEthiopianEncounterDate,
@@ -93,10 +95,10 @@ export default function PatientRecords() {
     canWriteEncounters,
     canWriteMonthlyDiagnosisCounts,
   } = useAdultOpd();
-  const now = new Date();
+  const initialPeriod = currentEthiopianPeriod();
   const [activeRecordsTab, setActiveRecordsTab] = useState('encounters');
-  const [aggregateMonth, setAggregateMonth] = useState(now.getMonth() + 1);
-  const [aggregateYear, setAggregateYear] = useState(now.getFullYear());
+  const [aggregateMonth, setAggregateMonth] = useState(initialPeriod.month);
+  const [aggregateYear, setAggregateYear] = useState(initialPeriod.year);
   const [clearingAggregates, setClearingAggregates] = useState(false);
   const [aggregateMessage, setAggregateMessage] = useState('');
   const [aggregateMessageIsError, setAggregateMessageIsError] = useState(false);
@@ -178,7 +180,8 @@ export default function PatientRecords() {
   ].filter(Boolean).length;
   const savedAggregateRows = useMemo(() => monthlyDiagnosisCounts
     .filter((item) =>
-      Number(item.reportingYear) === Number(aggregateYear)
+      item.reportingCalendar !== 'gregorian'
+      && Number(item.reportingYear) === Number(aggregateYear)
       && Number(item.reportingMonth) === Number(aggregateMonth)
     )
     .flatMap((item) => MONTHLY_DIAGNOSIS_AGE_GROUPS.flatMap((group) => [
@@ -190,9 +193,11 @@ export default function PatientRecords() {
     monthlyDiagnosisCounts,
   ]);
   const savedAggregateSummaryCount = monthlyDiagnosisCounts.filter((item) =>
-    Number(item.reportingYear) === Number(aggregateYear)
+    item.reportingCalendar !== 'gregorian'
+    && Number(item.reportingYear) === Number(aggregateYear)
     && Number(item.reportingMonth) === Number(aggregateMonth)
   ).length;
+  const legacyAggregateCount = monthlyDiagnosisCounts.filter((item) => item.reportingCalendar === 'gregorian').length;
 
   function updateFilter(field, value) {
     setFilters((prev) => ({ ...prev, [field]: value }));
@@ -214,7 +219,7 @@ export default function PatientRecords() {
   }
 
   async function handleClearAggregateSummaries() {
-    const periodLabel = `${MONTH_NAMES[aggregateMonth - 1]} ${aggregateYear}`;
+    const periodLabel = `${ethiopianMonthName(aggregateMonth)} ${aggregateYear} E.C.`;
     if (!window.confirm(
       `Permanently delete all saved registration-book summaries for ${periodLabel}? Individual patient encounters will not be changed.`
     )) return;
@@ -433,13 +438,19 @@ export default function PatientRecords() {
         <header className="aopd-records-aggregate-header">
           <div>
             <h3 id="aopd-records-aggregate-heading">Saved aggregate summaries</h3>
-            <p>Registration-book counts saved separately from individual patient encounters.</p>
+            <p>Registration-book counts saved separately from individual patient encounters. The month and year are Ethiopian.</p>
+            {legacyAggregateCount > 0 && (
+              <p className="aopd-alert" role="status">
+                {legacyAggregateCount} saved {legacyAggregateCount === 1 ? 'summary uses' : 'summaries use'} a Gregorian month and year.
+                Those counts stay stored and are not listed in this Ethiopian period.
+              </p>
+            )}
           </div>
           <div className="aopd-records-aggregate-period">
             <label>
               Month
               <select value={aggregateMonth} onChange={(event) => setAggregateMonth(Number(event.target.value))}>
-                {MONTH_NAMES.map((name, index) => (
+                {ETHIOPIAN_MONTH_NAMES.map((name, index) => (
                   <option key={name} value={index + 1}>{name}</option>
                 ))}
               </select>
@@ -485,7 +496,7 @@ export default function PatientRecords() {
               onClick={handleClearAggregateSummaries}
               disabled={clearingAggregates || savedAggregateSummaryCount === 0 || monthlyDiagnosisCountsStatus === 'loading'}
             >
-              {clearingAggregates ? 'Clearing…' : `Clear summaries for ${MONTH_NAMES[aggregateMonth - 1]} ${aggregateYear}`}
+              {clearingAggregates ? 'Clearing…' : `Clear summaries for ${ethiopianMonthName(aggregateMonth)} ${aggregateYear} E.C.`}
             </button>
           )}
         </div>
@@ -568,7 +579,7 @@ export default function PatientRecords() {
               <div>
                 <dt>Reporting period</dt>
                 <dd>
-                  {MONTH_NAMES[viewing.reportingMonth - 1]} {viewing.reportingYear}
+                  {ethiopianMonthName(viewing.reportingMonth)} {viewing.reportingYear} E.C.
                 </dd>
               </div>
             </dl>

@@ -212,6 +212,9 @@ create table public.encounters (
     age_unit = 'months' and age >= 60
     or age_unit = 'years' and age >= 5
   ) stored,
+  -- Gregorian extracts kept for compatibility. The application derives the
+  -- Ethiopian reporting month and year from encounter_date instead. Do not
+  -- replace these expressions: that would rewrite the stored values.
   reporting_month smallint generated always as (
     extract(month from encounter_date)::smallint
   ) stored,
