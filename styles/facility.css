@@ -1,0 +1,126 @@
+.aopd-active-facility {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 170px;
+  color: var(--aopd-muted);
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.aopd-active-facility select {
+  min-height: 42px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--aopd-line);
+  border-radius: 9px;
+  color: var(--aopd-deep);
+  background: #fff;
+}
+
+.aopd-access-card {
+  display: grid;
+  gap: 0.9rem;
+  width: min(100%, 780px);
+  max-height: min(92svh, 900px);
+  overflow-y: auto;
+}
+
+.aopd-access-card h1, .aopd-access-card h2, .aopd-access-card h3 {
+  margin: 0;
+}
+
+.aopd-access-card .aopd-settings {
+  width: 100%;
+}
+
+.aopd-access-card .aopd-panel {
+  margin-top: 0.5rem;
+}
+
+.aopd-facility-choice {
+  display: grid;
+  gap: 0.3rem;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--aopd-line);
+  border-radius: 12px;
+  color: var(--aopd-deep);
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.aopd-facility-choice:hover {
+  border-color: var(--aopd-primary);
+  background: #f3faf6;
+}
+
+.aopd-facility-choice span {
+  color: var(--aopd-muted);
+}
+
+.aopd-invitation-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--aopd-line);
+}
+
+.aopd-invitation-row:last-child {
+  border-bottom: 0;
+}
+
+.aopd-invitation-row p {
+  margin: 0.2rem 0 0;
+  color: var(--aopd-muted);
+}
+
+@media (max-width: 850px) {
+  .aopd-active-facility {
+    min-width: 130px;
+  }
+}
+
+@media (max-width: 600px) {
+  .aopd-invitation-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 480px) {
+
+  .aopd-active-facility {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+
+  .aopd-active-facility select {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 760px) {
+
+  .aopd-active-facility {
+
+    flex: 1 1 12rem;
+
+    min-width: min(100%, 12rem);
+
+  }
+
+}
+
+@media screen and (max-width: 760px) {
+
+  .aopd-active-facility select {
+
+    width: 100%;
+
+  }
+
+}

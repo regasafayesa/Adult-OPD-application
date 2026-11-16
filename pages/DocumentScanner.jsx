@@ -32,6 +32,7 @@ import {
   getEthiopianDateParts,
 } from '../utils/ethiopianCalendar';
 import { validateEncounter } from '../utils/validation';
+import './DocumentScanner.css';
 
 const EMPTY_EXTRACTION = {
   documentType: '',

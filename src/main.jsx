@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import '../AdultOpd.css';
+import '../styles/shared-components.css';
 import AdultOpdApp from '../AdultOpdApp';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

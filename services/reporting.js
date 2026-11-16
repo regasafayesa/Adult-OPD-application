@@ -32,13 +32,6 @@ function ethiopianAggregateSummaries(summaries) {
   return summaries.filter((summary) => !isGregorianAggregate(summary));
 }
 
-export function legacyAggregateMessage(summaries) {
-  const count = summaries.filter(isGregorianAggregate).length;
-  if (!count) return '';
-  const label = count === 1 ? 'summary was' : 'summaries were';
-  return `${count} registration-book ${label} saved with a Gregorian month and year. Those counts remain stored and are not added to Ethiopian reporting periods. Re-enter them under the Ethiopian month if they belong in a report.`;
-}
-
 function uniqueMonthlySummaries(summaries, year, month) {
   const uniqueSummaries = new Map();
   ethiopianAggregateSummaries(summaries).filter((summary) =>
@@ -408,7 +401,6 @@ export function generateMonthlyReport(records, year, month, aggregateSummaries =
     adultCount: adultRecords.length,
     validation,
     aggregate: generateMonthlyAggregateReport(aggregateSummaries, year, month),
-    legacyAggregateMessage: legacyAggregateMessage(aggregateSummaries),
   };
   report.combined = combineMonthlyCounts(report);
   return report;
@@ -520,7 +512,6 @@ export function generateYearlyReport(records, year, aggregateSummaries = [], dia
           : ['Individual encounter total does not match OPD records for the selected year.'],
     },
     aggregate: generateYearlyAggregateReport(aggregateSummaries, year),
-    legacyAggregateMessage: legacyAggregateMessage(aggregateSummaries),
   };
 }
 

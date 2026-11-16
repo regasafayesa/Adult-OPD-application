@@ -10,6 +10,7 @@ import {
   ICT_TALLY_AGE_GROUPS,
   printMonthlyReport,
 } from '../services/export';
+import './Reporting.css';
 
 export default function MonthlyReport() {
   const {
@@ -85,9 +86,6 @@ export default function MonthlyReport() {
       )}
       {syncStatus === 'error' && (
         <p className="aopd-alert no-print" role="alert">{syncError || 'Facility records could not be loaded.'}</p>
-      )}
-      {report.legacyAggregateMessage && (
-        <p className="aopd-alert no-print" role="status">{report.legacyAggregateMessage}</p>
       )}
       {exportError && <p className="aopd-error no-print">{exportError}</p>}
       {monthlyDiagnosisCountsStatus === 'error' && (

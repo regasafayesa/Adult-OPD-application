@@ -351,30 +351,21 @@ export async function updateEncounter(facilityId, record) {
   throw new Error(response.error?.message || 'The cloud service did not confirm the encounter update.');
 }
 
-export async function deleteEncounter(facilityId, id) {
+export async function deleteEncounter(facilityId, id, password) {
   assertSupabase();
-  const response = await supabase
-    .from('encounters')
-    .delete()
-    .eq('facility_id', facilityId)
-    .eq('id', id)
-    .select('id')
-    .single();
-  if (!response.error && response.data) return response.data;
+  return unwrap(await supabase.rpc('delete_encounter_with_password', {
+    p_facility_id: facilityId,
+    p_encounter_id: id,
+    p_password: password,
+  }));
+}
 
-  const remainingResponse = await supabase
-    .from('encounters')
-    .select('id')
-    .eq('facility_id', facilityId)
-    .eq('id', id)
-    .maybeSingle();
-  if (remainingResponse.error) {
-    throw new Error(
-      `${response.error?.message || 'Encounter deletion was not confirmed.'} Could not verify its saved state: ${remainingResponse.error.message}`
-    );
-  }
-  if (!remainingResponse.data) return { id };
-  throw new Error(response.error?.message || 'The cloud service did not confirm the encounter deletion.');
+export async function setFacilityDeletePassword(facilityId, password) {
+  assertSupabase();
+  unwrap(await supabase.rpc('set_facility_delete_password', {
+    p_facility_id: facilityId,
+    p_password: password,
+  }));
 }
 
 export async function addFacilityDiagnosis(facilityId, diagnosis) {
@@ -423,11 +414,13 @@ export async function updateFacilitySettings(facilityId, settings) {
   return data;
 }
 
-export async function deleteFacilityEncounters(facilityId, demoOnly = false) {
+export async function deleteFacilityEncounters(facilityId, demoOnly = false, password) {
   assertSupabase();
-  let query = supabase.from('encounters').delete().eq('facility_id', facilityId);
-  if (demoOnly) query = query.eq('is_demo', true);
-  unwrap(await query);
+  unwrap(await supabase.rpc('delete_facility_encounters_with_password', {
+    p_facility_id: facilityId,
+    p_password: password,
+    p_demo_only: demoOnly,
+  }));
 
   let verificationQuery = supabase
     .from('encounters')

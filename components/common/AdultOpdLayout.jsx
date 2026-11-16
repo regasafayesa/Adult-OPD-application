@@ -1,5 +1,6 @@
 import React from 'react';
 import DeveloperCredit from './DeveloperCredit';
+import './AdultOpdLayout.css';
 
 const NAV_ITEMS = [
   { to: '/adult-opd', label: 'Dashboard', end: true },

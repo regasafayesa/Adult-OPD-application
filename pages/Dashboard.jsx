@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES } from '../utils/ethiopianCalendar';
+import './Dashboard.css';
 
 export default function Dashboard() {
   const {
@@ -62,9 +63,6 @@ export default function Dashboard() {
       )}
       {syncStatus === 'error' && (
         <p className="aopd-alert" role="alert">{syncError || 'Facility records could not be loaded. Totals are not shown as zero.'}</p>
-      )}
-      {monthly.legacyAggregateMessage && (
-        <p className="aopd-alert" role="status">{monthly.legacyAggregateMessage}</p>
       )}
       <div className="aopd-card-grid">
         <StatCard label="Total cases" value={totalsReady ? monthly.combined.overall.total : '…'} />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAdultOpd } from '../context/AdultOpdContext';
+import './Diagnoses.css';
 
 export default function Diagnoses() {
   const { diagnoses, addDiagnosis, updateDiagnosis, canManageFacility } = useAdultOpd();

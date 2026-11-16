@@ -15,6 +15,7 @@ import {
 import { searchFacilityEncounters } from '../services/supabaseData';
 import { MONTHLY_DIAGNOSIS_AGE_GROUPS } from '../services/monthlyDiagnosisCounts.mjs';
 import PatientEntry from './PatientEntry';
+import './PatientRecords.css';
 
 function emptyRecordFilters() {
   return {
@@ -91,9 +92,11 @@ export default function PatientRecords() {
     deleteRecord,
     clearMonthlyDiagnosisCounts,
     facilityId,
+    isCloud,
     canManageFacility,
     canWriteEncounters,
     canWriteMonthlyDiagnosisCounts,
+    deleteRecords,
   } = useAdultOpd();
   const initialPeriod = currentEthiopianPeriod();
   const [activeRecordsTab, setActiveRecordsTab] = useState('encounters');
@@ -111,6 +114,12 @@ export default function PatientRecords() {
   const [searchError, setSearchError] = useState('');
   const [actionMessage, setActionMessage] = useState('');
   const [actionMessageIsError, setActionMessageIsError] = useState(false);
+  const [selectedRecordIds, setSelectedRecordIds] = useState([]);
+  const [deletingSelected, setDeletingSelected] = useState(false);
+
+  useEffect(() => {
+    setSelectedRecordIds([]);
+  }, [filters]);
 
   const localFiltered = useMemo(() => {
     return records.filter((record) => {
@@ -167,6 +176,8 @@ export default function PatientRecords() {
     const source = facilityId ? cloudFiltered : localFiltered;
     return [...source].sort((a, b) => String(b.date).localeCompare(String(a.date)));
   }, [cloudFiltered, facilityId, localFiltered]);
+  const selectedCount = filtered.filter((record) => selectedRecordIds.includes(record.id)).length;
+  const allFilteredSelected = filtered.length > 0 && selectedCount === filtered.length;
   const activeFilterCount = [
     filters.query,
     filters.year,
@@ -197,8 +208,6 @@ export default function PatientRecords() {
     && Number(item.reportingYear) === Number(aggregateYear)
     && Number(item.reportingMonth) === Number(aggregateMonth)
   ).length;
-  const legacyAggregateCount = monthlyDiagnosisCounts.filter((item) => item.reportingCalendar === 'gregorian').length;
-
   function updateFilter(field, value) {
     setFilters((prev) => ({ ...prev, [field]: value }));
   }
@@ -208,14 +217,66 @@ export default function PatientRecords() {
   }
 
   async function handleDelete(id) {
+    if (!window.confirm('Delete this encounter? Reports will update immediately.')) return;
+    const password = isCloud
+      ? window.prompt('Enter the facility encounter delete password.')
+      : undefined;
+    if (password === null) return;
+    if (isCloud && !password) {
+      setActionMessage('Enter the facility encounter delete password to continue.');
+      setActionMessageIsError(true);
+      return;
+    }
     setActionMessage('');
-    const result = await deleteRecord(id);
+    const result = await deleteRecord(id, password);
     setActionMessageIsError(!result.ok);
     setActionMessage(result.ok
       ? result.refreshError
         ? 'Encounter deleted from the cloud, but the latest facility records could not be reloaded.'
         : 'Encounter deleted from the facility database.'
       : result.error);
+    if (result.ok) {
+      setSelectedRecordIds((previous) => previous.filter((selectedId) => selectedId !== id));
+    }
+  }
+
+  async function handleDeleteSelected() {
+    const selectedRecords = filtered.filter((record) => selectedRecordIds.includes(record.id));
+    if (selectedRecords.length === 0) return;
+    if (!window.confirm(
+      `Permanently delete ${selectedRecords.length} selected patient encounter${selectedRecords.length === 1 ? '' : 's'}? This cannot be undone.`
+    )) return;
+    const password = isCloud
+      ? window.prompt('Enter the facility encounter delete password.')
+      : undefined;
+    if (password === null) return;
+    if (isCloud && !password) {
+      setActionMessage('Enter the facility encounter delete password to continue.');
+      setActionMessageIsError(true);
+      return;
+    }
+
+    setDeletingSelected(true);
+    setActionMessage('');
+    try {
+      const result = await deleteRecords(selectedRecords.map((record) => record.id), password);
+      const deletedIds = result.deletedIds || [];
+      if (deletedIds.length) {
+        setSelectedRecordIds((previous) => previous.filter((id) => !deletedIds.includes(id)));
+      }
+      setActionMessageIsError(!result.ok);
+      setActionMessage(result.ok
+        ? result.refreshError
+          ? `${deletedIds.length} encounters were deleted, but the latest facility records could not be reloaded.`
+          : `${deletedIds.length} selected encounters were deleted.`
+        : result.error);
+      if (result.ok) setSelectedRecordIds([]);
+    } catch (error) {
+      setActionMessageIsError(true);
+      setActionMessage(error.message || 'Could not delete the selected encounters.');
+    } finally {
+      setDeletingSelected(false);
+    }
   }
 
   async function handleClearAggregateSummaries() {
@@ -366,8 +427,26 @@ export default function PatientRecords() {
       {searchError && <p className="aopd-error" role="alert">{searchError}</p>}
       {actionMessage && <p className={actionMessageIsError ? 'aopd-error' : 'aopd-success'} role={actionMessageIsError ? 'alert' : 'status'}>{actionMessage}</p>}
 
+      {canManageFacility && filtered.length > 0 && (
+        <div className="aopd-records-bulk-toolbar">
+          <span>
+            {selectedCount > 0
+              ? `${selectedCount} encounter${selectedCount === 1 ? '' : 's'} selected`
+              : 'Select encounters to delete them together.'}
+          </span>
+          <button
+            type="button"
+            className="aopd-records-bulk-delete"
+            onClick={handleDeleteSelected}
+            disabled={selectedCount === 0 || deletingSelected || searchLoading}
+          >
+            {deletingSelected ? 'Deleting…' : `Delete selected${selectedCount ? ` (${selectedCount})` : ''}`}
+          </button>
+        </div>
+      )}
+
       <div className="aopd-table-wrap aopd-records-table-wrap">
-        <table className="aopd-records-table">
+        <table className={`aopd-records-table${canManageFacility ? ' has-selection' : ''}`}>
           <thead>
             <tr>
               <th>Date</th>
@@ -377,13 +456,29 @@ export default function PatientRecords() {
               <th>Sex</th>
               <th>Diagnosis</th>
               <th>Status</th>
+              {canManageFacility && (
+                <th className="aopd-records-select-column">
+                  <input
+                    type="checkbox"
+                    aria-label="Select all filtered encounters"
+                    checked={allFilteredSelected}
+                    disabled={searchLoading || deletingSelected}
+                    onChange={() => setSelectedRecordIds(allFilteredSelected
+                      ? []
+                      : filtered.map((item) => item.id))}
+                  />
+                </th>
+              )}
               {(canWriteEncounters || canManageFacility) && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={canWriteEncounters || canManageFacility ? 8 : 7} className="aopd-empty">
+                <td
+                  colSpan={7 + (canManageFacility ? 1 : 0) + (canWriteEncounters || canManageFacility ? 1 : 0)}
+                  className="aopd-empty"
+                >
                   No records match the current filters.
                 </td>
               </tr>
@@ -402,6 +497,19 @@ export default function PatientRecords() {
                 <td>
                   <StatusBadge record={record} />
                 </td>
+                {canManageFacility && (
+                  <td className="aopd-records-select-column">
+                    <input
+                      type="checkbox"
+                      aria-label={`Select encounter dated ${formatEthiopianDate(record.date)} for ${record.diagnosis}`}
+                      checked={selectedRecordIds.includes(record.id)}
+                      disabled={searchLoading || deletingSelected}
+                      onChange={() => setSelectedRecordIds((previous) => previous.includes(record.id)
+                        ? previous.filter((id) => id !== record.id)
+                        : [...previous, record.id])}
+                    />
+                  </td>
+                )}
                 {(canWriteEncounters || canManageFacility) && <td className="aopd-row-actions">
                   <button type="button" onClick={() => setViewing(record)}>
                     View
@@ -412,11 +520,7 @@ export default function PatientRecords() {
                   {canManageFacility && <button
                     type="button"
                     className="danger-text"
-                    onClick={() => {
-                      if (window.confirm('Delete this encounter? Reports will update immediately.')) {
-                        handleDelete(record.id);
-                      }
-                    }}
+                    onClick={() => handleDelete(record.id)}
                   >
                     Delete
                   </button>}
@@ -439,12 +543,6 @@ export default function PatientRecords() {
           <div>
             <h3 id="aopd-records-aggregate-heading">Saved aggregate summaries</h3>
             <p>Registration-book counts saved separately from individual patient encounters. The month and year are Ethiopian.</p>
-            {legacyAggregateCount > 0 && (
-              <p className="aopd-alert" role="status">
-                {legacyAggregateCount} saved {legacyAggregateCount === 1 ? 'summary uses' : 'summaries use'} a Gregorian month and year.
-                Those counts stay stored and are not listed in this Ethiopian period.
-              </p>
-            )}
           </div>
           <div className="aopd-records-aggregate-period">
             <label>

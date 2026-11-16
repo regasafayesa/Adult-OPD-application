@@ -97,7 +97,8 @@ test('adds Ethiopian aggregate counts once and leaves Gregorian aggregate rows o
   assert.equal(monthly.combined.ageGroups.years30To64.male, 5);
   assert.equal(monthly.overall.total, 1);
   assert.equal(monthly.aggregate.overall.total, 6);
-  assert.match(monthly.legacyAggregateMessage, /Gregorian/);
+  assert.equal('legacyAggregateMessage' in monthly, false);
+  assert.equal('legacyAggregateMessage' in yearly, false);
   assert.equal(wrongGregorianMonth.combined.overall.total, 0);
   assert.equal(yearly.yearTotal.total, 7);
   assert.equal(yearly.months[0].total, 7);

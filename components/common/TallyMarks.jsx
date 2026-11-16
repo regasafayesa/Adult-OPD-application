@@ -1,5 +1,6 @@
 import React from 'react';
 import { getTallyGroupSizes, normalizeTallyCount } from '../../utils/tallyMarks.mjs';
+import './TallyMarks.css';
 
 function TallyGroup({ size }) {
   return (

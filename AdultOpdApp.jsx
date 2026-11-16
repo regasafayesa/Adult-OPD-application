@@ -17,7 +17,8 @@ import FacilityMembers from './pages/FacilityMembers';
 import Help from './pages/Help';
 import { isPlatformAdmin } from './services/facilityAccess';
 import { supabase, supabaseConfigError } from './services/supabase';
-import './AdultOpd.css';
+import './styles/auth.css';
+import './styles/facility.css';
 
 const ALLOWED_ROLES = new Set(['owner', 'admin', 'data_entry', 'viewer']);
 

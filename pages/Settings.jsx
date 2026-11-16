@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import { readLegacyLocalData } from '../services/storage';
+import { setFacilityDeletePassword } from '../services/supabaseData';
+import './Settings.css';
 
 export default function Settings() {
   const {
     settings,
+    facilityId,
     canManageFacility,
     updateSettings,
     saveSettings,
@@ -24,6 +27,11 @@ export default function Settings() {
   const [recordActionBusy, setRecordActionBusy] = useState(false);
   const [recordActionMessage, setRecordActionMessage] = useState('');
   const [recordActionIsError, setRecordActionIsError] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deletePasswordConfirmation, setDeletePasswordConfirmation] = useState('');
+  const [deletePasswordSaving, setDeletePasswordSaving] = useState(false);
+  const [deletePasswordMessage, setDeletePasswordMessage] = useState('');
+  const [deletePasswordIsError, setDeletePasswordIsError] = useState(false);
 
   useEffect(() => {
     try {
@@ -60,11 +68,21 @@ export default function Settings() {
     setImportResult(response.result);
   }
 
-  async function handleRecordAction(action, successMessage) {
+  async function handleRecordAction(action, successMessage, requiresDeletePassword = false) {
+    let password;
+    if (requiresDeletePassword && isCloud) {
+      password = window.prompt('Enter the facility encounter delete password.');
+      if (password === null) return;
+      if (!password) {
+        setRecordActionMessage('Enter the facility encounter delete password to continue.');
+        setRecordActionIsError(true);
+        return;
+      }
+    }
     setRecordActionBusy(true);
     setRecordActionMessage('');
     try {
-      const result = await action();
+      const result = await action(password);
       if (!result.ok) {
         setRecordActionMessage(result.error);
         setRecordActionIsError(true);
@@ -79,6 +97,29 @@ export default function Settings() {
       setRecordActionIsError(true);
     } finally {
       setRecordActionBusy(false);
+    }
+  }
+
+  async function handleSaveDeletePassword(event) {
+    event.preventDefault();
+    setDeletePasswordMessage('');
+    if (deletePassword !== deletePasswordConfirmation) {
+      setDeletePasswordMessage('The delete passwords do not match.');
+      setDeletePasswordIsError(true);
+      return;
+    }
+    setDeletePasswordSaving(true);
+    try {
+      await setFacilityDeletePassword(facilityId, deletePassword);
+      setDeletePasswordMessage('The facility encounter delete password was saved.');
+      setDeletePasswordIsError(false);
+      setDeletePassword('');
+      setDeletePasswordConfirmation('');
+    } catch (error) {
+      setDeletePasswordMessage(error.message || 'The facility encounter delete password could not be saved.');
+      setDeletePasswordIsError(true);
+    } finally {
+      setDeletePasswordSaving(false);
     }
   }
 
@@ -139,6 +180,49 @@ export default function Settings() {
           {settingsSyncStatus === 'saved' && 'Facility settings saved to the cloud.'}
           {settingsSyncStatus === 'error' && 'Facility settings could not be saved. Your unsaved edits are still here; correct the issue or retry.'}
         </p>
+      )}
+
+      {isCloud && canManageFacility && (
+        <section className="aopd-panel">
+          <h3>Encounter delete password</h3>
+          <p>Set a separate password shared by this facility’s owners and administrators. It is required to delete individual or bulk encounters and does not change anyone’s login password.</p>
+          <form className="aopd-settings" onSubmit={handleSaveDeletePassword}>
+            <label>
+              New delete password
+              <input
+                type="password"
+                autoComplete="new-password"
+                minLength="8"
+                maxLength="72"
+                required
+                value={deletePassword}
+                onChange={(event) => setDeletePassword(event.target.value)}
+                disabled={deletePasswordSaving}
+              />
+            </label>
+            <label>
+              Confirm delete password
+              <input
+                type="password"
+                autoComplete="new-password"
+                minLength="8"
+                maxLength="72"
+                required
+                value={deletePasswordConfirmation}
+                onChange={(event) => setDeletePasswordConfirmation(event.target.value)}
+                disabled={deletePasswordSaving}
+              />
+            </label>
+            <button type="submit" className="aopd-btn" disabled={deletePasswordSaving}>
+              {deletePasswordSaving ? 'Saving…' : 'Save delete password'}
+            </button>
+          </form>
+          {deletePasswordMessage && (
+            <p className={deletePasswordIsError ? 'aopd-error' : 'aopd-success'} role={deletePasswordIsError ? 'alert' : 'status'}>
+              {deletePasswordMessage}
+            </p>
+          )}
+        </section>
       )}
 
       {isCloud && canManageFacility && (
@@ -215,7 +299,7 @@ export default function Settings() {
           <button
             type="button"
             className="aopd-btn secondary"
-            onClick={() => handleRecordAction(loadDemoData, 'Demo encounters saved to the cloud.')}
+            onClick={() => handleRecordAction(loadDemoData, 'Demo encounters saved to the cloud.', hasDemoRecords)}
             disabled={recordActionBusy}
           >
             {recordActionBusy ? 'Saving…' : hasDemoRecords ? 'Reload demo data' : 'Load demo data'}
@@ -224,7 +308,7 @@ export default function Settings() {
             <button
               type="button"
               className="aopd-btn danger"
-              onClick={() => handleRecordAction(clearDemoData, 'Demo encounters deleted from the cloud.')}
+              onClick={() => handleRecordAction(clearDemoData, 'Demo encounters deleted from the cloud.', true)}
               disabled={recordActionBusy}
             >
               {recordActionBusy ? 'Saving…' : 'Clear demo data'}
@@ -235,7 +319,7 @@ export default function Settings() {
             className="aopd-btn danger"
             onClick={() => {
               if (window.confirm('Delete all OPD encounters for this facility? This affects every authorized device.')) {
-                handleRecordAction(clearAllRecords, 'All facility encounters deleted from the cloud.');
+                handleRecordAction(clearAllRecords, 'All facility encounters deleted from the cloud.', true);
               }
             }}
             disabled={recordActionBusy}

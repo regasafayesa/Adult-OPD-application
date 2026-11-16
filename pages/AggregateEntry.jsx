@@ -12,6 +12,7 @@ import {
   validateMonthlyDiagnosisCount,
 } from '../services/monthlyDiagnosisCounts.mjs';
 import { createId } from '../services/storage';
+import './AggregateEntry.css';
 
 const BATCH_SIZE = 100;
 
@@ -97,7 +98,6 @@ export default function AggregateEntry() {
     && Number(item.reportingYear) === Number(year)
     && Number(item.reportingMonth) === Number(month)
   );
-  const legacyAggregateCount = monthlyDiagnosisCounts.filter((item) => item.reportingCalendar === 'gregorian').length;
   const queuedSummaries = useMemo(() => {
     const summariesByDiagnosis = new Map();
     queued.forEach((item) => {
@@ -446,12 +446,6 @@ export default function AggregateEntry() {
             New Ethiopian aggregate months, including Pagume, can be saved after
             {' '}<code>supabase/migrations/20261115_ethiopian_reporting_calendar.sql</code> is applied.
             Existing summaries are unchanged.
-          </p>
-        )}
-        {legacyAggregateCount > 0 && (
-          <p className="aopd-alert" role="status">
-            {legacyAggregateCount} saved registration-book {legacyAggregateCount === 1 ? 'summary uses' : 'summaries use'} a Gregorian month and year.
-            They stay stored and are not mixed into this Ethiopian period.
           </p>
         )}
         <p className="aopd-aggregate-period-note">

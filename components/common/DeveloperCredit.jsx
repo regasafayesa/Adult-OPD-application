@@ -1,4 +1,5 @@
 import React from 'react';
+import './DeveloperCredit.css';
 
 export default function DeveloperCredit() {
   return (

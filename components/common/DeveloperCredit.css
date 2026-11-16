@@ -1,0 +1,120 @@
+.aopd-developer-credit {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.8fr) minmax(0, 1.7fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(191, 219, 254, 0.22);
+  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2.8vw, 2.5rem);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(96, 165, 250, 0.16), transparent 30rem),
+    linear-gradient(135deg, #14233b 0%, #192f4d 58%, #203c61 100%);
+  color: #fff;
+}
+
+.aopd-developer-intro {
+  display: grid;
+  justify-items: start;
+  gap: 0.4rem;
+}
+
+.aopd-developer-eyebrow {
+  color: #bfdbfe;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.aopd-developer-intro > strong {
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.aopd-developer-caption {
+  color: #cbd5e1;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.aopd-developer-contacts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.aopd-developer-contact {
+  display: grid;
+  min-width: 0;
+  align-content: center;
+  gap: 0.5rem;
+  min-height: 78px;
+  border: 1px solid rgba(219, 234, 254, 0.2);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.065);
+  color: #fff;
+  text-decoration: none;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.aopd-developer-contact:hover {
+  transform: translateY(-2px);
+  border-color: rgba(147, 197, 253, 0.62);
+  background: rgba(96, 165, 250, 0.14);
+  color: #fff;
+}
+
+.aopd-developer-contact > span {
+  color: #bfdbfe;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.aopd-developer-contact > strong {
+  overflow-wrap: anywhere;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.aopd-developer-contact:focus-visible {
+  outline-color: #93c5fd;
+  text-decoration: underline;
+}
+
+@media (max-width: 760px) {
+
+  .aopd-developer-credit {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .aopd-developer-contacts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .aopd-developer-contact {
+    min-height: 68px;
+  }
+}
+
+@media screen and (max-width: 760px) {
+
+  .aopd-developer-credit {
+
+    grid-template-columns: minmax(0, 1fr);
+
+    gap: 1rem;
+
+  }
+
+}

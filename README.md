@@ -43,6 +43,14 @@ sensitive health information even when names are not collected.
    migration requires the facility, diagnosis, and authorization helpers from
    the schema and 20261022 migration; inspect the deployed schema before
    applying it to an existing project. It has not been run against Supabase.
+   To require a separate facility password for individual and bulk encounter
+   deletion, review and apply
+   `supabase/migrations/20261116_encounter_delete_password.sql` after the
+   facility authorization migration. Owners and administrators can then set
+   or change the shared facility password in **Settings**; it must contain at
+   least 8 characters. The migration stores only a bcrypt hash, blocks direct
+   client-side encounter deletes, and requires the password for every cloud
+   encounter deletion. Existing encounters are unchanged.
    Do not rerun the initial schema migration. Every provisioned facility member
    can manage that facility's records, settings, and unofficial diagnosis
    entries; approved diagnosis catalog entries and membership administration

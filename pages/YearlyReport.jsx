@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES } from '../utils/ethiopianCalendar';
 import { exportYearlyReportExcel } from '../services/export';
+import './Reporting.css';
 
 export default function YearlyReport() {
   const {
@@ -52,9 +53,6 @@ export default function YearlyReport() {
       )}
       {syncStatus === 'error' && (
         <p className="aopd-alert no-print" role="alert">{syncError || 'Facility records could not be loaded.'}</p>
-      )}
-      {report.legacyAggregateMessage && (
-        <p className="aopd-alert no-print" role="status">{report.legacyAggregateMessage}</p>
       )}
       {exportError && <p className="aopd-error no-print">{exportError}</p>}
       {monthlyDiagnosisCountsStatus === 'error' && (

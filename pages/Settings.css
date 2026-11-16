@@ -1,0 +1,135 @@
+.aopd-settings {
+  border: 1px solid var(--aopd-line);
+  border-radius: var(--aopd-radius);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--aopd-shadow);
+  transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.aopd-settings label {
+  color: #405f50;
+  font-size: 0.83rem;
+  font-weight: 750;
+}
+
+.aopd-settings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 1040px;
+  gap: 1.1rem;
+  padding: clamp(1rem, 2.5vw, 1.65rem);
+}
+
+.aopd-settings > label {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+@media (max-width: 760px) {
+  .aopd-settings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.aopd-settings select {
+  min-height: 42px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--aopd-line);
+  border-radius: 9px;
+  color: var(--aopd-deep);
+  background: #fff;
+}
+
+@media screen {
+
+  .aopd-settings {
+    border-color: var(--aopd-line);
+    border-radius: var(--aopd-radius);
+    background: #fff;
+    box-shadow: var(--aopd-shadow);
+  }
+}
+
+@media screen {
+
+  .aopd-settings label {
+    color: #334155;
+    font-size: 0.82rem;
+    font-weight: 650;
+  }
+}
+
+@media screen {
+
+  .aopd-settings label {
+
+    color: #344054;
+
+    font-size: 0.82rem;
+
+    font-weight: 650;
+
+  }
+
+}
+
+@media screen {
+
+  .aopd-settings {
+
+    border-color: var(--aopd-line);
+
+    border-radius: var(--aopd-radius);
+
+    background: #fff;
+
+    box-shadow: var(--aopd-shadow);
+
+  }
+
+}
+
+@media screen {
+
+  .aopd-settings {
+
+    align-items: start;
+
+    gap: 1rem;
+
+    border-radius: var(--aopd-radius);
+
+    padding: clamp(1rem, 2vw, 1.5rem);
+
+  }
+
+}
+
+@media screen and (max-width: 760px) {
+
+  .aopd-settings {
+
+    grid-template-columns: minmax(0, 1fr);
+
+  }
+
+}
+
+@media screen and (max-width: 560px) {
+
+  .aopd-settings {
+
+    padding: 0.9rem;
+
+  }
+
+}
+
+.aopd-settings > label .aopd-field-note {
+  color: var(--aopd-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.4;
+}

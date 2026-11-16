@@ -13,6 +13,7 @@ import {
   getEthiopianDateParts,
 } from '../utils/ethiopianCalendar';
 import { validateEncounter } from '../utils/validation';
+import './PatientEntry.css';
 
 const ENTRY_MONTH_NAMES = ETHIOPIAN_MONTH_NAMES.map((name, index) =>
   index === 7 ? 'Miazia' : name

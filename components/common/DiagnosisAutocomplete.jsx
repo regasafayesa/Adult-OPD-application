@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { findDiagnosisMatches } from '../../utils/diagnosisSearch';
+import './DiagnosisAutocomplete.css';
 
 export default function DiagnosisAutocomplete({
   diagnoses,

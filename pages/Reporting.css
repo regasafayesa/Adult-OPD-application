@@ -1,0 +1,273 @@
+.aopd-report {
+  border: 1px solid var(--aopd-line);
+  border-radius: var(--aopd-radius);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--aopd-shadow);
+  transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.aopd-report {
+  max-width: 1220px;
+  padding: clamp(1.2rem, 3.5vw, 2.7rem);
+  border-top: 5px solid var(--aopd-primary);
+}
+
+.aopd-report-header {
+  padding-bottom: 1.3rem;
+  border-bottom: 1px solid var(--aopd-line);
+}
+
+.aopd-report-header h2 {
+  color: var(--aopd-deep);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.aopd-report-header h3 {
+  color: var(--aopd-primary);
+  letter-spacing: 0.07em;
+}
+
+.aopd-ict-header {
+  text-align: center;
+}
+
+.aopd-ict-header h2 {
+  margin-bottom: 0.4rem;
+  font-size: clamp(1.15rem, 2vw, 1.65rem);
+  letter-spacing: 0.04em;
+}
+
+.aopd-ict-header h3 {
+  margin: 0.35rem 0;
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+
+.aopd-ict-period {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.aopd-ict-table-wrap {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.aopd-ict-table {
+  width: 100%;
+  min-width: 1200px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #111;
+  font-size: 0.7rem;
+}
+
+.aopd-ict-table th, .aopd-ict-table td {
+  border: 1px solid #333;
+  padding: 0.35rem 0.2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.aopd-ict-table th {
+  background: #edf4ef;
+  font-weight: 800;
+}
+
+.aopd-ict-table thead th {
+  font-size: 0.62rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.aopd-ict-table .aopd-ict-diagnosis-column {
+  width: 16%;
+}
+
+.aopd-ict-table .aopd-ict-tally-column {
+  width: 4.6667%;
+}
+
+.aopd-ict-table .aopd-ict-count-column {
+  width: 2.3333%;
+}
+
+.aopd-ict-table .aopd-ict-diagnosis {
+  text-align: left;
+}
+
+.aopd-ict-table .aopd-ict-tally {
+  padding: 0.2rem 0.1rem;
+}
+
+.aopd-ict-table .aopd-ict-count {
+  font-weight: 750;
+}
+
+@media (max-width: 480px) {
+
+  .aopd-report {
+    padding: 1rem 0.7rem;
+  }
+}
+
+@media print {
+
+  .aopd-report {
+    border: 1px solid #ddd;
+    box-shadow: none;
+  }
+}
+
+@media print {
+
+  .aopd-report {
+    max-width: none;
+    padding: 0;
+    border: 0;
+  }
+}
+
+@media print {
+
+  .aopd-report-header {
+    padding-bottom: 0.5rem;
+  }
+}
+
+@media print {
+
+  .aopd-report-header h2 {
+    margin: 0;
+    font-size: 12pt;
+  }
+}
+
+@media print {
+
+  .aopd-report-header h3 {
+    margin: 0.25rem 0;
+    font-size: 9pt;
+  }
+}
+
+@media print {
+
+  .aopd-report-header p {
+    margin: 0.2rem 0;
+    font-size: 7pt;
+  }
+}
+
+@media print {
+
+  .aopd-ict-period {
+    margin-top: 0.3rem;
+    font-size: 7pt;
+  }
+}
+
+@media print {
+
+  .aopd-ict-table-wrap {
+    overflow: visible;
+    margin-top: 0.4rem;
+  }
+}
+
+@media print {
+
+  .aopd-ict-table {
+    min-width: 0;
+    font-size: 5.5pt;
+  }
+}
+
+@media print {
+
+  .aopd-ict-table th, .aopd-ict-table td {
+    padding: 1.5pt 1pt;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media print {
+
+  .aopd-ict-table .aopd-ict-diagnosis {
+    width: 16%;
+  }
+}
+
+@media print {
+
+  .aopd-ict-table .aopd-ict-tally {
+    padding: 1pt 0.25pt;
+  }
+}
+
+@media print {
+
+  .aopd-ict-table thead {
+    display: table-header-group;
+  }
+}
+
+@media print {
+
+  .aopd-ict-table tr {
+    break-inside: avoid;
+  }
+}
+
+@media screen {
+
+  .aopd-report {
+    border-color: var(--aopd-line);
+    border-radius: var(--aopd-radius);
+    background: #fff;
+    box-shadow: var(--aopd-shadow);
+  }
+}
+
+@media screen {
+
+  .aopd-report {
+
+    border-color: var(--aopd-line);
+
+    border-radius: var(--aopd-radius);
+
+    background: #fff;
+
+    box-shadow: var(--aopd-shadow);
+
+  }
+
+}
+
+@media screen and (max-width: 560px) {
+
+  .aopd-report {
+
+    padding: 1rem 0.7rem;
+
+  }
+
+}
+
+@media screen and (max-width: 560px) {
+
+  .aopd-ict-period {
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+  }
+
+}

@@ -1,0 +1,49 @@
+.aopd-tally-marks {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5px;
+}
+
+.aopd-tally-group {
+  display: block;
+  width: 18px;
+  height: 14px;
+  flex: 0 0 18px;
+  overflow: hidden;
+  stroke: currentColor;
+  stroke-width: 1.1;
+  stroke-linecap: square;
+}
+
+.aopd-tally-cross {
+  stroke-width: 1.2;
+}
+
+@media print {
+
+  .aopd-tally-marks {
+    gap: 0.75px;
+  }
+}
+
+@media print {
+
+  .aopd-tally-group {
+    width: 15px;
+    height: 12px;
+    flex-basis: 15px;
+    stroke-width: 1.2;
+  }
+}
+
+@media print {
+
+  .aopd-tally-cross {
+    stroke-width: 1.25;
+  }
+}

@@ -366,13 +366,13 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     return { ok: true, record: updated };
   }, [facilityId, records, refreshFacilityData, remote, reportSyncError, syncStatus]);
 
-  const deleteRecord = useCallback(async (id) => {
+  const deleteRecord = useCallback(async (id, password) => {
     if (remote) {
       if (syncStatus !== 'ready') {
         return reportSyncError(new Error('Cloud data is not loaded. No encounter was deleted; retry after connection is restored.'));
       }
       try {
-        await deleteEncounter(facilityId, id);
+        await deleteEncounter(facilityId, id, password);
         setSyncError('');
       } catch (error) {
         return reportSyncError(error);
@@ -389,6 +389,56 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     }
     return { ok: true };
   }, [facilityId, refreshFacilityData, remote, reportSyncError, syncStatus]);
+
+  const deleteRecords = useCallback(async (ids, password) => {
+    if (!canManageFacility) {
+      return { ok: false, error: 'Only facility owners and administrators can delete encounters.' };
+    }
+    const uniqueIds = [...new Set(ids)];
+    if (uniqueIds.length === 0) {
+      return { ok: false, error: 'Select at least one encounter to delete.' };
+    }
+    if (remote && syncStatus !== 'ready') {
+      return reportSyncError(new Error('Cloud data is not loaded. No encounters were deleted; retry after connection is restored.'));
+    }
+
+    const deletedIds = [];
+    if (remote) {
+      for (const id of uniqueIds) {
+        try {
+          await deleteEncounter(facilityId, id, password);
+          deletedIds.push(id);
+        } catch (error) {
+          if (deletedIds.length === 0) return reportSyncError(error);
+
+          setRecords((prev) => prev.filter((record) => !deletedIds.includes(record.id)));
+          let refreshError;
+          try {
+            await refreshFacilityData();
+          } catch (errorWhileRefreshing) {
+            refreshError = errorWhileRefreshing;
+          }
+          const message = `Deleted ${deletedIds.length} of ${uniqueIds.length} selected encounters. ${getErrorMessage(error, 'Could not delete the remaining encounters.')}${refreshError
+            ? ` Facility records could not be refreshed: ${getErrorMessage(refreshError, 'Refresh failed.')}`
+            : ''}`;
+          setSyncError(message);
+          return { ok: false, error: message, deletedIds };
+        }
+      }
+      setSyncError('');
+    }
+
+    setRecords((prev) => prev.filter((record) => !uniqueIds.includes(record.id)));
+    if (remote) {
+      try {
+        await refreshFacilityData();
+      } catch (refreshError) {
+        setSyncError(`Selected encounters were deleted, but the refreshed facility data could not be loaded: ${getErrorMessage(refreshError, 'Refresh failed.')}`);
+        return { ok: true, deletedIds: uniqueIds, refreshError: getErrorMessage(refreshError, 'Refresh failed.') };
+      }
+    }
+    return { ok: true, deletedIds: uniqueIds };
+  }, [canManageFacility, facilityId, refreshFacilityData, remote, reportSyncError, syncStatus]);
 
   const addDiagnosis = useCallback(async (name) => {
     const trimmed = name.trim();
@@ -517,12 +567,14 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     }
   }, [facilityId, remote, reportSyncError, syncStatus]);
 
-  const loadDemoData = useCallback(async () => {
+  const loadDemoData = useCallback(async (deletePassword) => {
     const period = currentEthiopianPeriod();
     const demoRecords = buildDemoRecords(period.year, period.month);
     if (remote) {
       try {
-        await deleteFacilityEncounters(facilityId, true);
+        if (hasDemoRecords) {
+          await deleteFacilityEncounters(facilityId, true, deletePassword);
+        }
         const savedRecords = await Promise.all(demoRecords.map((record) => insertEncounter(facilityId, record)));
         setRecords((prev) => [...savedRecords, ...prev.filter((record) => !record.isDemo)]);
         setSyncError('');
@@ -549,10 +601,10 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     return { ok: true };
   }, [facilityId, hasDemoRecords, refreshFacilityData, remote, reportSyncError, syncStatus]);
 
-  const clearDemoData = useCallback(async () => {
+  const clearDemoData = useCallback(async (deletePassword) => {
     if (remote) {
       try {
-        await deleteFacilityEncounters(facilityId, true);
+        await deleteFacilityEncounters(facilityId, true, deletePassword);
         setSyncError('');
       } catch (error) {
         return reportSyncError(error);
@@ -570,10 +622,10 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     return { ok: true };
   }, [facilityId, refreshFacilityData, remote, reportSyncError, syncStatus]);
 
-  const clearAllRecords = useCallback(async () => {
+  const clearAllRecords = useCallback(async (deletePassword) => {
     if (remote) {
       try {
-        await deleteFacilityEncounters(facilityId);
+        await deleteFacilityEncounters(facilityId, false, deletePassword);
         setSyncError('');
       } catch (error) {
         return reportSyncError(error);
@@ -650,6 +702,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       saveMonthlyDiagnosisCounts,
       updateRecord,
       deleteRecord,
+      deleteRecords,
       addDiagnosis,
       updateDiagnosis,
       updateSettings,
@@ -687,6 +740,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       saveMonthlyDiagnosisCounts,
       updateRecord,
       deleteRecord,
+      deleteRecords,
       addDiagnosis,
       updateDiagnosis,
       updateSettings,
