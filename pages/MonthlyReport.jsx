@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { useAdultOpd } from '../context/AdultOpdContext';
-import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES } from '../utils/ethiopianCalendar';
+import {
+  currentEthiopianReportingPeriod,
+  ETHIOPIAN_REPORTING_MONTH_NAMES,
+} from '../utils/ethiopianCalendar';
 import TallyMarks from '../components/common/TallyMarks';
 import HelpHint from '../components/common/HelpHint';
 import {
@@ -20,8 +23,9 @@ export default function MonthlyReport() {
     monthlyDiagnosisCountsError,
     syncStatus,
     syncError,
+    isOnline,
   } = useAdultOpd();
-  const initialPeriod = currentEthiopianPeriod();
+  const initialPeriod = currentEthiopianReportingPeriod();
   const [year, setYear] = useState(initialPeriod.year);
   const [month, setMonth] = useState(initialPeriod.month);
   const [exportError, setExportError] = useState('');
@@ -62,7 +66,7 @@ export default function MonthlyReport() {
           <label>
             Ethiopian month
             <select value={month} onChange={(e) => setMonth(Number(e.target.value))}>
-              {ETHIOPIAN_MONTH_NAMES.map((name, index) => (
+              {ETHIOPIAN_REPORTING_MONTH_NAMES.map((name, index) => (
                 <option key={name} value={index + 1}>
                   {name}
                 </option>
@@ -84,11 +88,11 @@ export default function MonthlyReport() {
       {(syncStatus === 'loading' || monthlyDiagnosisCountsStatus === 'loading') && (
         <p className="aopd-alert no-print" role="status">Loading facility records. This report is not final yet.</p>
       )}
-      {syncStatus === 'error' && (
+      {isOnline && syncStatus === 'error' && (
         <p className="aopd-alert no-print" role="alert">{syncError || 'Facility records could not be loaded.'}</p>
       )}
       {exportError && <p className="aopd-error no-print">{exportError}</p>}
-      {monthlyDiagnosisCountsStatus === 'error' && (
+      {isOnline && monthlyDiagnosisCountsStatus === 'error' && (
         <p className="aopd-error no-print" role="alert">
           The patient report is available, but registration-book counts could not load: {monthlyDiagnosisCountsError}
           {' '}Review and apply <code>supabase/migrations/20261024_monthly_diagnosis_counts.sql</code> in Supabase SQL Editor, then reload.
@@ -112,7 +116,7 @@ export default function MonthlyReport() {
           <div className="aopd-ict-period">
             <span>Year: {report.year}</span>
             <span>Month: {report.month.toUpperCase()}</span>
-            <span>Reporting period: {report.month.toUpperCase()} {report.year}</span>
+            <span>Reporting dates: {report.periodRange?.label || '—'}</span>
           </div>
         </header>
 

@@ -27,6 +27,7 @@ export default function AdultOpdLayout({
   onSignOut,
   isLocalDemo = false,
   syncError = '',
+  isOnline = true,
   facilities = [],
   onFacilityChange,
   isPlatformAdmin = false,
@@ -118,7 +119,7 @@ export default function AdultOpdLayout({
           </div>
         </header>
         {signOutError && <p className="aopd-auth-error aopd-signout-error" role="alert">{signOutError}</p>}
-        {syncError && <p className="aopd-auth-error" role="alert">Cloud sync failed: {syncError}</p>}
+        {isOnline && syncError && <p className="aopd-auth-error" role="alert">Cloud sync failed: {syncError}</p>}
         {hasDemoRecords && (
           <div className="aopd-demo-banner" role="status">
             DEMO DATA — NOT REAL PATIENT DATA

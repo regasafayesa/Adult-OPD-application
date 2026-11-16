@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { useAdultOpd } from '../context/AdultOpdContext';
-import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES } from '../utils/ethiopianCalendar';
+import {
+  currentEthiopianReportingPeriod,
+  ETHIOPIAN_REPORTING_MONTH_NAMES,
+} from '../utils/ethiopianCalendar';
 import { exportYearlyReportExcel } from '../services/export';
 import './Reporting.css';
 
@@ -12,8 +15,9 @@ export default function YearlyReport() {
     monthlyDiagnosisCountsError,
     syncStatus,
     syncError,
+    isOnline,
   } = useAdultOpd();
-  const [year, setYear] = useState(currentEthiopianPeriod().year);
+  const [year, setYear] = useState(currentEthiopianReportingPeriod().year);
   const [showTrends, setShowTrends] = useState(true);
   const [exportError, setExportError] = useState('');
   const report = useMemo(() => generateYearlyReport(year), [generateYearlyReport, year]);
@@ -32,7 +36,7 @@ export default function YearlyReport() {
       <div className="aopd-toolbar no-print">
         <div>
           <h2>Yearly report</h2>
-          <p>Ethiopian year totals combine individual encounters and monthly registration-book counts across six age groups, including Pagume.</p>
+          <p>Ethiopian year totals combine individual encounters and monthly registration-book counts across six age groups.</p>
         </div>
         <div className="aopd-filters">
           <label>
@@ -51,11 +55,11 @@ export default function YearlyReport() {
       {(syncStatus === 'loading' || monthlyDiagnosisCountsStatus === 'loading') && (
         <p className="aopd-alert no-print" role="status">Loading facility records. This report is not final yet.</p>
       )}
-      {syncStatus === 'error' && (
+      {isOnline && syncStatus === 'error' && (
         <p className="aopd-alert no-print" role="alert">{syncError || 'Facility records could not be loaded.'}</p>
       )}
       {exportError && <p className="aopd-error no-print">{exportError}</p>}
-      {monthlyDiagnosisCountsStatus === 'error' && (
+      {isOnline && monthlyDiagnosisCountsStatus === 'error' && (
         <p className="aopd-alert no-print" role="alert">
           Yearly totals include individual encounters only because registration-book summaries could not load:
           {' '}{monthlyDiagnosisCountsError} Review and apply
@@ -71,6 +75,7 @@ export default function YearlyReport() {
           <h2>{settings.healthCenterName || 'Health Center Name not set'}</h2>
           <h3>OPD YEARLY REPORT</h3>
           <p>Ethiopian reporting year: {report.year}</p>
+          <p>Reporting dates: {report.periodRange?.label || '—'}</p>
           <p>Totals include individual encounters and registration-book aggregates. Individual encounter records are unchanged.</p>
         </header>
 
@@ -178,7 +183,7 @@ export default function YearlyReport() {
                 <thead>
                   <tr>
                     <th>Diagnosis</th>
-                    {ETHIOPIAN_MONTH_NAMES.map((name) => (
+                    {ETHIOPIAN_REPORTING_MONTH_NAMES.map((name) => (
                       <th key={name} className="num">
                         {name.slice(0, 3)}
                       </th>

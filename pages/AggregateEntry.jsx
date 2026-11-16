@@ -3,7 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import DiagnosisAutocomplete from '../components/common/DiagnosisAutocomplete';
 import HelpHint from '../components/common/HelpHint';
 import { SEX } from '../constants';
-import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES, ethiopianMonthName } from '../utils/ethiopianCalendar';
+import {
+  currentEthiopianReportingPeriod,
+  ETHIOPIAN_REPORTING_MONTH_NAMES,
+} from '../utils/ethiopianCalendar';
 import { useAdultOpd } from '../context/AdultOpdContext';
 import {
   calculateMonthlyDiagnosisTotals,
@@ -46,7 +49,7 @@ export default function AggregateEntry() {
     aggregateCalendarReady,
     isCloud,
   } = useAdultOpd();
-  const initialPeriod = currentEthiopianPeriod();
+  const initialPeriod = currentEthiopianReportingPeriod();
   const [year, setYear] = useState(initialPeriod.year);
   const [month, setMonth] = useState(initialPeriod.month);
   const [entry, setEntry] = useState(blankEntry);
@@ -225,7 +228,7 @@ export default function AggregateEntry() {
     if (!Number.isInteger(Number(year)) || Number(year) < 1 || Number(year) > 9999) {
       nextErrors.reportingYear = 'Select a valid reporting year.';
     }
-    if (!Number.isInteger(Number(month)) || Number(month) < 1 || Number(month) > 13) {
+    if (!Number.isInteger(Number(month)) || Number(month) < 1 || Number(month) > 12) {
       nextErrors.reportingMonth = 'Select a valid Ethiopian reporting month.';
     }
     if (!/^\d+$/.test(nextCount)) {
@@ -398,7 +401,6 @@ export default function AggregateEntry() {
         <div>
           <span className="aopd-aggregate-eyebrow">Monthly reporting workspace</span>
           <h2>Aggregate Reporting</h2>
-          <p>Monthly registration-book data entry</p>
         </div>
         <HelpHint label="Registration-book counts">Enter monthly counts from the book by diagnosis, age group, and sex. These numbers are added to eligible encounter counts in reports; do not include the same cases in both sources.</HelpHint>
       </header>
@@ -410,7 +412,6 @@ export default function AggregateEntry() {
           </span>
           <div>
             <strong>Ethiopian reporting period</strong>
-            <span>Choose the Ethiopian month and year for these registration-book counts.</span>
           </div>
         </div>
         <div className="aopd-aggregate-period-selector">
@@ -422,7 +423,7 @@ export default function AggregateEntry() {
               disabled={periodLocked}
               aria-label="Aggregate reporting month"
             >
-              {ETHIOPIAN_MONTH_NAMES.map((name, index) => (
+              {ETHIOPIAN_REPORTING_MONTH_NAMES.map((name, index) => (
                 <option key={name} value={index + 1}>{name}</option>
               ))}
             </select>
@@ -443,16 +444,16 @@ export default function AggregateEntry() {
         </div>
         {isCloud && !aggregateCalendarReady && (
           <p className="aopd-alert" role="status">
-            New Ethiopian aggregate months, including Pagume, can be saved after
+            Ethiopian reporting-month aggregates can be saved after
             {' '}<code>supabase/migrations/20261115_ethiopian_reporting_calendar.sql</code> is applied.
             Existing summaries are unchanged.
           </p>
         )}
-        <p className="aopd-aggregate-period-note">
-          {periodLocked
-            ? 'Save or remove pending counts, or finish editing, before changing the reporting period.'
-            : 'Pending counts will be saved for this selected month and year.'}
-        </p>
+        {periodLocked && (
+          <p className="aopd-aggregate-period-note">
+            Save or remove pending counts, or finish editing, before changing the reporting period.
+          </p>
+        )}
       </section>
 
       <div className="aopd-aggregate-workspace">
@@ -463,7 +464,6 @@ export default function AggregateEntry() {
             </div>
             <div>
               <h3 id="aggregate-editor-heading">{editingId || editingSaved ? 'Edit aggregate count' : 'Add a count'}</h3>
-              <p>Choose a diagnosis, age group, sex, and case total.</p>
             </div>
           </div>
           <form className="aopd-aggregate-count-form" onSubmit={queueEntry}>
@@ -611,7 +611,6 @@ export default function AggregateEntry() {
             <div>
               <span className="aopd-aggregate-eyebrow">Submission queue</span>
               <h3 id="aggregate-queued-heading">Added counts</h3>
-              <p>Review and save all entries for {ethiopianMonthName(month)} {year} E.C.</p>
             </div>
             <span className="aopd-aggregate-queue-count" aria-label={`${queued.length} aggregate entries`}>
               {queued.length}
@@ -669,13 +668,14 @@ export default function AggregateEntry() {
                   <path d="M14 3.75v4h4M8.5 12h7M8.5 15.5h7" />
                 </svg>
               </span>
-              <strong>No counts added yet</strong>
-              <p>Add one or more diagnosis counts. They’ll stay here until you save them.</p>
+              <p>Add a diagnosis count to get started.</p>
             </div>
           )}
 
           <div className="aopd-aggregate-save-bar">
-            <span>{queued.length ? `${queued.length} ${queued.length === 1 ? 'entry' : 'entries'} ready for review` : 'Add counts to enable saving'}</span>
+            {queued.length > 0 && (
+              <span>{`${queued.length} ${queued.length === 1 ? 'entry' : 'entries'} ready for review`}</span>
+            )}
             <button
               className="aopd-btn"
               type="button"

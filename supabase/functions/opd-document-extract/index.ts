@@ -62,9 +62,8 @@ const responseSchema = {
       items: {
         type: 'object',
         additionalProperties: false,
-        required: ['date', 'diagnosis', 'diagnosisCode', 'age', 'sex', 'confidence', 'issues', 'page'],
+        required: ['diagnosis', 'diagnosisCode', 'age', 'sex', 'confidence', 'issues', 'page'],
         properties: {
-          date: { type: ['string', 'null'] },
           diagnosis: { type: ['string', 'null'] },
           diagnosisCode: { type: ['string', 'null'] },
           age: { type: ['integer', 'null'], minimum: 0, maximum: 120 },
@@ -148,9 +147,7 @@ function buildPrompt(documentType: string) {
     return [
       ...common,
       'This is an individual registration document. Return each encounter as a separate row.',
-      'Extract only encounter date, diagnosis text/code if visibly printed, age in years, sex, confidence, issues, and page.',
-      'Return Gregorian dates as YYYY-MM-DD. For dates written in the Ethiopian calendar, return EC:YYYY-MM-DD using the Ethiopian year, month number (1-13), and day exactly as shown; do not convert Ethiopian dates to Gregorian.',
-      'Use null for a missing or unreadable encounter date.',
+      'Extract only diagnosis text/code if visibly printed, age in years, sex, confidence, issues, and page. Do not recognize or return any dates from the document.',
       'Represent unknown sex as Unknown. Do not treat tally-sheet counts as encounters.',
       'Ignore names and identifier columns. Empty encounter-level fields must be null.',
       'Return empty summaries and null reporting period unless clearly printed.',

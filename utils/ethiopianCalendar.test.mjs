@@ -7,8 +7,11 @@ import {
   formatEthiopianDate,
   getEthiopianDateParts,
   getEthiopianEncounterDateBounds,
+  getEthiopianReportingPeriodBounds,
+  getEthiopianReportingYearBounds,
   isEthiopianLeapYear,
   matchesEthiopianEncounterDate,
+  matchesEthiopianReportingPeriod,
 } from './ethiopianCalendar.js';
 
 test('converts a known Gregorian date to Ethiopian and back', () => {
@@ -41,6 +44,43 @@ test('computes Ethiopian month boundaries with an exclusive end', () => {
     from: '2024-09-06',
     before: '2024-09-11',
   });
+});
+
+test('computes inclusive reporting-period and reporting-year boundaries', () => {
+  const hidar = getEthiopianReportingPeriodBounds({ year: '2019', month: '3' });
+  const year = getEthiopianReportingYearBounds('2019');
+  const meskeremAfterLeapPagume = getEthiopianReportingPeriodBounds({ year: '2016', month: '1' });
+
+  assert.deepEqual(hidar, {
+    from: ethiopianDateToGregorianISO({ year: 2019, month: 2, day: 21 }),
+    through: ethiopianDateToGregorianISO({ year: 2019, month: 3, day: 20 }),
+    before: ethiopianDateToGregorianISO({ year: 2019, month: 3, day: 21 }),
+  });
+  assert.equal(matchesEthiopianReportingPeriod(hidar.from, 2019, 3), true);
+  assert.equal(matchesEthiopianReportingPeriod(hidar.through, 2019, 3), true);
+  assert.equal(matchesEthiopianReportingPeriod(
+    ethiopianDateToGregorianISO({ year: 2019, month: 3, day: 21 }),
+    2019,
+    3
+  ), false);
+  assert.equal(year.from, ethiopianDateToGregorianISO({ year: 2018, month: 12, day: 21 }));
+  assert.equal(year.through, ethiopianDateToGregorianISO({ year: 2019, month: 12, day: 20 }));
+  assert.equal(year.before, getEthiopianReportingPeriodBounds({ year: 2019, month: 12 }).before);
+  assert.equal(matchesEthiopianReportingPeriod(
+    ethiopianDateToGregorianISO({ year: 2015, month: 13, day: 6 }),
+    2016,
+    1
+  ), true);
+  assert.equal(matchesEthiopianReportingPeriod(
+    ethiopianDateToGregorianISO({ year: 2016, month: 13, day: 5 }),
+    2017,
+    1
+  ), true);
+  assert.equal(meskeremAfterLeapPagume.from, ethiopianDateToGregorianISO({
+    year: 2015,
+    month: 12,
+    day: 21,
+  }));
 });
 
 test('supports five- and six-day Pagume and leap-year validation', () => {

@@ -228,7 +228,7 @@ function monthlyHtml(report, settings) {
       <h1>OPD – ICT TALLY SHEET</h1>
       <p><strong>Health Center: ${escapeHtml(settings.healthCenterName || '')}</strong></p>
       <p>Year: ${report.year} &nbsp; Month: ${escapeHtml(String(report.month).toUpperCase())}</p>
-      <p>Reporting period: ${escapeHtml(String(report.month).toUpperCase())} ${report.year}</p>
+      <p>Reporting dates: ${escapeHtml(report.periodRange?.label || '—')}</p>
       ${facilityLines(settings).slice(1).map((line) => `<p>${escapeHtml(line)}</p>`).join('')}
       <table border="1" cellspacing="0" cellpadding="4">
         <thead>
@@ -254,7 +254,7 @@ export async function exportMonthlyReportExcel(report, settings) {
     rows.push([settings.healthCenterName || 'Health Center Name not set']);
     rows.push(['OPD – ICT TALLY SHEET']);
     rows.push([`Year: ${report.year}`, `Month: ${String(report.month).toUpperCase()}`]);
-    rows.push([`Reporting period: ${String(report.month).toUpperCase()} ${report.year}`]);
+    rows.push([`Reporting dates: ${report.periodRange?.label || '—'}`]);
     if (settings.region) rows.push([`Region: ${settings.region}`]);
     if (settings.zone) rows.push([`Zone: ${settings.zone}`]);
     if (settings.woreda) rows.push([`Woreda: ${settings.woreda}`]);
@@ -317,7 +317,7 @@ export async function exportMonthlyReportPdf(report, settings) {
   );
   y += 15;
   doc.text(`Month: ${monthYear}`, margin, y);
-  doc.text(`Reporting period: ${monthYear}`, pageWidth - margin, y, { align: 'right' });
+  doc.text(`Reporting dates: ${report.periodRange?.label || '—'}`, pageWidth - margin, y, { align: 'right' });
 
   const tallyHead = [
     [
@@ -467,6 +467,7 @@ export async function exportYearlyReportExcel(report, settings) {
       [settings.healthCenterName || 'Health Center Name not set'],
       ['OPD YEARLY REPORT'],
       [`Reporting Year: ${report.year}`],
+      [`Reporting dates: ${report.periodRange?.label || '—'}`],
       [],
       ['Month', 'Male', 'Female', 'Total'],
       ...report.months.map((row) => [row.month, row.male, row.female, row.total]),
@@ -501,6 +502,7 @@ export async function exportYearlyReportExcel(report, settings) {
       <h1>OPD YEARLY REPORT</h1>
       <p>${settings.healthCenterName || 'Health Center Name not set'}</p>
       <p>Year: ${report.year}</p>
+      <p>Reporting dates: ${escapeHtml(report.periodRange?.label || '—')}</p>
       <table border="1">${monthRows}<tr><th>YEAR TOTAL</th><th>${report.yearTotal.male}</th><th>${report.yearTotal.female}</th><th>${report.yearTotal.total}</th></tr></table>
       <h2>Combined cases by age group</h2>
       <table border="1"><thead><tr><th>Age group</th><th>Male</th><th>Female</th><th>Total</th></tr></thead><tbody>${ageRows}</tbody></table>

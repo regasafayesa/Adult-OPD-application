@@ -23,7 +23,7 @@ describe('generateMonthlyReport', () => {
     record({ age: 8, sex: 'Male', diagnosis: 'UTI' }),
   ];
 
-  const report = generateMonthlyReport(records, 2018, 13);
+  const report = generateMonthlyReport(records, 2019, 1);
 
   test('includes all age groups from age 5 in Adult totals', () => {
     expect(report.overall.total).toBe(6);
@@ -37,7 +37,7 @@ describe('generateMonthlyReport', () => {
       opdCategory: 'Youth OPD',
       includedInAdultReport: false,
     };
-    const legacyReport = generateMonthlyReport([legacyRecord], 2018, 13);
+    const legacyReport = generateMonthlyReport([legacyRecord], 2019, 1);
 
     expect(legacyReport.ageGroups['15–29'].total).toBe(1);
     expect(legacyReport.overall.total).toBe(1);
@@ -93,7 +93,7 @@ describe('generateMonthlyReport', () => {
       ...Array.from({ length: 45 }, () => record({ age: 30, sex: 'Female', diagnosis: 'Helminthiasis' })),
       ...Array.from({ length: 30 }, () => record({ age: 30, sex: 'Male', diagnosis: 'Typhoid fever' })),
     ];
-    const frequencyReport = generateMonthlyReport(frequencyRecords, 2018, 13);
+    const frequencyReport = generateMonthlyReport(frequencyRecords, 2019, 1);
     const tallyRows = buildMonthlyIctTallyRows(frequencyReport);
 
     expect(tallyRows.slice(0, 2).map(({ name }) => name)).toEqual([
@@ -117,7 +117,7 @@ describe('generateMonthlyReport', () => {
     const yearlyReport = generateYearlyReport([
       ...records,
       record({ date: '2025-09-10', age: 30, sex: 'Male', diagnosis: 'Typhoid fever' }),
-    ], 2018);
+    ], 2019);
 
     expect(Object.keys(yearlyReport.diagnoses).sort()).toEqual([
       'Diabetes Mellitus',
@@ -142,7 +142,7 @@ describe('generateMonthlyReport', () => {
     const edited = records.map((item) =>
       item.age === 19 ? enrichEncounter({ ...item, age: 30, sex: 'Male', diagnosis: 'UTI', date: item.date }, item) : item
     );
-    const next = generateMonthlyReport(edited, 2018, 13);
+    const next = generateMonthlyReport(edited, 2019, 1);
     expect(next.overall.total).toBe(6);
     expect(next.diagnoses.UTI.total.total).toBe(3);
     expect(next.ageGroups['30–64'].total).toBe(2);
@@ -150,7 +150,7 @@ describe('generateMonthlyReport', () => {
 
   test('recalculates after a delete', () => {
     const remaining = records.filter((item) => item.age !== 45);
-    const next = generateMonthlyReport(remaining, 2018, 13);
+    const next = generateMonthlyReport(remaining, 2019, 1);
     expect(next.overall.total).toBe(4);
     expect(next.diagnoses['Diabetes Mellitus']).toBeUndefined();
   });

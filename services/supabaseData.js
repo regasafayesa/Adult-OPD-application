@@ -120,7 +120,7 @@ function missingReportingCalendarColumn(error) {
 export async function deleteFacilityMonthlyDiagnosisCounts(facilityId, reportingYear, reportingMonth, reportingCalendar) {
   assertSupabase();
   if (!Number.isInteger(Number(reportingYear)) || Number(reportingYear) < 1 || Number(reportingYear) > 9999
-      || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 13) {
+      || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 12) {
     throw new Error('Select a valid reporting year and month before clearing aggregate summaries.');
   }
   const periodFilter = (query) => {

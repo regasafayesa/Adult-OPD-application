@@ -3,6 +3,11 @@ import test from 'node:test';
 import { generateDashboardStats, generateMonthlyReport, generateYearlyReport } from './reporting.js';
 import { emptyMonthlyDiagnosisCounts } from './monthlyDiagnosisCounts.mjs';
 import { buildMonthlyIctTallyRows, buildMonthlyIctPdfRows, tallyMarks } from './export.js';
+import { ethiopianDateToGregorianISO } from '../utils/ethiopianCalendar.js';
+
+const REPORT_YEAR = 2026;
+const REPORT_MONTH = 10;
+const REPORT_DATE = ethiopianDateToGregorianISO({ year: REPORT_YEAR, month: 9, day: 21 });
 
 function aggregate(overrides = {}) {
   return {
@@ -20,8 +25,8 @@ function aggregate(overrides = {}) {
 
 test('keeps aggregate totals separate from encounter-only statistics and accepts under-five ages', () => {
   const report = generateMonthlyReport([
-    { date: '2026-10-04', reportingYear: 2026, reportingMonth: 10, age: 30, sex: 'Female', diagnosis: 'Typhoid fever' },
-  ], 2026, 10, [
+    { date: REPORT_DATE, reportingYear: REPORT_YEAR, reportingMonth: REPORT_MONTH, age: 30, sex: 'Female', diagnosis: 'Typhoid fever' },
+  ], REPORT_YEAR, REPORT_MONTH, [
     aggregate({ below1Female: '2', months12To59Male: '3', years5To14Female: '4' }),
   ]);
 
@@ -35,9 +40,9 @@ test('keeps aggregate totals separate from encounter-only statistics and accepts
 
 test('merges aggregate and encounter counts into one canonical diagnosis row across all cells', () => {
   const encounter = {
-    date: '2026-10-04',
-    reportingYear: 2026,
-    reportingMonth: 10,
+    date: REPORT_DATE,
+    reportingYear: REPORT_YEAR,
+    reportingMonth: REPORT_MONTH,
     age: 30,
     sex: 'Male',
     diagnosis: 'Typhoid encounter label',
@@ -95,6 +100,7 @@ test('includes aggregate-only diagnoses and counts duplicate summaries once', ()
 test('keeps distinct catalog diagnoses separate when their display names match', () => {
   const encounters = [
     {
+      date: REPORT_DATE,
       reportingYear: 2026,
       reportingMonth: 10,
       age: 30,
@@ -104,6 +110,7 @@ test('keeps distinct catalog diagnoses separate when their display names match',
       diagnosisCode: 'A01',
     },
     {
+      date: REPORT_DATE,
       reportingYear: 2026,
       reportingMonth: 10,
       age: 30,
@@ -137,8 +144,14 @@ test('yearly aggregate summaries retain their source totals while contributing t
       below1Female: '3',
       years65PlusMale: '4',
     }),
+    aggregate({
+      id: 'legacy-pagume',
+      reportingMonth: 13,
+      below1Female: '100',
+    }),
   ]);
 
+  assert.equal(report.months.length, 12);
   assert.equal(report.yearTotal.total, 10);
   assert.equal(report.encounterYearTotal.total, 0);
   assert.equal(report.ageGroups.below1.female, 5);
@@ -152,9 +165,9 @@ test('yearly aggregate summaries retain their source totals while contributing t
 
 test('dashboard and yearly totals combine encounters and aggregate counts exactly once', () => {
   const records = [{
-    date: '2026-10-04',
-    reportingYear: 2026,
-    reportingMonth: 10,
+    date: REPORT_DATE,
+    reportingYear: REPORT_YEAR,
+    reportingMonth: REPORT_MONTH,
     age: 30,
     sex: 'Male',
     diagnosis: 'Typhoid fever',

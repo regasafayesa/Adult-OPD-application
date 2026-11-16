@@ -136,10 +136,11 @@ documents containing names or identifiers. Drafts persist extracted
 structured fields in a facility-scoped table so review can resume; after a
 successful import, those extracted fields are cleared while metadata and
 counts remain in history. Individual encounter dates in scanner imports use
-the current local date, not a date extracted from the source; age is editable
-in the scanner review. Authorized facility staff can remove failed, cancelled,
-or imported document history entries without deleting any patient or tally
-records.
+the current date converted to the Ethiopian calendar, not a date extracted
+from the source; changing a row's date applies it to that row and all following
+rows, and age remains editable in the scanner review. Authorized facility
+staff can remove failed, cancelled, or imported document history entries
+without deleting any patient or tally records.
 
 For an existing Supabase project, review and apply
 `supabase/migrations/20261031_document_imports.sql` after the facility schema
@@ -212,6 +213,12 @@ migration file, and select **Run** once. Confirm the query succeeds, then verify
 `select to_regclass('public.monthly_diagnosis_counts');` returns
 `monthly_diagnosis_counts`. The application does not apply the migration
 automatically, and the live Supabase schema must be checked after it is run.
+
+Monthly and yearly reports use Ethiopian reporting periods from the 21st of
+the preceding Ethiopian month through the 20th of the selected month. The
+yearly report contains the 12 periods Meskerem through Nehase; Nehase 21 and
+Pagume dates belong to the following reporting year's Meskerem period. Report
+headers and exports show each period's inclusive Ethiopian date range.
 Facility owners, administrators, and data-entry users can write these
 summaries; viewers can only read them.
 Clearing encounters does not delete registration-book summaries. Facility

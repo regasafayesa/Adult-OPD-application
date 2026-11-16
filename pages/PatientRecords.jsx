@@ -89,6 +89,7 @@ export default function PatientRecords() {
     monthlyDiagnosisCounts,
     monthlyDiagnosisCountsStatus,
     monthlyDiagnosisCountsError,
+    isOnline,
     deleteRecord,
     clearMonthlyDiagnosisCounts,
     facilityId,
@@ -570,7 +571,7 @@ export default function PatientRecords() {
         {monthlyDiagnosisCountsStatus === 'loading' && (
           <p role="status">Loading saved aggregate summaries…</p>
         )}
-        {monthlyDiagnosisCountsStatus === 'error' && (
+        {isOnline && monthlyDiagnosisCountsStatus === 'error' && (
           <p className="aopd-error" role="alert">
             {monthlyDiagnosisCountsError} Review and apply
             {' '}<code>supabase/migrations/20261024_monthly_diagnosis_counts.sql</code>

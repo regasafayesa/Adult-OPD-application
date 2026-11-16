@@ -3,6 +3,7 @@ import test from 'node:test';
 import { generateMonthlyReport, generateYearlyReport } from './reporting.js';
 import { emptyMonthlyDiagnosisCounts } from './monthlyDiagnosisCounts.mjs';
 import { reportingPeriodFromDate } from '../utils/dates.js';
+import { ethiopianDateToGregorianISO } from '../utils/ethiopianCalendar.js';
 
 function encounter(isoDate, overrides = {}) {
   return {
@@ -30,26 +31,41 @@ function aggregate(overrides = {}) {
   };
 }
 
-test('groups an encounter by its Ethiopian month across the Ethiopian new year', () => {
+test('groups encounters into reporting periods across the Ethiopian new year', () => {
   const records = [
     encounter('2026-09-11', { sex: 'Male', age: 40 }),
     encounter('2026-09-10', { diagnosis: 'Typhoid fever' }),
+    encounter('2026-11-13', { diagnosis: 'Hypertension' }),
   ];
   const meskerem = generateMonthlyReport(records, 2019, 1);
-  const pagume = generateMonthlyReport(records, 2018, 13);
-  const gregorianSeptember = generateMonthlyReport(records, 2026, 9);
+  const hidar = generateMonthlyReport(records, 2019, 3);
 
   assert.equal(meskerem.month, 'Meskerem');
-  assert.equal(meskerem.overall.total, 1);
+  assert.equal(meskerem.overall.total, 2);
   assert.equal(meskerem.overall.male, 1);
-  assert.equal(meskerem.ageGroups['30–64'].total, 1);
-  assert.equal(pagume.month, 'Pagume');
-  assert.equal(pagume.overall.total, 1);
-  assert.equal(pagume.diagnoses['Typhoid fever'].total.total, 1);
-  assert.equal(gregorianSeptember.overall.total, 0);
+  assert.equal(meskerem.ageGroups['30–64'].total, 2);
+  assert.equal(meskerem.periodRange.label, '21 Nehase 2018 – 20 Meskerem 2019');
+  assert.equal(hidar.month, 'Hidar');
+  assert.equal(hidar.overall.total, 1);
+  assert.equal(hidar.diagnoses.Hypertension.total.total, 1);
 });
 
-test('reconciles the Ethiopian year with its thirteen monthly reports', () => {
+test('filters encounters by inclusive report dates rather than saved calendar-month fields', () => {
+  const date = (month, day) => ethiopianDateToGregorianISO({ year: 2019, month, day });
+  const records = [
+    encounter(date(2, 20), { reportingYear: 2019, reportingMonth: 3 }),
+    encounter(date(2, 21), { reportingYear: 2019, reportingMonth: 2 }),
+    encounter(date(3, 20), { reportingYear: 2018, reportingMonth: 13 }),
+    encounter(date(3, 21), { reportingYear: 2019, reportingMonth: 3 }),
+  ];
+  const report = generateMonthlyReport(records, 2019, 3);
+
+  assert.equal(report.recordCount, 2);
+  assert.equal(report.overall.total, 2);
+  assert.equal(generateMonthlyReport(records, 2019, 2).recordCount, 1);
+});
+
+test('reconciles the Ethiopian year with its twelve monthly reporting periods', () => {
   const records = [
     encounter('2026-09-11', { sex: 'Male' }),
     encounter('2026-11-13', { age: 70, diagnosis: 'Hypertension' }),
@@ -57,15 +73,15 @@ test('reconciles the Ethiopian year with its thirteen monthly reports', () => {
   ];
   const yearly = generateYearlyReport(records, 2019);
 
-  assert.equal(yearly.months.length, 13);
+  assert.equal(yearly.months.length, 12);
   assert.equal(yearly.months[0].month, 'Meskerem');
   assert.equal(yearly.months[2].month, 'Hidar');
-  assert.equal(yearly.months[12].month, 'Pagume');
-  assert.equal(yearly.months[0].encounterTotal, 1);
+  assert.equal(yearly.months[11].month, 'Nehase');
+  assert.equal(yearly.months[0].encounterTotal, 2);
   assert.equal(yearly.months[2].encounterTotal, 1);
-  assert.equal(yearly.months[12].total, 0);
-  assert.equal(yearly.encounterYearTotal.total, 2);
-  assert.equal(yearly.yearTotal.total, 2);
+  assert.equal(yearly.encounterYearTotal.total, 3);
+  assert.equal(yearly.yearTotal.total, 3);
+  assert.equal(yearly.periodRange.label, '21 Nehase 2018 – 20 Nehase 2019');
   assert.equal(yearly.validation.valid, true);
   assert.equal(
     yearly.months.reduce((sum, month) => sum + month.total, 0),

@@ -1,12 +1,13 @@
 import { enrichEncounter } from './storage';
-import { ethiopianDateToGregorianISO } from '../utils/ethiopianCalendar.js';
+import { getEthiopianReportingPeriodBounds } from '../utils/ethiopianCalendar.js';
 
 /**
  * Small labelled demo dataset spanning all OPD age groups.
  * Not official MOH statistics. Not real patient data.
  */
 export function buildDemoRecords(year, month) {
-  const ethiopianMonth = Number(month) === 13 ? 12 : Number(month);
+  const period = getEthiopianReportingPeriodBounds({ year, month });
+  if (!period) return [];
   const samples = [
     { day: 2, age: 6, sex: 'Female', diagnosis: 'UTI' },
     { day: 3, age: 8, sex: 'Male', diagnosis: 'Pneumonia' },
@@ -31,13 +32,15 @@ export function buildDemoRecords(year, month) {
     { day: 22, age: 68, sex: 'Male', diagnosis: 'UTI' },
   ];
 
-  return samples.map((sample) =>
-    enrichEncounter({
-      date: ethiopianDateToGregorianISO({ year: Number(year), month: ethiopianMonth, day: sample.day }),
+  return samples.map((sample) => {
+    const visitDate = new Date(`${period.from}T00:00:00.000Z`);
+    visitDate.setUTCDate(visitDate.getUTCDate() + sample.day - 2);
+    return enrichEncounter({
+      date: visitDate.toISOString().slice(0, 10),
       age: sample.age,
       sex: sample.sex,
       diagnosis: sample.diagnosis,
       isDemo: true,
-    })
-  );
+    });
+  });
 }

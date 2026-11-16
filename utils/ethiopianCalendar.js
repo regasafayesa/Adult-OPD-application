@@ -16,6 +16,8 @@ export const ETHIOPIAN_MONTH_NAMES = [
   'Pagume',
 ];
 
+export const ETHIOPIAN_REPORTING_MONTH_NAMES = ETHIOPIAN_MONTH_NAMES.slice(0, 12);
+
 const ETHIOPIAN_TIME_ZONE = 'Africa/Addis_Ababa';
 const ETHIOPIAN_INTL_FORMATTER = new Intl.DateTimeFormat('en-u-ca-ethiopic-nu-latn', {
   day: 'numeric',
@@ -124,15 +126,28 @@ export function currentEthiopianPeriod(value = new Date()) {
   };
 }
 
+export function currentEthiopianReportingPeriod(value = new Date()) {
+  const period = ethiopianReportingPeriod(value);
+  return {
+    year: period.reportingYear || '',
+    month: period.reportingMonth || '',
+  };
+}
+
 export function ethiopianReportingPeriod(value) {
   const date = getEthiopianDateParts(value);
   if (!date) {
     return { reportingMonth: null, reportingYear: null, monthName: null };
   }
+  const startsNextReportingYear = date.month === 13 || (date.month === 12 && date.day >= 21);
+  const reportingYear = date.year + (startsNextReportingYear ? 1 : 0);
+  const reportingMonth = startsNextReportingYear
+    ? 1
+    : date.month + (date.day >= 21 ? 1 : 0);
   return {
-    reportingMonth: date.month,
-    reportingYear: date.year,
-    monthName: ethiopianMonthName(date.month),
+    reportingMonth,
+    reportingYear,
+    monthName: ethiopianMonthName(reportingMonth),
   };
 }
 
@@ -178,6 +193,55 @@ function maxISODate(dates) {
 
 function minISODate(dates) {
   return dates.reduce((earliest, date) => (date < earliest ? date : earliest));
+}
+
+export function getEthiopianReportingPeriodBounds(filters) {
+  const year = Number(filters.year);
+  const month = Number(filters.month);
+  if (!Number.isInteger(year) || year < 2 || year > 9999
+      || !Number.isInteger(month) || month < 1 || month > 12) {
+    return null;
+  }
+
+  const start = month === 1
+    ? { year: year - 1, month: 12, day: 21 }
+    : { year, month: month - 1, day: 21 };
+  const end = { year, month, day: 20 };
+  const from = ethiopianDateToGregorianISO(start);
+  const through = ethiopianDateToGregorianISO(end);
+  const before = through ? nextGregorianDay(through) : null;
+  if (!from || !through || !before) return null;
+  return { from, through, before };
+}
+
+export function getEthiopianReportingYearBounds(year) {
+  const firstMonth = getEthiopianReportingPeriodBounds({ year, month: 1 });
+  const lastMonth = getEthiopianReportingPeriodBounds({ year, month: 12 });
+  if (!firstMonth || !lastMonth) return null;
+  return {
+    from: firstMonth.from,
+    through: lastMonth.through,
+    before: lastMonth.before,
+  };
+}
+
+function isWithinGregorianDateBounds(value, bounds) {
+  if (!bounds) return false;
+  const parts = getGregorianDateParts(value);
+  if (!parts) return false;
+  const date = gregorianISOFromParts(parts);
+  return date >= bounds.from && date <= bounds.through;
+}
+
+export function matchesEthiopianReportingPeriod(recordDate, year, month) {
+  return isWithinGregorianDateBounds(
+    recordDate,
+    getEthiopianReportingPeriodBounds({ year, month })
+  );
+}
+
+export function matchesEthiopianReportingYear(recordDate, year) {
+  return isWithinGregorianDateBounds(recordDate, getEthiopianReportingYearBounds(year));
 }
 
 export function getEthiopianEncounterDateBounds(filters) {

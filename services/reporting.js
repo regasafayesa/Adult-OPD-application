@@ -1,6 +1,14 @@
 import { ADULT_AGE_GROUPS } from '../constants.js';
 import { classifyAge } from '../utils/ageClassification.js';
-import { ETHIOPIAN_MONTH_NAMES, ethiopianMonthName } from '../utils/ethiopianCalendar.js';
+import {
+  ETHIOPIAN_REPORTING_MONTH_NAMES,
+  ethiopianMonthName,
+  formatEthiopianDate,
+  getEthiopianReportingPeriodBounds,
+  getEthiopianReportingYearBounds,
+  matchesEthiopianReportingPeriod,
+  matchesEthiopianReportingYear,
+} from '../utils/ethiopianCalendar.js';
 import {
   calculateMonthlyDiagnosisTotals,
   isGregorianAggregate,
@@ -19,13 +27,24 @@ export function isAdultRecord(record) {
 }
 
 function recordsForMonth(records, year, month) {
-  return records.filter(
-    (record) => record.reportingYear === Number(year) && record.reportingMonth === Number(month)
+  return records.filter((record) =>
+    matchesEthiopianReportingPeriod(record.date, year, month)
   );
 }
 
 function recordsForYear(records, year) {
-  return records.filter((record) => record.reportingYear === Number(year));
+  return records.filter((record) => matchesEthiopianReportingYear(record.date, year));
+}
+
+function reportingPeriodRange(bounds) {
+  if (!bounds) return null;
+  const start = formatEthiopianDate(bounds.from);
+  const end = formatEthiopianDate(bounds.through);
+  return {
+    start,
+    end,
+    label: `${start} – ${end}`,
+  };
 }
 
 function ethiopianAggregateSummaries(summaries) {
@@ -36,6 +55,8 @@ function uniqueMonthlySummaries(summaries, year, month) {
   const uniqueSummaries = new Map();
   ethiopianAggregateSummaries(summaries).filter((summary) =>
     Number(summary.reportingYear) === Number(year)
+    && Number(summary.reportingMonth) >= 1
+    && Number(summary.reportingMonth) <= ETHIOPIAN_REPORTING_MONTH_NAMES.length
     && (month === undefined || Number(summary.reportingMonth) === Number(month))
   ).forEach((summary) => {
     const key = `${summary.facilityId || ''}|${summary.reportingYear}|${summary.reportingMonth}|${summary.diagnosisId}`;
@@ -91,7 +112,7 @@ export function generateMonthlyAggregateReport(summaries, year, month) {
 
 export function generateYearlyAggregateReport(summaries, year) {
   const matchingSummaries = uniqueMonthlySummaries(summaries, year);
-  const months = ETHIOPIAN_MONTH_NAMES.map((monthName, index) => {
+  const months = ETHIOPIAN_REPORTING_MONTH_NAMES.map((monthName, index) => {
     const report = generateMonthlyAggregateReport(matchingSummaries, year, index + 1);
     return {
       month: monthName,
@@ -114,7 +135,7 @@ export function generateYearlyAggregateReport(summaries, year) {
       male: 0,
       female: 0,
       total: 0,
-      months: Array(ETHIOPIAN_MONTH_NAMES.length).fill(0),
+      months: Array(ETHIOPIAN_REPORTING_MONTH_NAMES.length).fill(0),
       ageGroups: Object.fromEntries(MONTHLY_DIAGNOSIS_AGE_GROUPS.map(({ key }) => [key, {
         male: 0,
         female: 0,
@@ -393,6 +414,7 @@ export function generateMonthlyReport(records, year, month, aggregateSummaries =
     month: ethiopianMonthName(month),
     monthNumber: Number(month),
     year: Number(year),
+    periodRange: reportingPeriodRange(getEthiopianReportingPeriodBounds({ year, month })),
     overall,
     ageGroups,
     diagnoses: sortedDiagnoses,
@@ -408,11 +430,11 @@ export function generateMonthlyReport(records, year, month, aggregateSummaries =
 
 export function generateYearlyReport(records, year, aggregateSummaries = [], diagnosisCatalog = []) {
   const yearRecords = recordsForYear(records, year);
-  const monthlyReports = ETHIOPIAN_MONTH_NAMES.map((_, index) => {
+  const monthlyReports = ETHIOPIAN_REPORTING_MONTH_NAMES.map((_, index) => {
     return generateMonthlyReport(records, year, index + 1, aggregateSummaries, diagnosisCatalog);
   });
   const months = monthlyReports.map((monthly, index) => ({
-    month: ETHIOPIAN_MONTH_NAMES[index],
+    month: ETHIOPIAN_REPORTING_MONTH_NAMES[index],
     monthNumber: index + 1,
     male: monthly.combined.overall.male,
     female: monthly.combined.overall.female,
@@ -461,7 +483,7 @@ export function generateYearlyReport(records, year, aggregateSummaries = [], dia
           male: 0,
           female: 0,
           total: 0,
-          months: Array(ETHIOPIAN_MONTH_NAMES.length).fill(0),
+          months: Array(ETHIOPIAN_REPORTING_MONTH_NAMES.length).fill(0),
         });
       }
       const yearlyDiagnosis = combinedDiagnoses.get(identity);
@@ -495,6 +517,7 @@ export function generateYearlyReport(records, year, aggregateSummaries = [], dia
 
   return {
     year: Number(year),
+    periodRange: reportingPeriodRange(getEthiopianReportingYearBounds(year)),
     months,
     yearTotal,
     ageGroups,

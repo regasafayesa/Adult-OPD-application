@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdultOpd } from '../context/AdultOpdContext';
-import { currentEthiopianPeriod, ETHIOPIAN_MONTH_NAMES } from '../utils/ethiopianCalendar';
+import {
+  currentEthiopianReportingPeriod,
+  ETHIOPIAN_REPORTING_MONTH_NAMES,
+} from '../utils/ethiopianCalendar';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -16,8 +19,9 @@ export default function Dashboard() {
     monthlyDiagnosisCountsError,
     syncStatus,
     syncError,
+    isOnline,
   } = useAdultOpd();
-  const initialPeriod = currentEthiopianPeriod();
+  const initialPeriod = currentEthiopianReportingPeriod();
   const [year, setYear] = useState(initialPeriod.year);
   const [month, setMonth] = useState(initialPeriod.month);
   const totalsReady = syncStatus === 'ready' && monthlyDiagnosisCountsStatus !== 'loading';
@@ -34,6 +38,7 @@ export default function Dashboard() {
         <div>
           <h2>Dashboard</h2>
           <p>Ethiopian monthly totals combine individual encounters with registration-book summaries.</p>
+          <p>Reporting dates: {monthly.periodRange?.label || '—'}</p>
         </div>
         <div className="aopd-filters">
           <label>
@@ -43,7 +48,7 @@ export default function Dashboard() {
           <label>
             Ethiopian month
             <select value={month} onChange={(e) => setMonth(Number(e.target.value))}>
-              {ETHIOPIAN_MONTH_NAMES.map((name, index) => (
+              {ETHIOPIAN_REPORTING_MONTH_NAMES.map((name, index) => (
                 <option key={name} value={index + 1}>
                   {name}
                 </option>
@@ -61,7 +66,7 @@ export default function Dashboard() {
       {(syncStatus === 'loading' || monthlyDiagnosisCountsStatus === 'loading') && (
         <p className="aopd-alert" role="status">Loading facility records. Totals are not final yet.</p>
       )}
-      {syncStatus === 'error' && (
+      {isOnline && syncStatus === 'error' && (
         <p className="aopd-alert" role="alert">{syncError || 'Facility records could not be loaded. Totals are not shown as zero.'}</p>
       )}
       <div className="aopd-card-grid">
@@ -75,7 +80,7 @@ export default function Dashboard() {
       {totalsReady && monthly.combined.overall.total === 0 && (
         <p>No individual encounters or Ethiopian registration-book counts in this month.</p>
       )}
-      {monthlyDiagnosisCountsStatus === 'error' && (
+      {isOnline && monthlyDiagnosisCountsStatus === 'error' && (
         <p className="aopd-alert" role="alert">
           Dashboard totals include individual encounters only because aggregate counts could not load:
           {' '}{monthlyDiagnosisCountsError} Review and apply

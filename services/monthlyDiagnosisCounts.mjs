@@ -71,7 +71,7 @@ export function validateMonthlyDiagnosisCount(entry, { diagnoses = [] } = {}) {
   }
   if (!Number.isInteger(Number(entry.reportingMonth))
       || Number(entry.reportingMonth) < 1
-      || Number(entry.reportingMonth) > 13) {
+      || Number(entry.reportingMonth) > 12) {
     errors.reportingMonth = 'Select a valid Ethiopian reporting month.';
   }
 

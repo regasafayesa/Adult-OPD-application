@@ -440,7 +440,7 @@ function AdultOpdRoutes({
   onFacilityChange,
   isLocalDemo = false,
 }) {
-  const { hasDemoRecords, settings, syncStatus, syncError } = useAdultOpd();
+  const { hasDemoRecords, settings, syncStatus, syncError, isOnline } = useAdultOpd();
 
   if (syncStatus === 'loading') {
     return <LoadingScreen message="Loading records shared by your facility." />;
@@ -460,6 +460,7 @@ function AdultOpdRoutes({
       onSignOut={onSignOut}
       isLocalDemo={isLocalDemo}
       syncError={syncError}
+      isOnline={isOnline}
     >
       <Routes>
         <Route path="/" element={<Navigate to="/adult-opd" replace />} />

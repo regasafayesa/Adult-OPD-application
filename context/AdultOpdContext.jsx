@@ -4,7 +4,7 @@ import { enrichEncounter, createId, readLegacyLocalData } from '../services/stor
 import { buildDemoRecords } from '../services/demoData';
 import { getErrorMessage, isNetworkError } from '../services/networkErrors.mjs';
 import { generateDashboardStats, generateMonthlyReport, generateYearlyReport } from '../services/reporting';
-import { currentEthiopianPeriod } from '../utils/ethiopianCalendar';
+import { currentEthiopianReportingPeriod } from '../utils/ethiopianCalendar';
 import { validateMonthlyDiagnosisCount } from '../services/monthlyDiagnosisCounts.mjs';
 import {
   addFacilityDiagnosis,
@@ -40,6 +40,23 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
   const [syncStatus, setSyncStatus] = useState(remote ? 'loading' : 'ready');
   const [syncError, setSyncError] = useState('');
   const [settingsSyncStatus, setSettingsSyncStatus] = useState('idle');
+  const [isOnline, setIsOnline] = useState(() => typeof navigator === 'undefined' || navigator.onLine !== false);
+
+  useEffect(() => {
+    function handleOnline() {
+      setIsOnline(true);
+    }
+    function handleOffline() {
+      setIsOnline(false);
+    }
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    setIsOnline(typeof navigator === 'undefined' || navigator.onLine !== false);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   useEffect(() => {
     if (!remote) return undefined;
@@ -49,12 +66,14 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       try {
         const data = await loadFacilityData(facilityId);
         if (!active) return;
+        setIsOnline(true);
         setRecords(data.records);
         setDiagnoses(data.diagnoses);
         setSyncError('');
         setSyncStatus('ready');
       } catch (error) {
         if (!active) return;
+        if (isNetworkError(error)) setIsOnline(false);
         setSyncError(getErrorMessage(error, 'Could not sync facility data.'));
         setSyncStatus('error');
       }
@@ -66,10 +85,12 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
 
     refreshRemoteData();
     window.addEventListener('focus', refreshWhenVisible);
+    window.addEventListener('online', refreshRemoteData);
     document.addEventListener('visibilitychange', refreshWhenVisible);
     return () => {
       active = false;
       window.removeEventListener('focus', refreshWhenVisible);
+      window.removeEventListener('online', refreshRemoteData);
       document.removeEventListener('visibilitychange', refreshWhenVisible);
     };
   }, [facilityId, remote]);
@@ -97,6 +118,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       try {
         const summaries = await loadFacilityMonthlyDiagnosisCounts(facilityId, diagnoses);
         if (!active) return;
+        setIsOnline(true);
         setMonthlyDiagnosisCounts(summaries);
         setAggregateCalendarReady(summaries.ethiopianCalendarSupported !== false);
         setMonthlyDiagnosisCountsError('');
@@ -104,6 +126,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       } catch (error) {
         if (!active) return;
         if (isNetworkError(error)) {
+          setIsOnline(false);
           setMonthlyDiagnosisCountsError('Registration-book counts could not be loaded because the connection failed. Report totals do not include them until the connection succeeds.');
           setMonthlyDiagnosisCountsStatus('error');
           return;
@@ -117,10 +140,12 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
     }
     refreshMonthlyDiagnosisCounts();
     window.addEventListener('focus', refreshWhenVisible);
+    window.addEventListener('online', refreshMonthlyDiagnosisCounts);
     document.addEventListener('visibilitychange', refreshWhenVisible);
     return () => {
       active = false;
       window.removeEventListener('focus', refreshWhenVisible);
+      window.removeEventListener('online', refreshMonthlyDiagnosisCounts);
       document.removeEventListener('visibilitychange', refreshWhenVisible);
     };
   }, [diagnoses, facilityId, remote, syncStatus]);
@@ -568,7 +593,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
   }, [facilityId, remote, reportSyncError, syncStatus]);
 
   const loadDemoData = useCallback(async (deletePassword) => {
-    const period = currentEthiopianPeriod();
+    const period = currentEthiopianReportingPeriod();
     const demoRecords = buildDemoRecords(period.year, period.month);
     if (remote) {
       try {
@@ -648,7 +673,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       return { ok: false, error: 'Only facility owners and administrators can clear aggregate summaries.' };
     }
     if (!Number.isInteger(Number(reportingYear)) || Number(reportingYear) < 1 || Number(reportingYear) > 9999
-        || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 13) {
+        || !Number.isInteger(Number(reportingMonth)) || Number(reportingMonth) < 1 || Number(reportingMonth) > 12) {
       return { ok: false, error: 'Select a valid reporting year and month before clearing aggregate summaries.' };
     }
     try {
@@ -697,6 +722,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       hasDemoRecords,
       syncStatus,
       syncError,
+      isOnline,
       addRecord,
       addRecords,
       saveMonthlyDiagnosisCounts,
@@ -735,6 +761,7 @@ export function AdultOpdProvider({ children, initialSettings, facilityId, role =
       hasDemoRecords,
       syncStatus,
       syncError,
+      isOnline,
       addRecord,
       addRecords,
       saveMonthlyDiagnosisCounts,

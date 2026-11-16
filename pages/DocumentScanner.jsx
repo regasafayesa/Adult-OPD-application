@@ -20,13 +20,17 @@ import {
 } from '../services/documentImports';
 import { createId } from '../services/storage';
 import {
+  appendExtractedEncounter,
   assignTodayToExtractedEncounters,
+  removeExtractedEncounter,
   reviewedEncounterDate,
   todayEncounterDateISO,
+  updateExtractedEncounter,
 } from '../services/scannerEncounterDates.mjs';
 import {
   daysInEthiopianMonth,
   ETHIOPIAN_MONTH_NAMES,
+  ETHIOPIAN_REPORTING_MONTH_NAMES,
   ethiopianDateToGregorianISO,
   formatEthiopianDate,
   getEthiopianDateParts,
@@ -127,14 +131,14 @@ function EthiopianEncounterDateEditor({ value, onSave, onCancel }) {
   );
 }
 
-function recognizedExtraction(extraction, diagnoses, documentType, { assignToday = false } = {}) {
+function recognizedExtraction(extraction, diagnoses, documentType, { assignToday = false, now = new Date() } = {}) {
   if (documentType === 'individual') {
     const encounters = (extraction.encounters || []).map((row) => {
       const diagnosis = exactDiagnosis(diagnoses, row.diagnosis, row.diagnosisCode);
       return {
         ...row,
         recordId: row.recordId || createId('enc'),
-        date: reviewedEncounterDate(row.date),
+        date: assignToday ? null : reviewedEncounterDate(row.date),
         diagnosis: diagnosis?.name || row.diagnosis || '',
         diagnosisId: diagnosis?.id || '',
         age: row.age == null ? '' : String(row.age),
@@ -144,7 +148,7 @@ function recognizedExtraction(extraction, diagnoses, documentType, { assignToday
     return {
       ...EMPTY_EXTRACTION,
       ...extraction,
-      encounters: assignToday ? assignTodayToExtractedEncounters(encounters) : encounters,
+      encounters: assignToday ? assignTodayToExtractedEncounters(encounters, now) : encounters,
       summaries: [],
     };
   }
@@ -393,14 +397,10 @@ export default function DocumentScanner() {
   function updateEncounter(index, field, value) {
     setExtraction((previous) => ({
       ...previous,
-      encounters: previous.encounters.map((row, rowIndex) => {
-        if (rowIndex !== index) return row;
-        const updated = { ...row, [field]: value };
-        if (field === 'diagnosis') {
-          const diagnosis = activeDiagnoses.find((item) => item.name === value);
-          updated.diagnosisId = diagnosis?.id || '';
-        }
-        return updated;
+      encounters: updateExtractedEncounter(previous.encounters, index, field, value).map((row, rowIndex) => {
+        if (rowIndex !== index || field !== 'diagnosis') return row;
+        const diagnosis = activeDiagnoses.find((item) => item.name === value);
+        return { ...row, diagnosisId: diagnosis?.id || '' };
       }),
     }));
     setReviewConfirmed(false);
@@ -448,6 +448,7 @@ export default function DocumentScanner() {
   }
 
   async function processDocument() {
+    const scanStartedAt = new Date();
     setError('');
     setMessage('');
     setProgress(5);
@@ -468,7 +469,10 @@ export default function DocumentScanner() {
       setProgress(35);
       const result = await extractDocument({ facilityId, file, documentType });
       setProgress(85);
-      const normalized = recognizedExtraction(result, activeDiagnoses, documentType, { assignToday: true });
+      const normalized = recognizedExtraction(result, activeDiagnoses, documentType, {
+        assignToday: true,
+        now: scanStartedAt,
+      });
       const reportingMonth = normalized.reportingMonth || null;
       const reportingYear = normalized.reportingYear || null;
       setExtraction(normalized);
@@ -649,7 +653,7 @@ export default function DocumentScanner() {
   const isPdf = file?.name.toLowerCase().endsWith('.pdf');
   const isValidPeriod = Number.isInteger(Number(period.year))
     && Number(period.year) >= 1 && Number(period.year) <= 9999
-    && Number.isInteger(Number(period.month)) && Number(period.month) >= 1 && Number(period.month) <= 13;
+    && Number.isInteger(Number(period.month)) && Number(period.month) >= 1 && Number(period.month) <= 12;
 
   return (
     <main className="aopd-page aopd-document-scanner">
@@ -680,7 +684,7 @@ export default function DocumentScanner() {
             />
             <span>
               <strong>Individual Patient Registration</strong>
-              <small>Extract age, sex, and diagnosis. Each encounter starts on today’s Ethiopian date and can be changed on its own.</small>
+              <small>Extract age, sex, and diagnosis. All encounters start on today’s Ethiopian date; changing a date updates that row and all following rows.</small>
             </span>
           </label>
           <label>
@@ -823,11 +827,11 @@ export default function DocumentScanner() {
                       className="aopd-btn secondary"
                       onClick={() => setExtraction((previous) => ({
                         ...previous,
-                        encounters: [...previous.encounters, {
+                        encounters: appendExtractedEncounter(previous.encounters, {
                           recordId: createId('enc'),
-                          date: todayEncounterDateISO(), diagnosis: '', diagnosisId: '', age: '', sex: '',
+                          diagnosis: '', diagnosisId: '', age: '', sex: '',
                           confidence: 0, issues: ['Manually added; verify against the document.'], page: null,
-                        }],
+                        }),
                       }))}
                     >
                       Add row
@@ -924,7 +928,7 @@ export default function DocumentScanner() {
                                 {row.issues?.map((issue, issueIndex) => <small className="aopd-warn-text" key={issueIndex}>{issue}</small>)}
                                 {review.duplicate && <small className="aopd-warn-text">Potential duplicate encounter</small>}
                               </td>
-                              <td><button type="button" className="aopd-row-remove" onClick={() => setExtraction((previous) => ({ ...previous, encounters: previous.encounters.filter((_, rowIndex) => rowIndex !== index) }))}>Remove</button></td>
+                              <td><button type="button" className="aopd-row-remove" onClick={() => setExtraction((previous) => ({ ...previous, encounters: removeExtractedEncounter(previous.encounters, index) }))}>Remove</button></td>
                             </tr>
                           );
                         })}
@@ -968,7 +972,7 @@ export default function DocumentScanner() {
                       <label>Ethiopian month
                       <select value={period.month} onChange={(event) => { setPeriod((current) => ({ ...current, month: event.target.value })); setReviewConfirmed(false); }}>
                         <option value="">Select month</option>
-                        {ETHIOPIAN_MONTH_NAMES.map((name, index) => <option key={name} value={index + 1}>{name}</option>)}
+                        {ETHIOPIAN_REPORTING_MONTH_NAMES.map((name, index) => <option key={name} value={index + 1}>{name}</option>)}
                       </select>
                     </label>
                     <label>Ethiopian year

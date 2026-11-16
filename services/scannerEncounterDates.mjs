@@ -30,9 +30,26 @@ export function assignTodayToExtractedEncounters(encounters, now = new Date()) {
 }
 
 export function updateExtractedEncounter(encounters, index, field, value) {
-  return encounters.map((row, rowIndex) => (
-    rowIndex === index ? { ...row, [field]: value } : row
-  ));
+  return encounters.map((row, rowIndex) => {
+    if (rowIndex < index) return row;
+    if (field === 'date') return { ...row, date: value };
+    return rowIndex === index ? { ...row, [field]: value } : row;
+  });
+}
+
+export function appendExtractedEncounter(encounters, encounter, now = new Date()) {
+  const lastEncounter = encounters[encounters.length - 1];
+  return [
+    ...encounters,
+    {
+      ...encounter,
+      date: lastEncounter?.date || todayEncounterDateISO(now),
+    },
+  ];
+}
+
+export function removeExtractedEncounter(encounters, index) {
+  return encounters.filter((_, rowIndex) => rowIndex !== index);
 }
 
 export function ethiopianDateLabel(value) {
